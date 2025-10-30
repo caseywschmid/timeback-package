@@ -8,6 +8,11 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
 
 -
 
+## [0.1.1] - 2025-10-30
+
+### Added
+- OneRoster Rostering: `list_users` endpoint (`client.oneroster.rostering.list_users(...)`).
+
 ## [0.1.0] - 2025-10-30
 
 ### Added
@@ -22,5 +27,6 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
   - `timeback/docs/package_setup.md` (client setup)
 - Testing setup with unit tests (and integration tests marked with `@pytest.mark.integration`).
 
-[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/caseywschmid/timeback-package/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/caseywschmid/timeback-package/releases/tag/v0.1.0
