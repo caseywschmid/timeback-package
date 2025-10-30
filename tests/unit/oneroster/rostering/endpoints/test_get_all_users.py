@@ -1,7 +1,7 @@
 import pytest
 
-from timeback.services.oneroster.rostering.endpoints.list_users import list_users
-from timeback.models.response import TimebackListUsersResponse
+from timeback.services.oneroster.rostering.endpoints.get_all_users import get_all_users
+from timeback.models.response import TimebackGetAllUsersResponse
 
 
 class MockHttpClient:
@@ -30,7 +30,7 @@ def minimal_user(idx: str):
     }
 
 
-def test_list_users_success():
+def test_get_all_users_success():
     mock_http = MockHttpClient(
         {
             "users": [minimal_user("1"), minimal_user("2")],
@@ -42,14 +42,14 @@ def test_list_users_success():
         }
     )
 
-    resp = list_users(mock_http)
+    resp = get_all_users(mock_http)
 
-    assert isinstance(resp, TimebackListUsersResponse)
+    assert isinstance(resp, TimebackGetAllUsersResponse)
     assert len(resp.users) == 2
     assert resp.totalCount == 2
 
 
-def test_list_users_passes_query_params():
+def test_get_all_users_passes_query_params():
     mock_http = MockHttpClient(
         {
             "users": [minimal_user("9")],
@@ -61,7 +61,7 @@ def test_list_users_passes_query_params():
         }
     )
 
-    resp = list_users(
+    resp = get_all_users(
         mock_http,
         fields=["sourcedId", "username"],
         limit=1,
@@ -72,7 +72,7 @@ def test_list_users_passes_query_params():
         search="john",
     )
 
-    assert isinstance(resp, TimebackListUsersResponse)
+    assert isinstance(resp, TimebackGetAllUsersResponse)
     assert mock_http.last_params == {
         "fields": "sourcedId,username",
         "limit": 1,

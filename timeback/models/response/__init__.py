@@ -1,3 +1,3 @@
-from .timeback_list_users_response import TimebackListUsersResponse
+from .timeback_get_all_users_response import TimebackGetAllUsersResponse
 
-__all__ = ["TimebackListUsersResponse"]
+__all__ = ["TimebackGetAllUsersResponse"]

@@ -3,11 +3,11 @@ from pydantic import BaseModel, Field
 from timeback.models.timeback_user import TimebackUser
 
 
-class TimebackListUsersResponse(BaseModel):
+class TimebackGetAllUsersResponse(BaseModel):
     """Response model for paginated users list.
 
     Mirrors OneRoster list response envelope for users as documented in
-    `timeback/docs/oneroster/rostering/list_users.md`.
+    `timeback/docs/oneroster/rostering/get_all_users.md`.
     """
 
     users: List[TimebackUser] = Field(..., description="List of users")

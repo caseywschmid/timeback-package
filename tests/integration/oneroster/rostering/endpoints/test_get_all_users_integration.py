@@ -5,7 +5,7 @@ from timeback import Timeback
 
 
 @pytest.mark.integration
-def test_list_users_integration():
+def test_get_all_users_integration():
     """Integration test calling real API: list users (read-only).
 
     Requires env vars:
@@ -26,7 +26,7 @@ def test_list_users_integration():
         pytest.skip(f"Missing required environment variables: {missing_vars}")
 
     client = Timeback()
-    resp = client.oneroster.rostering.list_users(limit=1)
+    resp = client.oneroster.rostering.get_all_users(limit=1)
 
     assert resp is not None
     assert resp.limit >= 1

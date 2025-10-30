@@ -1,4 +1,4 @@
-"""List Users endpoint for OneRoster Rostering.
+"""Get All Users endpoint for OneRoster Rostering.
 
 GET /ims/oneroster/rostering/v1p2/users
 
@@ -9,7 +9,7 @@ Builds the full path and query params, performs the HTTP GET via the injected
 from typing import Any, Dict, Optional, Sequence, Union
 
 from timeback.http import HttpClient
-from timeback.models.response import TimebackListUsersResponse
+from timeback.models.response import TimebackGetAllUsersResponse
 from timeback.services.oneroster.rostering.utils.normalize_fields import (
     normalize_fields,
 )
@@ -18,7 +18,7 @@ from timeback.logs import logger
 log = logger.configure_logging(__name__, log_level="INFO")
 
 
-def list_users(
+def get_all_users(
     http: HttpClient,
     *,
     fields: Optional[Union[str, Sequence[str]]] = None,
@@ -28,7 +28,7 @@ def list_users(
     order_by: Optional[str] = None,
     filter: Optional[str] = None,
     search: Optional[str] = None,
-) -> TimebackListUsersResponse:
+) -> TimebackGetAllUsersResponse:
     """Fetch a paginated list of users.
 
     Parameters map to OneRoster query parameters; `order_by` maps to `orderBy`.
@@ -54,4 +54,6 @@ def list_users(
 
     data: Dict[str, Any] = http.get(path, params=query)
     log.debug(f"Raw Data: {data}")
-    return TimebackListUsersResponse.model_validate(data)
+    return TimebackGetAllUsersResponse.model_validate(data)
+
+

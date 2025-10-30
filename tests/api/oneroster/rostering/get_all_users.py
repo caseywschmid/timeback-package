@@ -4,7 +4,7 @@ from timeback import Timeback
 def main():
     client = Timeback()
 
-    users = client.oneroster.rostering.list_users()
+    users = client.oneroster.rostering.get_all_users()
     if not users:
         print("No users found")
         return

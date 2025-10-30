@@ -1,4 +1,4 @@
-## OneRoster — Rostering - List Users
+## OneRoster — Rostering - Get All Users
 
 ### GET /ims/oneroster/rostering/v1p2/users
 
@@ -36,7 +36,7 @@ Python usage:
 from timeback import Timeback
 
 client = Timeback()
-resp = client.oneroster.rostering.list_users(limit=50, filter="status='active'", search="john")
+resp = client.oneroster.rostering.get_all_users(limit=50, filter="status='active'", search="john")
 
 print(resp.totalCount, len(resp.users))
 if resp.users:
