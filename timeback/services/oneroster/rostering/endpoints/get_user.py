@@ -7,7 +7,7 @@ from timeback.services.oneroster.rostering.utils.parse_user_response import (
 )
 from timeback.logs import logger
 
-log = logger.configure_logging(__name__, log_level="DEBUG")
+log = logger.configure_logging(__name__, log_level="INFO")
 
 
 def get_user(
@@ -22,9 +22,11 @@ def get_user(
     """
     params: Dict[str, Any] = {}
     if fields:
-        params["fields"] = ",".join(fields) if isinstance(fields, (list, tuple)) else fields
+        params["fields"] = (
+            ",".join(fields) if isinstance(fields, (list, tuple)) else fields
+        )
     log.debug(f"Params: {params}")
     log.debug(f"Sourced ID: {sourced_id}")
     data = http.get(f"/ims/oneroster/rostering/v1p2/users/{sourced_id}", params=params)
-    log.debug(f"Data: {data}")
+    log.debug(f"Raw Data: {data}")
     return parse_user_response(data)
