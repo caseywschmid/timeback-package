@@ -100,3 +100,71 @@ python -c "import timeback; print(timeback.__version__)"
   - Builds and publishes to PyPI
 
 This keeps local steps minimal while preserving the same policy.
+
+## End-to-end release workflow (feature → release)
+
+This documents the exact procedure when adding a new feature (e.g., a new endpoint) and releasing it.
+
+1) Create and work on a feature branch
+
+```bash
+# from main
+git checkout -b feat/get-users
+# implement feature changes (code, tests, docs)
+```
+
+2) Run tests locally
+
+```bash
+poetry install
+poetry run pytest -q -m "not integration"
+# optional:
+poetry run pytest -q -m integration
+```
+
+3) Commit feature changes (code/tests/docs only)
+
+```bash
+git add timeback/services/oneroster/rostering/**/* tests/**/* timeback/docs/oneroster/rostering/list_users.md timeback/models/response/*
+git commit -m "feat(oneroster/rostering): add list_users endpoint with docs and tests"
+```
+
+4) Bump the package version and changelog (release commit)
+
+- Edit:
+  - `pyproject.toml` → `[tool.poetry].version = "X.Y.Z"`
+  - `timeback/__init__.py` → `__version__ = "X.Y.Z"`
+  - `CHANGELOG.md` → add `[X.Y.Z]` section and update comparison links
+
+```bash
+git add pyproject.toml timeback/__init__.py CHANGELOG.md
+git commit -m "chore(release): vX.Y.Z"
+```
+
+5) Push the feature branch and open PR
+
+```bash
+git push -u origin HEAD
+# open PR → merge into main via squash merge when green
+```
+
+6) Tag the release on main
+
+```bash
+git checkout main
+git pull
+git tag vX.Y.Z
+git push origin main --tags
+```
+
+7) Build and publish to PyPI
+
+```bash
+poetry build
+poetry publish
+```
+
+Notes:
+- Keep feature and release bump as separate commits.
+- Releases are tagged from main only.
+- Version bump types: MAJOR (breaking), MINOR (new features), PATCH (fixes/infra).
