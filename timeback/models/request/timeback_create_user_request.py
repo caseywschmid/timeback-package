@@ -5,7 +5,7 @@ POST /ims/oneroster/rostering/v1p2/users/
 
 from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field, field_validator
-
+from uuid import uuid4
 from timeback.enums import TimebackStatus
 from timeback.models.timeback_user_role import TimebackUserRole
 from timeback.models.timeback_user_id import TimebackUserId
@@ -14,8 +14,8 @@ from timeback.models.timeback_org_ref import TimebackOrgRef
 
 
 class TimebackCreateUserBody(BaseModel):
-    # Required client-supplied sourcedId; API returns sourcedIdPairs mapping
-    sourcedId: str
+    # Optional client-supplied sourcedId; if omitted, auto-generate a UUID string
+    sourcedId: Optional[str] = Field(default_factory=lambda: str(uuid4()))
     enabledUser: Union[bool, str] = Field(...)
     givenName: str = Field(...)
     familyName: str = Field(...)
@@ -55,5 +55,3 @@ class TimebackCreateUserRequest(BaseModel):
 
     def to_dict(self) -> Dict[str, Any]:
         return {"user": self.user.model_dump(exclude_none=True)}
-
-
