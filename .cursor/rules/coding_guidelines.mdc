@@ -4,6 +4,8 @@ alwaysApply: true
 
 ## Timeback Package Coding Guidelines
 
+- Always use Pydantic V2 for all models.
+
 Clear, enforceable rules for adding new endpoints, utilities, tests, and docs.
 
 ### 1) Endpoint placement by API path

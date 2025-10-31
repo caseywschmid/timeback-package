@@ -1,5 +1,5 @@
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 
 
 class TimebackCodeMinorField(BaseModel):
@@ -11,8 +11,8 @@ class TimebackCodeMinor(BaseModel):
     imsx_codeMinorField: List[TimebackCodeMinorField] = Field(...)
 
 
-class TimebackErrorDetailsItem(BaseModel):
-    __root__: Dict[str, str]
+class TimebackErrorDetailsItem(RootModel[Dict[str, str]]):
+    pass
 
 
 class TimebackErrorBase(BaseModel):
