@@ -19,6 +19,9 @@ from timeback.services.oneroster.rostering.endpoints.update_user import (
 from timeback.services.oneroster.rostering.endpoints.create_user import (
     create_user as create_user_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.delete_user import (
+    delete_user as delete_user_endpoint,
+)
 
 
 class RosteringService:
@@ -67,3 +70,7 @@ class RosteringService:
     def create_user(self, request: TimebackCreateUserRequest) -> TimebackCreateUserResponse:
         """Create a new user."""
         return create_user_endpoint(self._http, request)
+
+    def delete_user(self, sourced_id: str):
+        """Delete (tombstone) a user by sourcedId. Returns raw provider response (None for 204)."""
+        return delete_user_endpoint(self._http, sourced_id)

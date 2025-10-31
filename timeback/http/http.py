@@ -65,6 +65,30 @@ class HttpClient:
                     continue
                 raise
 
+    def delete(self, path: str) -> Optional[Dict[str, Any]]:
+        url = f"{self._base_url}{path}"
+        attempt = 0
+        max_attempts = 3
+        while True:
+            attempt += 1
+            start = time.time()
+            try:
+                resp = self._client.delete(url, headers=self._headers())
+                duration = (time.time() - start) * 1000
+                request_id = resp.headers.get("x-request-id") or resp.headers.get(
+                    "x-amzn-requestid"
+                )
+                if 200 <= resp.status_code < 300:
+                    if not resp.text:
+                        return None
+                    return resp.json()
+                self._raise_for_status(resp, request_id, duration)
+            except RateLimitError:
+                if attempt < max_attempts:
+                    time.sleep(0.5 * attempt)
+                    continue
+                raise
+
     def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         url = f"{self._base_url}{path}"
         attempt = 0

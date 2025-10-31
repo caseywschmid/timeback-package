@@ -175,7 +175,7 @@
 
 - [x] `get_user`
 - [x] `update_user`
-- [ ] `delete_user`
+- [x] `delete_user`
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/demographics
 
