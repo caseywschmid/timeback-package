@@ -66,49 +66,9 @@ qti_health = client.qti_http.get("/health")
 caliper_status = client.caliper_http.get("/status")
 ```
 
-## Services and endpoints
-
-- OneRoster
-  - `client.oneroster.rostering.get_user(sourced_id, fields=None)`
-
 Design rules: service methods contain no business logic; each method calls a single endpoint function in `timeback/services/.../endpoints/`, which may import utilities from `.../utils/`. All endpoints/utilities return typed Pydantic models/enums from `timeback/models` and `timeback/enums`.
 
 See docs for structure and procedures:
 
-- `timeback/docs/coding_guidelines.md`
-- `timeback/docs/add_endpoint_procedure.md`
 - `timeback/docs/oneroster/rostering/get_user.md`
-
-## Testing
-
-Run all unit tests:
-
-```bash
-poetry run pytest -q -m "not integration"
-```
-
-Run integration tests (real API calls; requires network and creds):
-
-```bash
-export TIMEBACK_ENVIRONMENT=production
-export TIMEBACK_CLIENT_ID=...
-export TIMEBACK_CLIENT_SECRET=...
-poetry run pytest -q -m integration
-```
-
-## Development
-
-Formatting and linting:
-
-```bash
-poetry run black .
-poetry run flake8 .
-poetry run mypy .
-```
-
-Build and publish:
-
-```bash
-poetry build
-poetry publish  # requires configured credentials
-```
+- `timeback/docs/oneroster/rostering/get_all_users.md`

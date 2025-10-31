@@ -1,0 +1,71 @@
+---
+alwaysApply: true
+---
+
+# Timeback API Structure
+
+The Timeback API is actually multiple APIs that are grouped together under the same domain.
+
+- OneRoster API
+  - /ims/oneroster
+    - /rostering/v1p2
+    - /gradebook/v1p2
+    - /resources/v1p2
+- PowerPath API
+  - /powerpath
+- CASE API
+  - /ims/case
+    - /v1p1
+- EduBridge API
+  - /edubridge
+- OpenBadge API
+  - /ims/ob
+    - /v3p0
+- CLR API (Comprehensive Learner Record)
+  - /ims/clr
+    - /v2p0
+
+
+There are other APIs as well that are part of the Timeback API
+
+- The QTI API
+- The Caliper API
+
+# Timeback Package Structure
+
+This package will expose a Timeback() class that will be used to interact with all aspects ofthe Timeback API.
+
+The Timeback() class will farm out requests to the appropriate service classes that will handle the requests and responses for the appropriate API depending on the endpoint being called.
+
+Those services are (to be expanded later): 
+- RosteringService
+- GradebookService
+- ResourcesService
+- PowerPathService
+- QTIService
+- CASEService
+- CaliperService
+
+
+- Timeback()
+    - OneRosterService()
+        - RosteringService()
+        - GradebookService()
+        - ResourcesService()
+    - PowerPathService()
+    - QTIService()
+    - CASEService()
+    - CaliperService()
+
+The idea is that someone would be able to use this package in the following way:
+
+```
+from timeback import Timeback
+
+client = Timeback()
+user = client.oneroster.rostering.get_user("sourced-id")
+```
+
+This would then farm out the request to the appropriate service class and return the response.
+
+The services classes would then handle the requests and responses for the appropriate API depending on the endpoint being called.

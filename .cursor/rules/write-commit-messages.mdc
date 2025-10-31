@@ -1,0 +1,60 @@
+---
+alwaysApply: false
+description: Guidelines for writing clear and consistent commit messages
+---
+
+# Commit Message Guidelines
+
+## Core Principles
+
+1. **Be concise and direct** - State what was done without unnecessary words
+2. **No emojis** - Keep messages professional and universal
+3. **Explain the change, not the diff** - Describe the outcome or purpose, not individual file changes
+4. **Use imperative mood** - Write as if giving a command (e.g., "Add feature" not "Added feature")
+5. **Limit subject line to 72 characters** - Ensures readability in all git tools
+6. **Use lists sparingly** - For commits with multiple distinct changes, a bulleted list in the body is acceptable
+
+## Format
+```
+[type]: [subject in imperative mood]
+
+Optional body with additional context or list of changes when needed
+```
+
+### Types
+
+- **feat** - New feature for the user
+- **fix** - Bug fix
+- **refactor** - Code restructuring without changing behavior
+- **perf** - Performance improvement
+- **test** - Adding or updating tests
+- **docs** - Documentation changes
+- **style** - Code formatting, missing semicolons, etc. (no functional changes)
+- **chore** - Maintenance tasks (dependencies, build config, etc.)
+
+## Examples
+
+**Good:**
+- `feat: Add password reset functionality`
+- `fix: Prevent crash when user profile is incomplete`
+- `refactor: Simplify authentication logic`
+- `perf: Optimize database queries for user search`
+- `test: Add integration tests for payment flow`
+- `docs: Update API authentication guide`
+- `style: Format user service files`
+- `chore: Bump axios to version 1.6.0`
+
+**With body/list (when needed):**
+```
+refactor: Restructure user authentication module
+
+- Move validation logic to separate utility
+- Extract token refresh into dedicated service
+- Update error handling for better clarity
+```
+
+**Avoid:**
+- ❌ `feat: onboarding` (too vague)
+- ❌ `fix: fixed the bug` (redundant and not descriptive)
+- ❌ `Updated files` (missing type, unclear what changed)
+- ❌ `feat: Added new feature to onboarding` (past tense, "new feature" is redundant)

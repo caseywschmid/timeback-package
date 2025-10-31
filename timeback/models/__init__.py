@@ -57,6 +57,8 @@ from .timeback_term_ref import TimebackTermRef
 from .timeback_sourced_id_ref import TimebackSourcedIdReference
 from .timeback_component import TimebackComponent
 from .timeback_enrollment import TimebackEnrollment
+from .request import TimebackUpdateUserRequest
+from .response import TimebackUpdateUserResponse
 
 __all__ = [
     "TimebackTimeSpentEvent",
@@ -114,4 +116,6 @@ __all__ = [
     "TimebackQTIAssessmentItem",
     "TimebackQTIAssessmentTest",
     "TimebackEnrollment",
+    "TimebackUpdateUserRequest",
+    "TimebackUpdateUserResponse",
 ]

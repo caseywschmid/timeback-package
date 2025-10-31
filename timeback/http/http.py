@@ -43,6 +43,28 @@ class HttpClient:
                     continue
                 raise
 
+    def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        url = f"{self._base_url}{path}"
+        attempt = 0
+        max_attempts = 3
+        while True:
+            attempt += 1
+            start = time.time()
+            try:
+                resp = self._client.put(url, headers=self._headers(), json=json)
+                duration = (time.time() - start) * 1000
+                request_id = resp.headers.get("x-request-id") or resp.headers.get(
+                    "x-amzn-requestid"
+                )
+                if 200 <= resp.status_code < 300:
+                    return resp.json()
+                self._raise_for_status(resp, request_id, duration)
+            except RateLimitError:
+                if attempt < max_attempts:
+                    time.sleep(0.5 * attempt)
+                    continue
+                raise
+
     @staticmethod
     def _raise_for_status(
         resp: httpx.Response, request_id: Optional[str], duration_ms: float

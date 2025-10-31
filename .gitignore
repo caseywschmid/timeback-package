@@ -41,4 +41,4 @@ _timebackDocs/
 poetry.lock 
 
 # AI
-.cursor/
+# .cursor/
