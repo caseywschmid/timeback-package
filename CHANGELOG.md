@@ -8,6 +8,20 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
 
 -
 
+## [0.1.3] - 2025-10-31
+
+### Added
+- OneRoster Rostering: `create_user`, `update_user`, `delete_user` endpoints with docs and tests.
+- Integration test for user CRUD (net-zero cleanup).
+- Timeback error models (BadRequest/Unauthorized/Forbidden/NotFound/Unprocessable/TooMany/Server) with typed exception attachment.
+
+### Changed
+- Models aligned with OpenAPI: added `children` to Org, required fields on LineItem, `schoolYear` int on AcademicSession.
+- `create_user` request: `sourcedId` optional; auto-generated UUID when omitted.
+
+### Fixed
+- Pydantic v2 root model usage in error details (use RootModel).
+
 ## [0.1.2] - 2025-10-30
 
 ### Changed
@@ -32,7 +46,8 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
   - `timeback/docs/package_setup.md` (client setup)
 - Testing setup with unit tests (and integration tests marked with `@pytest.mark.integration`).
 
-[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/caseywschmid/timeback-package/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/caseywschmid/timeback-package/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/caseywschmid/timeback-package/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/caseywschmid/timeback-package/releases/tag/v0.1.0
