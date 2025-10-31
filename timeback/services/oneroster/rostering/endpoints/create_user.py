@@ -1,7 +1,6 @@
 from typing import Dict, Any
 
 from timeback.http import HttpClient
-from timeback.models.timeback_user import TimebackUser
 from timeback.models.request import TimebackCreateUserRequest
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.logs import logger
@@ -9,7 +8,7 @@ from timeback.logs import logger
 log = logger.configure_logging(__name__, log_level="DEBUG")
 
 
-def create_user(http: HttpClient, request: TimebackCreateUserRequest) -> TimebackUser:
+def create_user(http: HttpClient, request: TimebackCreateUserRequest) -> TimebackCreateUserResponse:
     """Create a new user.
 
     POST /ims/oneroster/rostering/v1p2/users/
@@ -21,6 +20,6 @@ def create_user(http: HttpClient, request: TimebackCreateUserRequest) -> Timebac
     )
     log.debug(f"Raw Data: {data}")
     resp = TimebackCreateUserResponse.model_validate(data)
-    return resp.user
+    return resp
 
 

@@ -2,13 +2,21 @@
 
 Represents the body returned by:
 - POST /ims/oneroster/rostering/v1p2/users/
+
+Per spec: HTTP 201 with `sourcedIdPairs` mapping supplied→allocated.
 """
 
 from pydantic import BaseModel, Field
-from timeback.models.timeback_user import TimebackUser
+
+
+class TimebackSourcedIdPairs(BaseModel):
+    suppliedSourcedId: str = Field(..., description="Client-supplied sourcedId")
+    allocatedSourcedId: str = Field(..., description="Server-allocated sourcedId")
 
 
 class TimebackCreateUserResponse(BaseModel):
-    user: TimebackUser = Field(..., description="Created user object")
+    sourcedIdPairs: TimebackSourcedIdPairs = Field(
+        ..., description="Mapping from supplied to allocated sourcedId"
+    )
 
 

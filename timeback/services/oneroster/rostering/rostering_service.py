@@ -6,6 +6,7 @@ from timeback.models.request import (
     TimebackUpdateUserRequest,
     TimebackCreateUserRequest,
 )
+from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
     get_user as get_user_endpoint,
 )
@@ -63,6 +64,6 @@ class RosteringService:
         """Update an existing user by sourcedId."""
         return update_user_endpoint(self._http, sourced_id, request)
 
-    def create_user(self, request: TimebackCreateUserRequest) -> TimebackUser:
+    def create_user(self, request: TimebackCreateUserRequest) -> TimebackCreateUserResponse:
         """Create a new user."""
         return create_user_endpoint(self._http, request)

@@ -19,9 +19,10 @@ Request body (application/json):
   - `roles` (array of role assignments)
   - `email` (string, email)
 
-Successful response (HTTP 200 or 201 depending on provider):
+Successful response (HTTP 201):
 
-- Body: `{ "user": TimebackUser }`
+- Body (per spec):
+  - `{ "sourcedIdPairs": { "suppliedSourcedId": string, "allocatedSourcedId": string } }`
 
 Error responses:
 
@@ -51,7 +52,8 @@ body = TimebackCreateUserBody(
     roles=[TimebackUserRole(roleType=TimebackRoleType.PRIMARY, role=TimebackRoleName.STUDENT, org=TimebackOrgRef(sourcedId="org1"))],
 )
 req = TimebackCreateUserRequest(user=body)
-user = client.oneroster.rostering.create_user(req)
+resp = client.oneroster.rostering.create_user(req)
+print(resp.sourcedIdPairs.suppliedSourcedId, '->', resp.sourcedIdPairs.allocatedSourcedId)
 ```
 
 Notes:

@@ -24,11 +24,15 @@ def main():
     )
     req = TimebackCreateUserRequest(user=body)
 
-    user = client.oneroster.rostering.create_user(req)
-    if not user:
+    resp = client.oneroster.rostering.create_user(req)
+    if not resp:
         print("No result")
         return
-    print(user.sourcedId, user.givenName, user.familyName)
+    print(
+        resp.sourcedIdPairs.suppliedSourcedId,
+        "->",
+        resp.sourcedIdPairs.allocatedSourcedId,
+    )
 
 
 if __name__ == "__main__":
