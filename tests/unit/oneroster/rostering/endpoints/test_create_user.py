@@ -21,6 +21,7 @@ class MockHttp:
 
 def test_create_user_success():
     body = TimebackCreateUserBody(
+        sourcedId="u-created",
         enabledUser=True,
         givenName="Chris",
         familyName="Doe",

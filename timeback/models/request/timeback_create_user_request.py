@@ -14,6 +14,8 @@ from timeback.models.timeback_org_ref import TimebackOrgRef
 
 
 class TimebackCreateUserBody(BaseModel):
+    # Required client-supplied sourcedId; API returns sourcedIdPairs mapping
+    sourcedId: str
     enabledUser: Union[bool, str] = Field(...)
     givenName: str = Field(...)
     familyName: str = Field(...)

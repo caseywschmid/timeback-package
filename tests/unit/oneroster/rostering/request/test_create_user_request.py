@@ -7,6 +7,7 @@ from timeback.models.timeback_org_ref import TimebackOrgRef
 
 def test_enabled_user_string_normalizes_on_create():
     body = TimebackCreateUserBody(
+        sourcedId="u-1",
         enabledUser="true",
         givenName="A",
         familyName="B",
