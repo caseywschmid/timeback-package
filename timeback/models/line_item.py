@@ -47,7 +47,7 @@ class LineItem(BaseModel):
         default=TimebackStatus.ACTIVE, description="Status (must be 'active')"
     )
 
-    # Optional fields
+    # Optional/Additional fields
     sourcedId: Optional[str] = Field(None, description="Unique identifier")
     dateLastModified: Optional[str] = Field(
         None, description="Last modification timestamp"
@@ -58,8 +58,14 @@ class LineItem(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Custom metadata")
 
     # References (optional)
-    class_: Optional[TimebackSourcedIdReference] = Field(
-        None, alias="class", description="Reference to class"
+    class_: TimebackSourcedIdReference = Field(
+        ..., alias="class", description="Reference to class"
+    )
+    school: TimebackSourcedIdReference = Field(
+        ..., description="Reference to school"
+    )
+    category: TimebackSourcedIdReference = Field(
+        ..., description="Reference to category"
     )
     parentAssessmentLineItem: Optional[TimebackSourcedIdReference] = Field(
         None, description="Reference to parent line item"
@@ -79,6 +85,10 @@ class LineItem(BaseModel):
     learningObjectiveSet: Optional[List[Dict[str, Any]]] = Field(
         None, description="Learning objectives"
     )
+
+    # Required dates per spec
+    assignDate: str = Field(..., description="Assignment date (ISO 8601)")
+    dueDate: str = Field(..., description="Due date (ISO 8601)")
 
 
 class LineItemsResponse(BaseModel):

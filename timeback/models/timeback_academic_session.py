@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 import uuid
 from timeback.enums import TimebackStatus, TimebackAcademicSessionType
-from timeback.models.timeback_org_reference import TimebackOrgRef
+from timeback.models.timeback_org_ref import TimebackOrgRef
 
 
 class TimebackAcademicSession(BaseModel):
@@ -43,7 +43,7 @@ class TimebackAcademicSession(BaseModel):
     type: TimebackAcademicSessionType
     startDate: str
     endDate: str
-    schoolYear: str
+    schoolYear: int
     org: TimebackOrgRef
 
     # Optional fields with defaults

@@ -50,6 +50,7 @@ from .timeback_qti_assessment_test import TimebackQTIAssessmentTest
 from .timeback_assessment_line_item_ref import TimebackAssessmentLineItemRef
 from .timeback_student_ref import TimebackStudentRef
 from .timeback_score_scale_ref import TimebackScoreScaleRef
+from .timeback_score_scale import TimebackScoreScale, TimebackScoreScaleValue
 from .timeback_course_ref import TimebackCourseRef
 from .timeback_user_ref import TimebackUserRef
 from .timeback_resource_ref import TimebackResourceRef
@@ -95,6 +96,8 @@ __all__ = [
     "TimebackTermRef",
     "TimebackSourcedIdReference",
     "TimebackComponent",
+    "TimebackScoreScale",
+    "TimebackScoreScaleValue",
     # QTI Models
     "TimebackQTIObjectAttributes",
     "TimebackQTIChoice",
