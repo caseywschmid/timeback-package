@@ -169,7 +169,7 @@
 ### /ims/oneroster/rostering/v1p2/users/
 
 - [x] `get_all_users`
-- [ ] `create_user`
+- [x] `create_user`
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}
 
