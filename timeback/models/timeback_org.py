@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 import uuid
 from timeback.enums.timeback_org_type import TimebackOrgType
 from timeback.enums.timeback_status import TimebackStatus
-from timeback.models.timeback_org_reference import TimebackOrgRef
+from timeback.models.timeback_org_ref import TimebackOrgRef
 
 class TimebackOrg(BaseModel):
     """OneRoster Organization model.
