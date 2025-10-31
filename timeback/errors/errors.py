@@ -1,5 +1,8 @@
 class TimebackError(Exception):
     """Base exception for Timeback client errors."""
+    def __init__(self, *args, error_details=None, **kwargs):
+        super().__init__(*args)
+        self.error_details = error_details
 
 
 class ConfigurationError(TimebackError):

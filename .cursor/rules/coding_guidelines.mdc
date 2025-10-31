@@ -1,0 +1,185 @@
+---
+alwaysApply: true
+---
+
+## Timeback Package Coding Guidelines
+
+- Always use Pydantic V2 for all models.
+
+Clear, enforceable rules for adding new endpoints, utilities, tests, and docs.
+
+### 1) Endpoint placement by API path
+
+- **Rule**: Place each endpoint under the correct service based on its API path.
+  - OneRoster Rostering: `/ims/oneroster/rostering/v1p2/...` → `timeback/services/oneroster/rostering/endpoints/`
+  - OneRoster Gradebook: `/ims/oneroster/gradebook/v1p2/...` → `timeback/services/oneroster/gradebook/endpoints/`
+  - OneRoster Resources: `/ims/oneroster/resources/v1p2/...` → `timeback/services/oneroster/resources/endpoints/`
+  - PowerPath: `/powerpath/...` → `timeback/services/powerpath/endpoints/` (when added)
+  - CASE: `/ims/case/v1p1/...` → `timeback/services/case/endpoints/` (when added)
+  - QTI, Caliper: use their dedicated service trees when scaffolded
+
+Example path mapping:
+
+```text
+GET /ims/oneroster/rostering/v1p2/users/{sourcedId}
+→ timeback/services/oneroster/rostering/endpoints/get_user.py
+```
+
+### 2) Service classes contain no business logic
+
+- Rule: Service classes expose methods only; they must call a single endpoint function per method.
+- Rule: All logic lives in the endpoint function file or imported utilities.
+
+Example (`RosteringService`):
+
+```python
+# timeback/services/oneroster/rostering/rostering_service.py
+from timeback.http import HttpClient
+from timeback.models.timeback_user import TimebackUser
+from timeback.services.oneroster.rostering.endpoints.get_user import get_user as get_user_endpoint
+
+class RosteringService:
+    """Rostering service methods for OneRoster."""
+
+    def __init__(self, http: HttpClient):
+        self._http = http
+
+    def get_user(self, sourced_id: str) -> TimebackUser:
+        return get_user_endpoint(self._http, sourced_id)
+```
+
+### 3) One file per endpoint; descriptive name
+
+- **Rule**: Each endpoint has exactly one file named after the action, placed under `.../endpoints/`.
+- **Rule**: The file exports one public function that performs the call and returns a typed model.
+
+Example endpoint function:
+
+```python
+# timeback/services/oneroster/rostering/endpoints/get_user.py
+from typing import Any, Dict
+from timeback.http import HttpClient
+from timeback.models.timeback_user import TimebackUser
+from timeback.services.oneroster.rostering.utils.parse_user_response import parse_user_response
+
+def get_user(http: HttpClient, sourced_id: str) -> TimebackUser:
+    data: Dict[str, Any] = http.get(f"/ims/oneroster/rostering/v1p2/users/{sourced_id}")
+    return parse_user_response(data)
+```
+
+### 4) Extract non-trivial logic into utilities
+
+- **Rule**: Any parsing/transform/validation beyond trivial parameter plumbing goes into `.../utils/`.
+- **Rule**: Utilities are imported by endpoint files (never the service).
+- **Rule**: Utility functions are strict 1 function per file.
+
+Example utility:
+
+```python
+# timeback/services/oneroster/rostering/utils/parse_user_response.py
+from typing import Any, Dict
+from timeback.models.timeback_user import TimebackUser
+from timeback.errors import ParseError
+
+def parse_user_response(data: Dict[str, Any]) -> TimebackUser:
+    try:
+        payload = data.get("user", data)
+        return TimebackUser.model_validate(payload)
+    except Exception as e:
+        raise ParseError(f"Failed to parse User response: {e}") from e
+```
+
+### 5) Typed responses using Pydantic models and Enums
+
+- **Rule**: Every service method, endpoint, and utility returns a concrete Pydantic model or typed value.
+- **Rule**: Use enums from `timeback/enums/` where applicable.
+- **Rule**: Validate and normalize API data into models before returning.
+
+Example signature requirement:
+
+```python
+def get_user(http: HttpClient, sourced_id: str) -> TimebackUser: ...
+```
+
+### 6) Tests: structure, coverage, and cleanup
+
+- **Rule**: Unit tests for every endpoint and utility, mirroring the service directory structure.
+- **Rule**: Integration tests for endpoint functions that call the real API.
+- **Rule**: Integration tests must net zero DB changes; create-and-cleanup in the same test.
+
+Structure:
+
+```text
+tests/
+  unit/
+    oneroster/rostering/endpoints/test_get_user.py
+    oneroster/rostering/utils/test_parse_user_response.py (if needed)
+  integration/
+    oneroster/rostering/endpoints/test_get_user_integration.py
+```
+
+Example unit test (mocking HTTP):
+
+```python
+def test_get_user_success():
+    class MockHttp:  # minimal stub
+        def get(self, path, params=None):
+            return {"user": {"sourcedId": "u1", "givenName": "A", "familyName": "B", "enabledUser": True, "roles": [], "agents": [], "userProfiles": []}}
+
+    user = get_user(MockHttp(), "u1")
+    assert user.sourcedId == "u1"
+```
+
+Integration test cleanup pattern:
+
+```python
+# Pseudocode; ensure any created resource is deleted in teardown/finally
+created = create_resource(...)
+try:
+    fetched = get_resource(created.id)
+    assert fetched.id == created.id
+finally:
+    delete_resource(created.id)
+```
+
+### 7) Documentation per endpoint
+
+- **Rule**: Each endpoint gets a short doc page under `timeback/docs/` mirroring service structure.
+- **Rule**: Include: purpose, request path/params, response model, and example usage.
+
+Example doc location:
+
+```text
+timeback/docs/oneroster/rostering/get_user.md
+```
+
+### 8) Naming, structure, and imports
+
+- **Rule**: Descriptive filenames and function names (e.g., `get_user.py`, `list_classes.py`).
+- **Rule**: Keep imports local and minimal in endpoint files; avoid cross-service imports.
+- **Rule**: No circular imports; utilities must not import service classes.
+
+### 9) HTTP usage
+
+- **Rule**: Use the injected `HttpClient` only in endpoint functions.
+- **Rule**: Build full path strings that match the API spec; query params are explicit dicts.
+- **Rule**: Let `HttpClient` raise typed errors; do not catch unless adding actionable context.
+
+### 10) Comments and docstrings
+
+- **Rule**: Service classes: brief class docstring only.
+- **Rule**: Endpoint files: short header comment explaining purpose and path.
+- **Rule**: Utilities: docstring with rationale and edge cases if non-obvious.
+
+### Quick checklist (per endpoint)
+
+- Correct service folder by path
+- One endpoint file, one public function
+- No logic in service class; service calls endpoint function
+- Complex logic extracted to utilities
+- Typed return model (Pydantic + Enums)
+- Unit tests for endpoint and utilities
+- Integration test with net-zero DB changes
+- Endpoint doc added under `timeback/docs/...`
+
+

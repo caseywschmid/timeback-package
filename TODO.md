@@ -168,14 +168,14 @@
 
 ### /ims/oneroster/rostering/v1p2/users/
 
-- [ ] `get_all_users`
-- [ ] `create_user`
+- [x] `get_all_users`
+- [x] `create_user`
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}
 
 - [x] `get_user`
-- [ ] `update_user`
-- [ ] `delete_user`
+- [x] `update_user`
+- [x] `delete_user`
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/demographics
 

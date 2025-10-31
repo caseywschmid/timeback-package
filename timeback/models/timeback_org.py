@@ -13,12 +13,12 @@ API Endpoints:
 """
 
 from datetime import datetime
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from pydantic import BaseModel, Field
 import uuid
 from timeback.enums.timeback_org_type import TimebackOrgType
 from timeback.enums.timeback_status import TimebackStatus
-from timeback.models.timeback_org_reference import TimebackOrgRef
+from timeback.models.timeback_org_ref import TimebackOrgRef
 
 class TimebackOrg(BaseModel):
     """OneRoster Organization model.
@@ -51,3 +51,4 @@ class TimebackOrg(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Custom metadata")
     identifier: Optional[str] = Field(None, description="External identifier")
     parent: Optional[TimebackOrgRef] = Field(None, description="Reference to parent organization")
+    children: List[TimebackOrgRef] = Field(default_factory=list, description="Child organizations")
