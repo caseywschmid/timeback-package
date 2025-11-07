@@ -177,6 +177,10 @@
 - [x] `update_user`
 - [x] `delete_user`
 
+### /ims/oneroster/rostering/v1p2/users/{sourcedId}/agents/{agentSourcedId}
+
+- [x] `delete_agent`
+
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/demographics
 
 - [ ] `get_user_with_demographics`
