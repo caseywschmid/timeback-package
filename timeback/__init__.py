@@ -2,7 +2,7 @@
 Timeback - A Python library for interfacing with the TimeBack API.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __author__ = "Casey Schmid"
 __email__ = "casey.schmid@2hourlearning.com"
 

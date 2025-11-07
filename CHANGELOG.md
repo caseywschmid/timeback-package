@@ -8,6 +8,11 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
 
 -
 
+## [0.1.4] - 2025-01-XX
+
+### Added
+- OneRoster Rostering: `delete_agent` endpoint (`client.oneroster.rostering.delete_agent(user_id, agent_sourced_id)`) with docs and tests.
+
 ## [0.1.3] - 2025-10-31
 
 ### Added
@@ -46,7 +51,8 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
   - `timeback/docs/package_setup.md` (client setup)
 - Testing setup with unit tests (and integration tests marked with `@pytest.mark.integration`).
 
-[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/caseywschmid/timeback-package/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/caseywschmid/timeback-package/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/caseywschmid/timeback-package/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/caseywschmid/timeback-package/compare/v0.1.0...v0.1.1
