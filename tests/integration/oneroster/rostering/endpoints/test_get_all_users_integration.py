@@ -2,6 +2,7 @@ import os
 import pytest
 
 from timeback import Timeback
+from timeback.models.request import TimebackGetAllUsersRequest, TimebackQueryParams
 
 
 @pytest.mark.integration
@@ -26,7 +27,9 @@ def test_get_all_users_integration():
         pytest.skip(f"Missing required environment variables: {missing_vars}")
 
     client = Timeback()
-    resp = client.oneroster.rostering.get_all_users(limit=1)
+    query_params = TimebackQueryParams(limit=1)
+    request = TimebackGetAllUsersRequest(query_params=query_params)
+    resp = client.oneroster.rostering.get_all_users(request)
 
     assert resp is not None
     assert resp.limit >= 1

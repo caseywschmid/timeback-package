@@ -1,0 +1,14 @@
+---
+alwaysApply: false
+---
+
+# Handle Response Mismatches
+
+Sometimes the actual response from the API will not match the expected response according to the API documentation. In these cases, you will need to handle the response mismatch by creating a new response model that will be used to type the response. 
+
+You'll be provided with the raw data from the API response. You'll need to check all the existing models in the package to ensure we actually need a new one. If we do, you'll need to update the existing response model if it exists or create a new model that will be used to type the actual response.
+
+All response models should be located in the models/response/ directory.
+If you add a new response model, you MUST update the __init__.py file in the models/response/ directory to include the new model.
+
+See timeback/models/response/timeback_get_agent_for_response.py for an example of how to create a response model that has a custom response body that doesn't match the expected response according to the API documentation.

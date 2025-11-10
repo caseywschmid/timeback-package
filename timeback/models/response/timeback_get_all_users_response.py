@@ -8,6 +8,14 @@ class TimebackGetAllUsersResponse(BaseModel):
 
     Mirrors OneRoster list response envelope for users as documented in
     `timeback/docs/oneroster/rostering/get_all_users.md`.
+    
+    Attributes:
+        - users (List[TimebackUser]): List of users. See TimebackUser for structure.
+        - totalCount (int): Total number of results
+        - pageCount (int): Total number of pages
+        - pageNumber (int): Current page number
+        - offset (int): Offset for pagination
+        - limit (int): Limit per page
     """
 
     users: List[TimebackUser] = Field(..., description="List of users")

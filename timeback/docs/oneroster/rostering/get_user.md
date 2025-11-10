@@ -32,16 +32,27 @@ Python usage:
 
 ```python
 from timeback import Timeback
+from timeback.models.request import TimebackGetUserRequest, TimebackQueryParams
 
 client = Timeback()
-user = client.oneroster.rostering.get_user("<sourcedId>")
-# With fields filter
-user_min = client.oneroster.rostering.get_user("<sourcedId>", fields=["sourcedId", "username"])
 
-print(user.sourcedId, user.givenName, user.familyName)
+# Basic request without query params
+request = TimebackGetUserRequest(sourced_id="<sourcedId>")
+response = client.oneroster.rostering.get_user(request)
+
+# With fields filter
+query_params = TimebackQueryParams(fields=["sourcedId", "username"])
+request_with_fields = TimebackGetUserRequest(
+    sourced_id="<sourcedId>", 
+    query_params=query_params
+)
+response_min = client.oneroster.rostering.get_user(request_with_fields)
+
+print(response.user.sourcedId, response.user.givenName, response.user.familyName)
 ```
 
 Notes:
 
-- The client returns the raw API payload cast into the `TimebackUser` Pydantic model without transformation.
+- The client returns the full API response as `TimebackGetUserResponse` which contains a `user` field.
+- The response model mirrors the API structure: `{ "user": User }`.
 - If the API omits required fields, validation will fail with a `ParseError`.

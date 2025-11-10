@@ -8,15 +8,16 @@ Per spec: HTTP 201 with `sourcedIdPairs` mapping supplied→allocated.
 
 from pydantic import BaseModel, Field
 
-
-class TimebackSourcedIdPairs(BaseModel):
-    suppliedSourcedId: str = Field(..., description="Client-supplied sourcedId")
-    allocatedSourcedId: str = Field(..., description="Server-allocated sourcedId")
+from timeback.models import TimebackSourcedIdPairs
 
 
 class TimebackCreateUserResponse(BaseModel):
+    """Response model for creating a OneRoster User.
+
+    Attributes:
+        - sourcedIdPairs (TimebackSourcedIdPairs): SourcedId mapping. See TimebackSourcedIdPairs for structure.
+    """
+
     sourcedIdPairs: TimebackSourcedIdPairs = Field(
         ..., description="Mapping from supplied to allocated sourcedId"
     )
-
-

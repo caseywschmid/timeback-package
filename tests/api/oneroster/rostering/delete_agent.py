@@ -1,4 +1,5 @@
 from timeback import Timeback
+from timeback.models.request import TimebackDeleteAgentRequest
 
 
 def main():
@@ -6,7 +7,8 @@ def main():
 	user_id = "02d5c525-1755-4572-aae6-a30b8e89af79"
 	agent_sourced_id = "test.account8@alpha.school"
 
-	result = client.oneroster.rostering.delete_agent(user_id, agent_sourced_id)
+	request = TimebackDeleteAgentRequest(user_id=user_id, agent_sourced_id=agent_sourced_id)
+	result = client.oneroster.rostering.delete_agent(request)
 	if result is None:
 		print("Deleted (no content)")
 		return

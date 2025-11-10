@@ -24,6 +24,7 @@ from .timeback_user import TimebackUser
 from .timeback_user_role import TimebackUserRole
 from .timeback_user_id import TimebackUserId
 from .timeback_agent_ref import TimebackAgentRef
+from .timeback_agent import TimebackAgent
 from .timeback_org_ref import TimebackOrgRef
 from .timeback_resource import TimebackResource
 from .timeback_component_ref import TimebackComponentRef
@@ -58,6 +59,7 @@ from .timeback_term_ref import TimebackTermRef
 from .timeback_sourced_id_ref import TimebackSourcedIdReference
 from .timeback_component import TimebackComponent
 from .timeback_enrollment import TimebackEnrollment
+from .timeback_sourced_id_pairs import TimebackSourcedIdPairs   
 from .request import TimebackUpdateUserRequest
 from .response import TimebackUpdateUserResponse
 
@@ -80,6 +82,7 @@ __all__ = [
     "TimebackAssessmentResultsResponse",
     # New Models
     "TimebackUser",
+    "TimebackAgent",
     "TimebackUserRole",
     "TimebackUserId",
     "TimebackResource",
@@ -121,4 +124,5 @@ __all__ = [
     "TimebackEnrollment",
     "TimebackUpdateUserRequest",
     "TimebackUpdateUserResponse",
+    "TimebackSourcedIdPairs",
 ]

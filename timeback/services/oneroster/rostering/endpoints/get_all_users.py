@@ -3,16 +3,14 @@
 GET /ims/oneroster/rostering/v1p2/users
 
 Builds the full path and query params, performs the HTTP GET via the injected
-`HttpClient`, and parses the response into `TimebackListUsersResponse`.
+`HttpClient`, and parses the response into `TimebackGetAllUsersResponse`.
 """
 
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict
 
 from timeback.http import HttpClient
 from timeback.models.response import TimebackGetAllUsersResponse
-from timeback.services.oneroster.rostering.utils.normalize_fields import (
-    normalize_fields,
-)
+from timeback.models.request import TimebackGetAllUsersRequest
 from timeback.logs import logger
 
 log = logger.configure_logging(__name__, log_level="INFO")
@@ -20,37 +18,24 @@ log = logger.configure_logging(__name__, log_level="INFO")
 
 def get_all_users(
     http: HttpClient,
-    *,
-    fields: Optional[Union[str, Sequence[str]]] = None,
-    limit: Optional[int] = None,
-    offset: Optional[int] = None,
-    sort: Optional[str] = None,
-    order_by: Optional[str] = None,
-    filter: Optional[str] = None,
-    search: Optional[str] = None,
+    request: TimebackGetAllUsersRequest,
 ) -> TimebackGetAllUsersResponse:
     """Fetch a paginated list of users.
 
-    Parameters map to OneRoster query parameters; `order_by` maps to `orderBy`.
+    GET /ims/oneroster/rostering/v1p2/users
+
+    Args:
+        http: Injected HTTP client for making requests
+        request: Request containing optional query parameters
+
+    Returns:
+        TimebackGetAllUsersResponse containing paginated list of users
     """
     path = "/ims/oneroster/rostering/v1p2/users"
 
     query: Dict[str, Any] = {}
-    normalized_fields = normalize_fields(fields)
-    if normalized_fields:
-        query["fields"] = normalized_fields
-    if limit is not None:
-        query["limit"] = limit
-    if offset is not None:
-        query["offset"] = offset
-    if sort is not None:
-        query["sort"] = sort
-    if order_by is not None:
-        query["orderBy"] = order_by
-    if filter is not None:
-        query["filter"] = filter
-    if search is not None:
-        query["search"] = search
+    if request.query_params:
+        query = request.query_params.to_query_dict()
 
     data: Dict[str, Any] = http.get(path, params=query)
     log.debug(f"Raw Data: {data}")
