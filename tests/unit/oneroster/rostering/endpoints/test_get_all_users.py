@@ -27,6 +27,7 @@ def minimal_user(idx: str):
         "userProfiles": [],
         "email": f"u{idx}@example.com",
         "status": "active",
+        "dateLastModified": "2024-01-01T00:00:00Z",
     }
 
 

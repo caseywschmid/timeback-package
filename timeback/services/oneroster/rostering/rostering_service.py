@@ -28,7 +28,11 @@ from timeback.services.oneroster.rostering.endpoints.delete_agent import (
 from timeback.services.oneroster.rostering.endpoints.get_agent_for import (
     get_agent_for as get_agent_for_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_agents import (
+    get_agents as get_agents_endpoint,
+)
 from timeback.models.response import TimebackDeleteAgentResponse, TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAgentsResponse
 
 
 class RosteringService:
@@ -89,3 +93,7 @@ class RosteringService:
     def get_agent_for(self, user_id: str) -> TimebackGetAgentForResponse:
         """Get users this user is an agent for (e.g., parents getting children list)."""
         return get_agent_for_endpoint(self._http, user_id)
+
+    def get_agents(self, user_id: str) -> TimebackGetAgentsResponse:
+        """Get agent users for the specified user."""
+        return get_agents_endpoint(self._http, user_id)

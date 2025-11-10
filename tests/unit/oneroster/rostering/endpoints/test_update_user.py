@@ -21,6 +21,7 @@ class MockHttp:
         user.setdefault("status", TimebackStatus.ACTIVE)
         user.setdefault("agents", [])
         user.setdefault("userProfiles", [])
+        user.setdefault("dateLastModified", "2024-01-01T00:00:00Z")
         return {"user": user}
 
 

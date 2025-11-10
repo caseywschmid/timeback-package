@@ -24,6 +24,7 @@ from .timeback_user import TimebackUser
 from .timeback_user_role import TimebackUserRole
 from .timeback_user_id import TimebackUserId
 from .timeback_agent_ref import TimebackAgentRef
+from .timeback_agent import TimebackAgent
 from .timeback_org_ref import TimebackOrgRef
 from .timeback_resource import TimebackResource
 from .timeback_component_ref import TimebackComponentRef
@@ -80,6 +81,7 @@ __all__ = [
     "TimebackAssessmentResultsResponse",
     # New Models
     "TimebackUser",
+    "TimebackAgent",
     "TimebackUserRole",
     "TimebackUserId",
     "TimebackResource",

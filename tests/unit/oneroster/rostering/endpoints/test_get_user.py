@@ -34,6 +34,7 @@ def test_get_user_success():
                 ],
                 "agents": [],
                 "userProfiles": [],
+                "dateLastModified": "2024-01-01T00:00:00Z",
             }
         }
     )
@@ -55,9 +56,12 @@ def test_get_user_with_fields_param():
                 "givenName": "John",
                 "familyName": "Doe",
                 "enabledUser": True,
-                "roles": [],
+                "roles": [
+                    {"role": "student", "roleType": "primary", "org": {"sourcedId": "org1", "type": "org"}}
+                ],
                 "agents": [],
                 "userProfiles": [],
+                "dateLastModified": "2024-01-01T00:00:00Z",
             }
         }
     )
@@ -80,6 +84,7 @@ def test_get_user_direct_response():
             "roles": [{"role": "teacher", "roleType": "primary", "org": {"sourcedId": "org2", "type": "org"}}],
             "agents": [],
             "userProfiles": [],
+            "dateLastModified": "2024-01-01T00:00:00Z",
         }
     )
 
@@ -102,6 +107,7 @@ def test_parse_user_response_with_user_wrapper():
             "roles": [{"role": "student", "roleType": "primary", "org": {"sourcedId": "org3", "type": "org"}}],
             "agents": [],
             "userProfiles": [],
+            "dateLastModified": "2024-01-01T00:00:00Z",
         }
     }
 
@@ -123,6 +129,7 @@ def test_parse_user_response_direct():
         "roles": [{"role": "teacher", "roleType": "primary", "org": {"sourcedId": "org4", "type": "org"}}],
         "agents": [],
         "userProfiles": [],
+        "dateLastModified": "2024-01-01T00:00:00Z",
     }
 
     user = parse_user_response(data)

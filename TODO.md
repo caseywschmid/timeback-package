@@ -189,7 +189,7 @@
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/agents
 
-- [ ] `get_agents`
+- [x] `get_agents`
 - [ ] `add_agent`
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/agents/{agentSourcedId}
