@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from timeback import Timeback
+from timeback.models.request import TimebackGetAllUsersRequest, TimebackQueryParams
 
 
 def main():
@@ -10,9 +11,9 @@ def main():
     client = Timeback()
 
     # Use filter for exact email match
-    users_response = client.oneroster.rostering.get_all_users(
-        filter=f"email='{args.email}'"
-    )
+    query_params = TimebackQueryParams(filter=f"email='{args.email}'")
+    request = TimebackGetAllUsersRequest(query_params=query_params)
+    users_response = client.oneroster.rostering.get_all_users(request)
 
     if not users_response or not users_response.users:
         print("No user found with that email")

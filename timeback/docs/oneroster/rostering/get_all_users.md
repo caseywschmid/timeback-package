@@ -34,17 +34,30 @@ Python usage:
 
 ```python
 from timeback import Timeback
+from timeback.models.request import TimebackGetAllUsersRequest, TimebackQueryParams
 
 client = Timeback()
-resp = client.oneroster.rostering.get_all_users(limit=50, filter="status='active'", search="john")
 
-print(resp.totalCount, len(resp.users))
-if resp.users:
-    print(resp.users[0].sourcedId, resp.users[0].givenName, resp.users[0].familyName)
+# Basic request without query params
+request = TimebackGetAllUsersRequest()
+response = client.oneroster.rostering.get_all_users(request)
+
+# With query params
+query_params = TimebackQueryParams(
+    limit=50,
+    filter="status='active'",
+    search="john"
+)
+request_with_params = TimebackGetAllUsersRequest(query_params=query_params)
+response_filtered = client.oneroster.rostering.get_all_users(request_with_params)
+
+print(response_filtered.totalCount, len(response_filtered.users))
+if response_filtered.users:
+    print(response_filtered.users[0].sourcedId, response_filtered.users[0].givenName, response_filtered.users[0].familyName)
 ```
 
 Notes:
 
-- `order_by` parameter in the Python client maps to `orderBy` in the API query.
-- `fields` accepts a string or list of strings; lists are joined with commas.
+- The `order_by` field in `TimebackQueryParams` maps to `orderBy` in the API query.
+- The `fields` field accepts a string or list of strings; lists are joined with commas.
 

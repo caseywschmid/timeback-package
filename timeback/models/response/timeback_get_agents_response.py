@@ -10,6 +10,10 @@ class TimebackGetAgentsResponse(BaseModel):
 
     Mirrors OneRoster response envelope for the agents endpoint:
     { "agents": [User, ...] }
+    
+    Attributes:
+        - agents (List[TimebackAgent]): List of agent users associated with the given user.
+          See TimebackAgent for structure.
     """
 
     agents: List[TimebackAgent] = Field(

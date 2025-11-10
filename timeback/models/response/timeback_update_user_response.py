@@ -9,6 +9,12 @@ from timeback.models.timeback_user import TimebackUser
 
 
 class TimebackUpdateUserResponse(BaseModel):
+    """Response model for updating a OneRoster User.
+    
+    Attributes:
+        - user (TimebackUser): Updated user object. See TimebackUser for structure.
+    """
+    
     user: TimebackUser = Field(..., description="Updated user object")
 
 

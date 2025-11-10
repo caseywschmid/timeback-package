@@ -3,6 +3,7 @@ import pytest
 
 from timeback import Timeback
 from timeback.errors import NotFoundError
+from timeback.models.request import TimebackGetUserRequest
 
 # TODO: Replace with actual test user
 # alannah.carrion@2hourlearning.com
@@ -42,21 +43,23 @@ def test_get_user_integration():
         pytest.skip("No test sourcedId provided - set test_sourced_id in this file")
 
     # Test the actual API call
-    user = client.oneroster.rostering.get_user(test_sourced_id)
+    request = TimebackGetUserRequest(sourced_id=test_sourced_id)
+    response = client.oneroster.rostering.get_user(request)
 
-    # Verify we got a valid user object
-    assert user is not None
-    assert user.sourcedId == test_sourced_id
-    assert user.givenName is not None
-    assert user.familyName is not None
-    assert user.enabledUser is not None
-    assert user.status is not None
-    assert user.roles is not None
-    assert user.agents is not None
-    assert user.userProfiles is not None
+    # Verify we got a valid response with user object
+    assert response is not None
+    assert response.user is not None
+    assert response.user.sourcedId == test_sourced_id
+    assert response.user.givenName is not None
+    assert response.user.familyName is not None
+    assert response.user.enabledUser is not None
+    assert response.user.status is not None
+    assert response.user.roles is not None
+    assert response.user.agents is not None
+    assert response.user.userProfiles is not None
 
     print(
-        f"Successfully fetched user: {user.givenName} {user.familyName} ({user.sourcedId})"
+        f"Successfully fetched user: {response.user.givenName} {response.user.familyName} ({response.user.sourcedId})"
     )
 
 
@@ -79,13 +82,14 @@ def test_get_user_integration_full_response():
     if test_sourced_id == "REPLACE_WITH_ACTUAL_SOURCED_ID":
         pytest.skip("No test sourcedId provided - set test_sourced_id in this file")
 
-    user = client.oneroster.rostering.get_user(test_sourced_id)
+    request = TimebackGetUserRequest(sourced_id=test_sourced_id)
+    response = client.oneroster.rostering.get_user(request)
 
-    assert user.sourcedId == test_sourced_id
-    assert user.enabledUser is not None
-    assert user.roles is not None
-    assert user.agents is not None
-    assert user.userProfiles is not None
+    assert response.user.sourcedId == test_sourced_id
+    assert response.user.enabledUser is not None
+    assert response.user.roles is not None
+    assert response.user.agents is not None
+    assert response.user.userProfiles is not None
 
 
 @pytest.mark.integration
@@ -104,5 +108,6 @@ def test_get_user_integration_not_found():
     client = Timeback()
 
     # Use a non-existent sourcedId
+    request = TimebackGetUserRequest(sourced_id="non-existent-sourced-id-12345")
     with pytest.raises(NotFoundError):
-        client.oneroster.rostering.get_user("non-existent-sourced-id-12345")
+        client.oneroster.rostering.get_user(request)

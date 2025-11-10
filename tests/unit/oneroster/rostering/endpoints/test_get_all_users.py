@@ -2,6 +2,7 @@ import pytest
 
 from timeback.services.oneroster.rostering.endpoints.get_all_users import get_all_users
 from timeback.models.response import TimebackGetAllUsersResponse
+from timeback.models.request import TimebackGetAllUsersRequest, TimebackQueryParams
 
 
 class MockHttpClient:
@@ -43,7 +44,8 @@ def test_get_all_users_success():
         }
     )
 
-    resp = get_all_users(mock_http)
+    request = TimebackGetAllUsersRequest()
+    resp = get_all_users(mock_http, request)
 
     assert isinstance(resp, TimebackGetAllUsersResponse)
     assert len(resp.users) == 2
@@ -62,8 +64,7 @@ def test_get_all_users_passes_query_params():
         }
     )
 
-    resp = get_all_users(
-        mock_http,
+    query_params = TimebackQueryParams(
         fields=["sourcedId", "username"],
         limit=1,
         offset=0,
@@ -72,6 +73,8 @@ def test_get_all_users_passes_query_params():
         filter="status='active'",
         search="john",
     )
+    request = TimebackGetAllUsersRequest(query_params=query_params)
+    resp = get_all_users(mock_http, request)
 
     assert isinstance(resp, TimebackGetAllUsersResponse)
     assert mock_http.last_params == {

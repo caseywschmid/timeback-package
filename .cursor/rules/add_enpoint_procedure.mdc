@@ -21,20 +21,134 @@ Using the path, determine which service class this endpoint belongs to.
 
 ### 4. Review Models
 
-Analyze the request/response body and determine the parameters that will be passed to the method. Do a thorough review of the contents of the /models directory to determine the correct models to use. EVERY endpoint implemented should have FULL typing - including the request and response body for each endpoint if the request or response is more than a single field.
+Analyze the endpoint to determine what parameters it requires (path params, query params, request body params). Do a thorough review of the contents of the /models directory to determine the correct models to use.
+
+**Model Creation Rules:**
+- **Create request/response models when:**
+  - 2+ attributes (any combination of path params, query params, or body params)
+  - Single non-primitive attribute (complex model, list of models, etc.)
+  
+- **Do NOT create models when:**
+  - Single primitive attribute (str, int, bool, etc.) - pass directly as function parameter or return as `Dict[str, Any]`
+
+**For endpoints with multiple parameters:**
+- Include ALL parameters (path, query, body) in a single request model. Whatever the user will need to pass to the endpoint should be included in the request model. 
+- The endpoint function extracts what it needs from the model (path params for URL, body params for JSON, etc.)
+- This makes the API cleaner for users - they pass one request object with all required data
+
+**Examples:**
+- `delete_agent(user_id, agent_sourced_id)` → Create `TimebackDeleteAgentRequest` with both fields
+- `add_agent(user_id, agent_sourced_id)` → Create `TimebackAddAgentRequest` with both fields (user_id for path, agent_sourced_id for body)
+- `delete_user(sourced_id)` → No model needed (single primitive)
+- `get_agents(user_id)` → No model needed (single primitive)
 
 ### 5. Create new models
 
-Create the new models that you'll need for the request and response body for the new endpoint if required.
+Create the new models that you'll need for the request and response body for the new endpoint if required based on the rules in section 4.
 
-- models/request/ and models/response/ directories have `__init__.py` files that must be updated to include any new models that you've created.
-- the models/ directory has a `__init__.py` file that must be updated to include any new models that you've created as well.
+**Model Requirements:**
+- Use Pydantic v2 syntax: `model_config = ConfigDict(...)` instead of `class Config:`
+- Use `populate_by_name=True` in ConfigDict when field aliases are needed
+- Use descriptive field names following Python conventions (snake_case)
+- Use aliases when the API uses different naming (e.g., `alias="userId"` for `user_id`)
+
+**Docstring Standards:**
+
+All models MUST include comprehensive docstrings documenting attributes for IDE hover tooltips.
+
+**Request Models:**
+- List attributes under "Required:" and "Optional:" sections
+- Reference nested models: "See TimebackUserRole for structure."
+- Reference enums: "See TimebackStatus enum."
+
+**Response Models:**
+- List all attributes under "Attributes:" (no Required/Optional distinction)
+- Reference nested models: "See TimebackUser for structure."
+- Always create response models for structured API responses
+- Mirror the exact API response structure (e.g., `{ "user": User }` → `user: TimebackUser`)
+- Do NOT post-process - return `ResponseModel.model_validate(data)` directly
+
+**File Updates:**
+- Update `models/request/__init__.py` and `models/response/__init__.py` to export new models
+- Update `models/__init__.py` if creating new top-level models
+
+**Example Request Model:**
+```python
+from pydantic import BaseModel, ConfigDict, Field
+
+class TimebackAddAgentRequest(BaseModel):
+    """Request model for adding an agent to a user.
+    
+    Attributes:
+        Required:
+            - user_id (str): The sourcedId of the user
+            - agent_sourced_id (str): The sourcedId of the agent to add
+    """
+    
+    model_config = ConfigDict(populate_by_name=True)
+    user_id: str = Field(..., description="The sourcedId of the user", alias="userId")
+    agent_sourced_id: str = Field(..., description="The sourcedId of the agent to add", alias="agentSourcedId")
+```
+
+**Example Response Model:**
+```python
+from pydantic import BaseModel, Field
+from timeback.models.timeback_user import TimebackUser
+
+class TimebackGetUserResponse(BaseModel):
+    """Response model for getting a OneRoster User.
+    
+    Attributes:
+        - user (TimebackUser): User object. See TimebackUser for structure.
+    """
+    
+    user: TimebackUser = Field(..., description="User object")
+```
+
 
 ### 6. Create the endpoint function
 
-Create the the extracted function that will be used by the service class to make the API call. This function will go in the endpoints directory and will be named after the name of the method you found in TODO.md.
+Create the extracted function that will be used by the service class to make the API call. This function will go in the endpoints directory and will be named after the name of the method you found in TODO.md.
 
-While writing endpoint functions, it is absolutely critical that you add type annotations for EVERY parameter and return value. You should have created the necessary request and response models in the models/request/ and models/response/ directories if they're needed for the endpoint. Also, a thorough review of the available models in the models/ directory will help you determine the correct models to use. If you can type something in this endpoint function, you MUST type it. Dont write new types - all the types you'll need (with the exception of request and response models that you might have created) are already defined in the models/ directory.
+While writing endpoint functions, it is absolutely critical that you add type annotations for EVERY parameter and return value. You should have created the necessary request and response models in the models/request/ and models/response/ directories if they're needed for the endpoint. Also, a thorough review of the available models in the models/ directory will help you determine the correct models to use. If you can type something in this endpoint function, you MUST type it. Don't write new Timeback types - all the types you'll need (with the exception of request and response models that you might have created) are already defined in the models/ directory.
+
+**Handling Request Models:**
+
+If the endpoint requires a request model (2+ parameters or single non-primitive):
+- Accept the request model as a single parameter: `def endpoint_name(http: HttpClient, request: TimebackRequestModel) -> ReturnType:`
+- Extract path parameters from the request model and use them in the URL path: `f"/path/{request.user_id}/subpath/{request.agent_sourced_id}"`
+- Extract body parameters from the request model and use them in the JSON body: `{"agentSourcedId": request.agent_sourced_id}`
+- Extract query parameters from the request model and use them in the query string: `params={"limit": request.limit, "offset": request.offset}`
+- The endpoint function is responsible for extracting what it needs from the model and using it appropriately (path, body, query)
+
+If the endpoint does NOT require a request model (single primitive parameter):
+- Accept the primitive directly as a parameter: `def endpoint_name(http: HttpClient, sourced_id: str) -> ReturnType:`
+- Use it directly in the URL path or query string
+
+**Response Handling:**
+
+- If the response is a complex type (model, list of models), return the typed response model
+- If the response is a single primitive or flexible JSON, return `Dict[str, Any]` or `Optional[Dict[str, Any]]`
+
+**Example with Request Model:**
+```python
+def add_agent(http: HttpClient, request: TimebackAddAgentRequest) -> Dict[str, Any]:
+    """Add an agent for a user."""
+    # Extract path param from request model
+    path = f"/ims/oneroster/rostering/v1p2/users/{request.user_id}/agents"
+    # Extract body param from request model
+    body = {"agentSourcedId": request.agent_sourced_id}
+    data = http.post(path, json=body)
+    return data
+```
+
+**Example without Request Model:**
+```python
+def delete_user(http: HttpClient, sourced_id: str) -> Optional[Dict[str, Any]]:
+    """Delete a user."""
+    # Use primitive parameter directly
+    return http.delete(f"/ims/oneroster/rostering/v1p2/users/{sourced_id}")
+```
 
 #### Extract non-trivial logic into utilities
 

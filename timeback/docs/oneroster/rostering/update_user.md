@@ -6,24 +6,30 @@
 - Auth: OAuth2 Client Credentials (Bearer token)
 - Description: Update an existing user identified by `sourcedId`.
 
-Path params:
+Request model:
 
-- `sourcedId` (string, required): The user to update
+- `TimebackUpdateUserRequest` with required fields:
+  - `user` (TimebackUpdateUserBody) — User data with required fields:
+    - `sourcedId` (string) — The sourcedId of the user to update (used in path and body)
+    - `enabledUser` (boolean)
+    - `givenName` (string)
+    - `familyName` (string)
+    - `roles` (array of role assignments)
+    - `email` (string, email)
+    - Optional fields: `status`, `metadata`, `userMasterIdentifier`, `username`, `userIds`, `middleName`, `primaryOrg`, `preferredFirstName`, `preferredMiddleName`, `preferredLastName`, `pronouns`, `grades`, `password`, `sms`, `phone`, `agents`
 
-Request body (application/json):
+Path params (extracted from request):
 
-- `{ "user": { ... } }` with required fields:
-  - `enabledUser` (boolean)
-  - `givenName` (string)
-  - `familyName` (string)
-  - `roles` (array of role assignments)
-  - `email` (string, email)
+- `sourcedId` (string, required): Extracted from `request.user.sourcedId` for the path
 
-Optional fields include: `status`, `metadata`, `userMasterIdentifier`, `username`, `userIds`, `middleName`, `primaryOrg`, `preferredFirstName`, `preferredMiddleName`, `preferredLastName`, `pronouns`, `grades`, `password`, `sms`, `phone`, `agents`.
+Request body (application/json, extracted from request):
+
+- `{ "user": { ... } }` with required fields as listed above
 
 Successful response (HTTP 200):
 
 - Body: `{ "user": TimebackUser }`
+- Client return type: `TimebackUpdateUserResponse`
 
 Error responses:
 
@@ -46,6 +52,7 @@ from timeback.models.timeback_org_ref import TimebackOrgRef
 
 client = Timeback()
 body = TimebackUpdateUserBody(
+    sourcedId="u1",
     enabledUser=True,
     givenName="Alice",
     familyName="Baker",
@@ -53,7 +60,8 @@ body = TimebackUpdateUserBody(
     roles=[TimebackUserRole(roleType=TimebackRoleType.PRIMARY, role=TimebackRoleName.TEACHER, org=TimebackOrgRef(sourcedId="org1"))],
 )
 req = TimebackUpdateUserRequest(user=body)
-user = client.oneroster.rostering.update_user("u1", req)
+resp = client.oneroster.rostering.update_user(req)
+print(resp.user.sourcedId, resp.user.givenName, resp.user.familyName)
 ```
 
 Notes:

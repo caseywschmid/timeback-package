@@ -8,6 +8,10 @@ class TimebackGetAgentForResponse(BaseModel):
 
     Mirrors OneRoster response envelope for agentFor endpoint as documented in
     `timeback/docs/oneroster/rostering/get_agent_for.md`.
+    
+    Attributes:
+        - users (List[TimebackAgent]): List of users this user is an agent for.
+          See TimebackAgent for structure.
     """
 
     users: List[TimebackAgent] = Field(

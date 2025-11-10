@@ -11,6 +11,7 @@ def main():
     sourced_id = "replace-with-real-user-sourced-id"
 
     body = TimebackUpdateUserBody(
+        sourcedId=sourced_id,
         enabledUser=True,
         givenName="Alice",
         familyName="Baker",
@@ -25,11 +26,11 @@ def main():
     )
     req = TimebackUpdateUserRequest(user=body)
 
-    user = client.oneroster.rostering.update_user(sourced_id, req)
-    if not user:
+    resp = client.oneroster.rostering.update_user(req)
+    if not resp:
         print("No result")
         return
-    print(user.sourcedId, user.givenName, user.familyName)
+    print(resp.user.sourcedId, resp.user.givenName, resp.user.familyName)
 
 
 if __name__ == "__main__":

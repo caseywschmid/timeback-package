@@ -1,10 +1,17 @@
-from typing import Optional, Sequence, Union
+from typing import Any, Dict, Optional
 from timeback.http import HttpClient
-from timeback.models.timeback_user import TimebackUser
-from timeback.models.response import TimebackGetAllUsersResponse
+from timeback.models.response import (
+    TimebackGetAllUsersResponse,
+    TimebackUpdateUserResponse,
+    TimebackGetUserResponse,
+)
 from timeback.models.request import (
     TimebackUpdateUserRequest,
     TimebackCreateUserRequest,
+    TimebackAddAgentRequest,
+    TimebackDeleteAgentRequest,
+    TimebackGetUserRequest,
+    TimebackGetAllUsersRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -31,7 +38,10 @@ from timeback.services.oneroster.rostering.endpoints.get_agent_for import (
 from timeback.services.oneroster.rostering.endpoints.get_agents import (
     get_agents as get_agents_endpoint,
 )
-from timeback.models.response import TimebackDeleteAgentResponse, TimebackGetAgentForResponse
+from timeback.services.oneroster.rostering.endpoints.add_agent import (
+    add_agent as add_agent_endpoint,
+)
+from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAgentsResponse
 
 
@@ -41,42 +51,22 @@ class RosteringService:
     def __init__(self, http: HttpClient):
         self._http = http
 
-    def get_user(
-        self,
-        sourced_id: str,
-        fields: Optional[Union[str, Sequence[str]]] = None,
-    ) -> TimebackUser:
+    def get_user(self, request: TimebackGetUserRequest) -> TimebackGetUserResponse:
         """Fetch a single user by sourcedId."""
-        return get_user_endpoint(self._http, sourced_id, fields=fields)
+        return get_user_endpoint(self._http, request)
 
     def get_all_users(
         self,
-        *,
-        fields: Optional[Union[str, Sequence[str]]] = None,
-        limit: Optional[int] = None,
-        offset: Optional[int] = None,
-        sort: Optional[str] = None,
-        order_by: Optional[str] = None,
-        filter: Optional[str] = None,
-        search: Optional[str] = None,
+        request: TimebackGetAllUsersRequest,
     ) -> TimebackGetAllUsersResponse:
         """Fetch a paginated list of users."""
-        return get_all_users_endpoint(
-            self._http,
-            fields=fields,
-            limit=limit,
-            offset=offset,
-            sort=sort,
-            order_by=order_by,
-            filter=filter,
-            search=search,
-        )
+        return get_all_users_endpoint(self._http, request)
 
     def update_user(
-        self, sourced_id: str, request: TimebackUpdateUserRequest
-    ) -> TimebackUser:
+        self, request: TimebackUpdateUserRequest
+    ) -> TimebackUpdateUserResponse:
         """Update an existing user by sourcedId."""
-        return update_user_endpoint(self._http, sourced_id, request)
+        return update_user_endpoint(self._http, request)
 
     def create_user(self, request: TimebackCreateUserRequest) -> TimebackCreateUserResponse:
         """Create a new user."""
@@ -86,9 +76,9 @@ class RosteringService:
         """Delete (tombstone) a user by sourcedId. Returns raw provider response (None for 204)."""
         return delete_user_endpoint(self._http, sourced_id)
 
-    def delete_agent(self, user_id: str, agent_sourced_id: str) -> Optional[TimebackDeleteAgentResponse]:
-        """Delete an agent for a user. Returns typed response when provider returns a body; None for no-content."""
-        return delete_agent_endpoint(self._http, user_id, agent_sourced_id)
+    def delete_agent(self, request: TimebackDeleteAgentRequest) -> Optional[Dict[str, Any]]:
+        """Delete an agent for a user. Returns raw provider response (None for no-content)."""
+        return delete_agent_endpoint(self._http, request)
 
     def get_agent_for(self, user_id: str) -> TimebackGetAgentForResponse:
         """Get users this user is an agent for (e.g., parents getting children list)."""
@@ -97,3 +87,7 @@ class RosteringService:
     def get_agents(self, user_id: str) -> TimebackGetAgentsResponse:
         """Get agent users for the specified user."""
         return get_agents_endpoint(self._http, user_id)
+
+    def add_agent(self, request: TimebackAddAgentRequest) -> Dict[str, Any]:
+        """Add an agent for a user. Returns raw provider response."""
+        return add_agent_endpoint(self._http, request)
