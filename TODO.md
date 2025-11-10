@@ -126,6 +126,7 @@
 
 - [ ] `get_assessment_result`
 - [ ] `put_assessment_result`
+- [ ] `patch_assessment_result`
 - [ ] `delete_assessment_result`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/
@@ -137,6 +138,7 @@
 
 - [ ] `get_assessment_line_item`
 - [ ] `put_assessment_line_item`
+- [ ] `patch_assessment_line_item`
 - [ ] `delete_assessment_line_item`
 
 ### /ims/oneroster/resources/v1p2/resources/
@@ -177,13 +179,22 @@
 - [x] `update_user`
 - [x] `delete_user`
 
-### /ims/oneroster/rostering/v1p2/users/{sourcedId}/agents/{agentSourcedId}
-
-- [x] `delete_agent`
-
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/demographics
 
 - [ ] `get_user_with_demographics`
+
+### /ims/oneroster/rostering/v1p2/users/{userId}/agentFor
+
+- [ ] `get_agent_for`
+
+### /ims/oneroster/rostering/v1p2/users/{userId}/agents
+
+- [ ] `get_agents`
+- [ ] `add_agent`
+
+### /ims/oneroster/rostering/v1p2/users/{sourcedId}/agents/{agentSourcedId}
+
+- [x] `delete_agent`
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/credentials
 
@@ -299,6 +310,7 @@
 
 - [ ] `get_enrollment`
 - [ ] `update_enrollment`
+- [ ] `partially_update_enrollment`
 - [ ] `delete_enrollment`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes/{classSourcedId}/enrollments
@@ -357,6 +369,10 @@
 - [ ] `put_course_component`
 - [ ] `delete_course_component`
 
+### /ims/oneroster/rostering/v1p2/courses/structure
+
+- [ ] `create_course_structure`
+
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/courses
 
 - [ ] `get_courses_for_school`
@@ -371,3 +387,257 @@
 - [ ] `get_academic_session`
 - [ ] `put_academic_session`
 - [ ] `delete_academic_session`
+
+## PowerPath
+
+### /powerpath/placement/getAllPlacementTests:
+
+- [ ] `get_all_placement_tests`
+
+### /powerpath/placement/getCurrentLevel:
+
+- [ ] `get_current_level`
+
+### /powerpath/placement/getNextPlacementTest:
+
+- [ ] `get_next_placement_test`
+
+### /powerpath/placement/getSubjectProgress:
+
+- [ ] `get_subject_progress`
+
+### /powerpath/screening/results/{userId}:
+
+- [ ] `get_results`
+
+### /powerpath/screening/session/{userId}:
+
+- [ ] `get_session`
+
+### /powerpath/screening/tests/assign:
+
+- [ ] `assign_test`
+
+### /powerpath/createExternalPlacementTest:
+
+- [ ] `create_external_placement_test`
+
+### /powerpath/createExternalTestOut:
+
+- [ ] `create_external_test_out`
+
+### /powerpath/createInternalTest:
+
+- [ ] `create_internal_test`
+
+### /powerpath/importExternalTestAssignmentResults:
+
+- [ ] `import_external_test_assignment_results`
+
+### /powerpath/makeExternalTestAssignment:
+
+- [ ] `make_external_test_assignment`
+
+### /powerpath/testOut:
+
+- [ ] `test_out`
+
+### /powerpath/lessonPlans/:
+
+- [ ] `create_lesson_plan`
+
+### /powerpath/lessonPlans/{courseId}/{userId}:
+
+- [ ] `get_tree`
+
+### /powerpath/lessonPlans/{courseId}/deleteAll:
+
+- [ ] `delete_lesson_plans_by_course_id`
+
+### /powerpath/lessonPlans/{lessonPlanId}/operations:
+
+- [ ] `store_operation`
+- [ ] `get_operations`
+
+### /powerpath/lessonPlans/{lessonPlanId}/operations/sync:
+
+- [ ] `sync_operations`
+
+### /powerpath/lessonPlans/{lessonPlanId}/recreate:
+
+- [ ] `recreate_lesson_plan`
+
+### /powerpath/lessonPlans/course/{courseId}/sync:
+
+- [ ] `sync_course_lesson_plans`
+
+### /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}:
+
+- [ ] `get_course_progress`
+
+### /powerpath/lessonPlans/tree/{lessonPlanId}:
+
+- [ ] `get_lesson_plan`
+
+### /powerpath/lessonPlans/tree/{lessonPlanId}/structure:
+
+- [ ] `get_lesson_plan_structure`
+
+### /powerpath/lessonPlans/updateStudentItemResponse:
+
+- [ ] `update_student_item_response`
+
+### /powerpath/syllabus/{courseSourcedId}:
+
+- [ ] `get_course_syllabus`
+
+### /powerpath/createNewAttempt:
+
+- [ ] `create_new_attempt`
+
+### /powerpath/finalStudentAssessmentResponse:
+
+- [ ] `final_student_assessment_response`
+
+### /powerpath/getAssessmentProgress:
+
+- [ ] `get_assessment_progress`
+
+### /powerpath/getAttempts:
+
+- [ ] `get_attempts`
+
+### /powerpath/getNextQuestion:
+
+- [ ] `get_next_question`
+
+### /powerpath/resetAttempt:
+
+- [ ] `reset_attempt`
+
+### /powerpath/updateStudentQuestionResponse:
+
+- [ ] `update_student_question_response`
+
+## QTI API - All Endpoints
+
+### /stimuli:
+
+- [ ] `search_stimuli`
+- [ ] `create_stimulus`
+
+### /stimuli/{identifier}:
+
+- [ ] `get_stimulus`
+- [ ] `update_stimulus`
+- [ ] `delete_stimulus`
+
+### /assessment-items:
+
+- [ ] `search_assessment_items`
+- [ ] `create_assessment_item`
+
+### /assessment-items/{identifier}:
+
+- [ ] `get_assessment_item`
+- [ ] `update_assessment_item`
+- [ ] `delete_assessment_item`
+
+### /assessment-items/metadata:
+
+- [ ] `update_metadata`
+
+### /assessment-items/{identifier}/process-response:
+
+- [ ] `process_response`
+
+### /assessment-tests:
+
+- [ ] `search_assessment_tests`
+- [ ] `create_assessment_test`
+
+### /assessment-tests/{identifier}:
+
+- [ ] `get_assessment_test`
+- [ ] `update_assessment_test`
+- [ ] `delete_assessment_test`
+
+### /assessment-tests/{identifier}/questions:
+
+- [ ] `get_all_questions`
+
+### /assessment-tests/{identifier}/metadata:
+
+- [ ] `update_assessment_test_metadata`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts:
+
+- [ ] `search_test_parts`
+- [ ] `create_test_part`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}:
+
+- [ ] `get_test_part`
+- [ ] `update_test_part`
+- [ ] `delete_test_part`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections:
+
+- [ ] `search_sections`
+- [ ] `create_section`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}:
+
+- [ ] `get_section`
+- [ ] `update_section`
+- [ ] `delete_section`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}/items:
+
+- [ ] `add_assessment_item`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}/items/{itemIdentifier}:
+
+- [ ] `remove_assessment_item`
+
+### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}/items/order:
+
+- [ ] `update_assessment_item_order`
+
+### /question:
+
+- [ ] `create_question_feedback`
+
+### /lesson:
+
+- [ ] `create_lesson_feedback`
+
+### /lesson/{lessonId}:
+
+- [ ] `get_feedback_by_lesson_id`
+
+### /{id}:
+
+- [ ] `delete_feedback`
+
+### /validate:
+
+- [ ] `validate_xml`
+
+### /validate/batch:
+
+- [ ] `validate_batch`
+
+## Caliper Events API - All Endpoints
+
+### /caliper/event:
+
+- [ ] `create_caliper_event`
+
+### /caliper/event/validate:
+
+- [ ] `validate_caliper_event`
+
+### /caliper/events:
+
+- [ ] `list_caliper_events`

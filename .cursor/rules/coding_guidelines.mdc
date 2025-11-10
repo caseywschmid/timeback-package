@@ -104,8 +104,6 @@ def get_user(http: HttpClient, sourced_id: str) -> TimebackUser: ...
 ### 6) Tests: structure, coverage, and cleanup
 
 - **Rule**: Unit tests for every endpoint and utility, mirroring the service directory structure.
-- **Rule**: Integration tests for endpoint functions that call the real API.
-- **Rule**: Integration tests must net zero DB changes; create-and-cleanup in the same test.
 
 Structure:
 
@@ -114,8 +112,6 @@ tests/
   unit/
     oneroster/rostering/endpoints/test_get_user.py
     oneroster/rostering/utils/test_parse_user_response.py (if needed)
-  integration/
-    oneroster/rostering/endpoints/test_get_user_integration.py
 ```
 
 Example unit test (mocking HTTP):
@@ -179,7 +175,6 @@ timeback/docs/oneroster/rostering/get_user.md
 - Complex logic extracted to utilities
 - Typed return model (Pydantic + Enums)
 - Unit tests for endpoint and utilities
-- Integration test with net-zero DB changes
 - Endpoint doc added under `timeback/docs/...`
 
 

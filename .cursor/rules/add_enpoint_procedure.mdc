@@ -1,364 +1,73 @@
 ---
-alwaysApply: true
+alwaysApply: false
 ---
+
 ## Procedure: Add a New Endpoint to a Service
 
-Follow these steps to add a new endpoint that adheres to our coding guidelines.
-
-### 0) Identify endpoint path and target service
-
-- Determine the API path and map it to the correct service directory.
-  - `/ims/oneroster/rostering/v1p2/...` → `timeback/services/oneroster/rostering/endpoints/`
-  - `/ims/oneroster/gradebook/v1p2/...` → `timeback/services/oneroster/gradebook/endpoints/`
-  - `/ims/oneroster/resources/v1p2/...` → `timeback/services/oneroster/resources/endpoints/`
-  - `/powerpath/...` → `timeback/services/powerpath/endpoints/` (when added)
-  - `/ims/case/v1p1/...` → `timeback/services/case/endpoints/` (when added)
-
-Example: `GET /ims/oneroster/rostering/v1p2/users/{sourcedId}` → `oneroster/rostering/endpoints/get_user.py`.
-
-### 1) Create the endpoint function (one file per endpoint)
-
-- File location: `.../endpoints/<action>.py` (descriptive action name, e.g., `get_user.py`).
-- Export exactly one public function that performs the HTTP call and returns a typed model.
-- Use only the injected `HttpClient` for HTTP; build the full path string; pass explicit query params.
-- Extract any non-trivial parsing/validation to `.../utils/` and import it.
-
-Example:
-
-```python
-# timeback/services/oneroster/rostering/endpoints/get_user.py
-from typing import Any, Dict
-from timeback.http import HttpClient
-from timeback.models.timeback_user import TimebackUser
-from timeback.services.oneroster.rostering.utils.parse_user_response import parse_user_response
-from timeback.logs import logger
-log = logger.configure_logging(__name__, log_level="DEBUG")
-
-def get_user(http: HttpClient, sourced_id: str) -> TimebackUser:
-    params: Dict[str, Any] = {}
-    log.debug(f"Params: {params}")
-    log.debug(f"Sourced ID: {sourced_id}")
-    data: Dict[str, Any] = http.get(f"/ims/oneroster/rostering/v1p2/users/{sourced_id}", params=params)
-    log.debug(f"Raw Data: {data}")
-    return parse_user_response(data)
-```
-
-### 2) Models: separate request vs response; one per file
-
-- Locations:
-  - Requests: `timeback/models/request/Timeback_*_Request.py`
-  - Responses: `timeback/models/response/Timeback_*_Response.py`
-- Naming:
-  - Request models: `Timeback_<Action>_Request`
-  - Response models: `Timeback_<Action>_Response`
-- One model per file. Re-export via package `__init__.py` for convenient imports.
-- Validate API data directly with Pydantic in endpoints; do not create trivial parse utilities that only call `model_validate`.
-
-Example response model:
+### 1. Analyze
 
-```python
-from pydantic import BaseModel, Field
-from typing import List
-from timeback.models.timeback_user import TimebackUser
-
-class TimebackListUsersResponse(BaseModel):
-    users: List[TimebackUser] = Field(...)
-    totalCount: int = Field(...)
-    pageCount: int = Field(...)
-    pageNumber: int = Field(...)
-    offset: int = Field(...)
-    limit: int = Field(...)
-```
-
-### 3) Add utilities if needed
+Analyzethe raw endpoint documentation provided to you making note of the HTTP method, path, and request/response body.
 
-- Location: `.../utils/<purpose>.py` (single function per file).
-- Purpose: parsing, transformation, validation, normalization.
-- Return a typed model or typed value; raise `ParseError` for parse failures.
-
-Example:
-
-```python
-# timeback/services/oneroster/rostering/utils/parse_user_response.py
-from typing import Any, Dict
-from timeback.models.timeback_user import TimebackUser
-from timeback.errors import ParseError
-
-def parse_user_response(data: Dict[str, Any]) -> TimebackUser:
-    try:
-        payload = data.get("user", data)
-        return TimebackUser.model_validate(payload)
-    except Exception as e:
-        raise ParseError(f"Failed to parse User response: {e}") from e
-```
-
-### 4) Wire the endpoint into the service class
-
-- Service class should contain no business logic.
-- Add a service method that defers entirely to the endpoint function.
-- Place method in the correct service file, e.g., `.../rostering_service.py`.
-
-Example:
+### 2. Get the endpoint name
 
-```python
-# timeback/services/oneroster/rostering/rostering_service.py
-from timeback.http import HttpClient
-from timeback.models.timeback_user import TimebackUser
-from timeback.services.oneroster.rostering.endpoints.get_user import get_user as get_user_endpoint
+Look in TODO.md and find the corresponding name for this endpoint. This will be the name of the method that will be created in the service.
 
-class RosteringService:
-    """Rostering service methods for OneRoster."""
+### 3. Determine the service class
 
-    def __init__(self, http: HttpClient):
-        self._http = http
+Using the path, determine which service class this endpoint belongs to.
 
-    def get_user(self, sourced_id: str) -> TimebackUser:
-        return get_user_endpoint(self._http, sourced_id)
-```
+- For example, if the path is /ims/oneroster/rostering/v1p2 then the new method will be added to the RosteringService class that is implemented by the OneRosterService class.
+- If the service class is not found, you may need to create a new service class. Follow the same patterns found in other service classes to create the new service class. You MUST update the `__init__.py` file in the services directory to include the new service class if you create a new service class.
 
-### 5) Ensure __init__.py exports are correct
+### 4. Review Models
 
-- Update `__init__.py` files to expose new modules only if required by import style.
-- Keep exports minimal; prefer explicit imports in service modules.
-- Typical pattern requires no changes unless you are adding a new public service or top-level export.
+Analyze the request/response body and determine the parameters that will be passed to the method. Do a thorough review of the contents of the /models directory to determine the correct models to use. EVERY endpoint implemented should have FULL typing - including the request and response body for each endpoint if the request or response is more than a single field.
 
-Checklist:
-- `timeback/services/oneroster/rostering/__init__.py` (usually unchanged)
-- `timeback/services/oneroster/rostering/endpoints/__init__.py` (usually unchanged)
+### 5. Create new models
 
-### 6) Use proper models and enums
+Create the new models that you'll need for the request and response body for the new endpoint if required.
 
-- Return types must be Pydantic models from `timeback/models`.
-- Use enums from `timeback/enums` where applicable.
-- Validate and normalize API data into models before returning.
+- models/request/ and models/response/ directories have `__init__.py` files that must be updated to include any new models that you've created.
+- the models/ directory has a `__init__.py` file that must be updated to include any new models that you've created as well.
 
-Example signature:
+### 6. Create the endpoint function
 
-```python
-def get_user(http: HttpClient, sourced_id: str) -> TimebackUser: ...
-```
+Create the the extracted function that will be used by the service class to make the API call. This function will go in the endpoints directory and will be named after the name of the method you found in TODO.md.
 
-### 7) Add unit tests (endpoint + utilities)
+While writing endpoint functions, it is absolutely critical that you add type annotations for EVERY parameter and return value. You should have created the necessary request and response models in the models/request/ and models/response/ directories if they're needed for the endpoint. Also, a thorough review of the available models in the models/ directory will help you determine the correct models to use. If you can type something in this endpoint function, you MUST type it. Dont write new types - all the types you'll need (with the exception of request and response models that you might have created) are already defined in the models/ directory.
 
-- Mirror the service directory structure under `tests/unit/...`.
-- Unit-test endpoint function with a mock `HttpClient` (do not hit the network).
-- Unit-test each utility function independently.
+#### Extract non-trivial logic into utilities
 
-Structure example:
+While writing this function, you are required to further extract any non-trivial logic into a utility function. This utility function will go in the utils directory and will have a descriptive name that clearly explains the purpose of the function. You'll then import the utility function into the endpoint function and use it to perform the necessary logic.
 
-```text
-tests/
-  unit/
-    oneroster/rostering/endpoints/test_get_user.py
-    oneroster/rostering/utils/test_parse_user_response.py
-```
+If you create a new utility function, you MUST update the `__init__.py` file in the utils directory to include the new utility function.
 
-Endpoint unit test example:
+Once you've written the endpoint function and any necessary utility functions, you MUST update the `__init__.py` file in the endpoints directory to include the new endpoint function.
 
-```python
-from timeback.services.oneroster.rostering.endpoints.get_user import get_user
-from timeback.models.timeback_user import TimebackUser
+### 7. Plug the new endpoint into the service class
 
-class MockHttp:
-    def get(self, path, params=None):
-        return {"user": {"sourcedId": "u1", "givenName": "A", "familyName": "B", "enabledUser": True, "roles": [], "agents": [], "userProfiles": []}}
+After you've written the endpoint function and any necessary utility functions, plug the new endoint function into the service class that it belongs to. Follow all existing patterns. If you've had to create a new service class and there are no existing patterns to follow, review timeback/services/oneroster/oneroster.py and timeback/services/oneroster/rostering/rostering\*service.py to see how to plug the new endpoint function into the service class.
 
-def test_get_user_success():
-    user = get_user(MockHttp(), "u1")
-    assert isinstance(user, TimebackUser)
-    assert user.sourcedId == "u1"
-```
+### 8. Write unit tests
 
-### 8) Add endpoint documentation
+Once you've plugged the new endpoint into the service class, you need to then write unit tests for the new endpoint function and any necessary utility functions that came with it.
 
-- Location mirrors services under `timeback/docs/...`.
-- Follow this format (use `timeback/docs/oneroster/rostering/get_user.md` as the standard):
-  - Title: `Service — Domain - Action`
-  - Path heading with full HTTP method and path
-  - Method, Auth, Description (1–2 lines, no fluff)
-  - Path params (names, types, required)
-  - Query params (if any; names, types, defaults)
-  - Successful response (status + body shape)
-  - Error responses mapped to client errors (`AuthError`, `NotFoundError`, `RateLimitError`, `ServerError`, `RequestError`)
-  - Python usage snippet with minimal example
-  - Notes (brief, only if necessary)
+- These unit tests will go in the tests/unit/ directory which follows the same file structure as the source code. Place the unit tests in the correct directory based on the file structure of the source code.
+- Name the unit tests the same thing as the endpoint function or utility function but with a prepeneded `test*` prefix.
+- These unit tests will also be fully typed with the correct request and response models and other Timeback models that are needed for the endpoint. See tests/unit/oneroster/rostering/endpoints/test_create_user.py for an example if you need one.
 
-Doc template:
+### 9. Write an api test function
 
-```markdown
-## <Service> — <Domain> - <Action>
+Once you've written the unit tests for the new endpoint, you need to then write a short python function that will directly call this new endpoint. This will be used by the team to make calls to this new endpoint as needed for individual testing and development. This function will go in the tests/api/ directory and that directory also follows the same file structure as the source code. Place the new api test function in the correct directory based on the file structure of the source code. Follow existing patterns.
 
-### <METHOD> <full-path>
+### 10. Update TODO.md
 
-- Method: <GET/POST/PUT/DELETE>
-- Auth: OAuth2 Client Credentials (Bearer token)
-- Description: <what the endpoint returns/does>
+Once you've written the api test function, you need to then update the TODO.md file to reflect the new endpoint that you've added.
 
-Path params:
+### 11. Write documentation
 
-- `<name>` (<type>, required): <description>
+The next thing to do is to write a short documentation page for the new endpoint. This will go in the timeback/docs/ directory which also follows the same file structure as the source code. Place the new documentation page in the correct directory based on the file structure of the source code. Follow existing patterns. The documentation page should fully explain the new endpoint, how to use it, and any special considerations that should be noted. See timeback/docs/oneroster/rostering/get_all_users.md for an example of how to write the new documentation page.
 
-Query params:
+### 12. Inform the team
 
-- `<name>` (<type>, optional): <description> (default: <value>)
-
-Successful response (HTTP <code>):
-
-- Body: `{ "<root>": <Model> }` or `<Model>`
-- Key fields: <brief list>
-
-Error responses:
-
-- 400/422: Request/validation → raises `RequestError`
-- 401: Unauthorized → raises `AuthError`
-- 403: Forbidden → raises `RequestError`
-- 404: Not Found → raises `NotFoundError`
-- 429: Too Many Requests → raises `RateLimitError`
-- 5xx: Server errors → raises `ServerError`
-
-Python usage:
-
-```python
-from timeback import Timeback
-
-client = Timeback()
-result = client.<service>.<domain>.<method>(<args>)
-```
-
-Notes:
-
-- <brief clarifications only>
-```
-
-Example doc path:
-
-```text
-timeback/docs/oneroster/rostering/get_user.md
-```
-
-### 9) Add runnable API test script (manual smoke test)
-
-- Purpose: Provide a tiny, runnable Python script under `tests/api/...` that calls the new endpoint with hard-coded inputs for quick manual verification (no mocks, no user prompts).
-- Structure mirrors the service directory and endpoint name:
-
-```text
-tests/
-  api/
-    <service>/<domain>/<action>.py
-```
-
-- Rules:
-  - Keep the script minimal and non-interactive; use hard-coded sample inputs.
-  - Use `from timeback import Timeback`.
-  - Construct the client with default env-based config.
-  - Print a concise success output (e.g., a few key fields) or a simple failure message.
-  - Do not add these files to unit/integration test runners; they are for manual smoke tests only.
-
-- Template:
-
-```python
-from timeback import Timeback
-
-def main():
-    client = Timeback()
-    # TODO: replace with realistic hard-coded inputs for this endpoint
-    result = client.<service>.<domain>.<method>(<args>)
-    if not result:
-        print("No result")
-        return
-    # Print a few key fields only
-    print(result)
-
-if __name__ == "__main__":
-    main()
-```
-
-- Examples (existing):
-
-`tests/api/oneroster/rostering/get_user.py`:
-
-```python
-from timeback import Timeback
-
-def main():
-    client = Timeback()
-    sourced_id = "31129aea-12b2-4e9e-a6e5-f5c8b712d674"
-
-    user = client.oneroster.rostering.get_user(sourced_id)
-    if not user:
-        print("No user found")
-        return
-
-    print(user.sourcedId, user.givenName, user.familyName)
-
-if __name__ == "__main__":
-    main()
-```
-
-`tests/api/oneroster/rostering/get_all_users.py`:
-
-```python
-from timeback import Timeback
-
-def main():
-    client = Timeback()
-
-    users = client.oneroster.rostering.get_all_users()
-    if not users:
-        print("No users found")
-        return
-
-if __name__ == "__main__":
-    main()
-```
-
-### 10) Update TODO.md with the new endpoint
-
-- Open `TODO.md` and add entries under the correct API path section.
-- Use unchecked boxes `- [ ]` for not-yet-implemented endpoints and a checked box `- [x]` for the endpoint you just added.
-- Place the item under the correct resource group (e.g., `/ims/oneroster/rostering/v1p2/users/{sourcedId}` for `get_user`).
-- Keep naming consistent with existing items (e.g., `get_user`, `get_all_users`, `create_user`).
-
-Example (for `get_user`):
-
-```markdown
-### /ims/oneroster/rostering/v1p2/users/{sourcedId}
-
-- [x] `get_user`
-- [ ] `update_user`
-- [ ] `delete_user`
-```
-
-Example (for a collection endpoint like `get_all_users`):
-
-```markdown
-### /ims/oneroster/rostering/v1p2/users/
-
-- [x] `get_all_users`
-- [ ] `create_user`
-```
-
-### 11) Final checklist before commit
-
-- Endpoint file placed under correct `.../endpoints/` path.
-- Service method added that calls exactly one endpoint function.
-- Utilities created for non-trivial logic and imported by the endpoint.
-- All functions return typed models/enums from `timeback/models` and `timeback/enums`.
-- Unit tests for the endpoint and utilities.
-- Integration test present and net-zero DB changes ensured.
-- Docs added under `timeback/docs/...`.
-- `TODO.md` updated with this endpoint and related tasks.
-- `__init__.py` files reviewed and updated only if necessary.
-
-### 12) Minimal example: adding `get_user`
-
-- Files added/updated:
-  - `timeback/services/oneroster/rostering/endpoints/get_user.py`
-  - `timeback/services/oneroster/rostering/utils/parse_user_response.py`
-  - `timeback/services/oneroster/rostering/rostering_service.py` (method added)
-  - `tests/unit/oneroster/rostering/endpoints/test_get_user.py`
-  - `tests/unit/oneroster/rostering/utils/test_parse_user_response.py`
-  - `timeback/docs/oneroster/rostering/get_user.md`
-  - `TODO.md` updated with the new endpoint
-
-
+Once this is done, inform the team that you've added the new endpoint and that they can now start using it.
