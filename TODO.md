@@ -185,7 +185,7 @@
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/agentFor
 
-- [ ] `get_agent_for`
+- [x] `get_agent_for`
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/agents
 

@@ -44,19 +44,22 @@ class TimebackUser(BaseModel):
     givenName: str = Field(..., description="First name")
     familyName: str = Field(..., description="Last name")
     roles: List[TimebackUserRole] = Field(
-        ..., description="User's roles and organizations"
+        ..., description="User's roles and organizations", min_length=1
     )
-    agents: List[TimebackAgentRef] = Field(
-        ..., description="Related user references"
+    # Optional per schema
+    agents: Optional[List[TimebackAgentRef]] = Field(
+        None, description="Related user references"
     )
-    userProfiles: List[Dict[str, Any]] = Field(
-        ..., description="User profiles"
+    # Not defined in OneRoster User schema; keep optional if present in provider responses
+    userProfiles: Optional[List[Dict[str, Any]]] = Field(
+        None, description="User profiles"
     )
 
-    # Optional fields
-    dateLastModified: Optional[str] = Field(
-        None, description="Last modification timestamp"
+    # Required by schema
+    dateLastModified: str = Field(
+        ..., description="Last modification timestamp (ISO datetime with UTC timezone)"
     )
+    # Optional fields
     metadata: Optional[Dict[str, Any]] = Field(None, description="Custom metadata")
     userMasterIdentifier: Optional[str] = Field(
         None, description="Master identifier across systems"

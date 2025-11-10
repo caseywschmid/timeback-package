@@ -25,7 +25,10 @@ from timeback.services.oneroster.rostering.endpoints.delete_user import (
 from timeback.services.oneroster.rostering.endpoints.delete_agent import (
     delete_agent as delete_agent_endpoint,
 )
-from timeback.models.response import TimebackDeleteAgentResponse
+from timeback.services.oneroster.rostering.endpoints.get_agent_for import (
+    get_agent_for as get_agent_for_endpoint,
+)
+from timeback.models.response import TimebackDeleteAgentResponse, TimebackGetAgentForResponse
 
 
 class RosteringService:
@@ -82,3 +85,7 @@ class RosteringService:
     def delete_agent(self, user_id: str, agent_sourced_id: str) -> Optional[TimebackDeleteAgentResponse]:
         """Delete an agent for a user. Returns typed response when provider returns a body; None for no-content."""
         return delete_agent_endpoint(self._http, user_id, agent_sourced_id)
+
+    def get_agent_for(self, user_id: str) -> TimebackGetAgentForResponse:
+        """Get users this user is an agent for (e.g., parents getting children list)."""
+        return get_agent_for_endpoint(self._http, user_id)
