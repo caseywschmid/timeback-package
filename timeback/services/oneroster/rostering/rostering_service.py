@@ -4,6 +4,8 @@ from timeback.models.response import (
     TimebackGetAllUsersResponse,
     TimebackUpdateUserResponse,
     TimebackGetUserResponse,
+    TimebackRegisterStudentCredentialsResponse,
+    TimebackDecryptCredentialResponse,
 )
 from timeback.models.request import (
     TimebackUpdateUserRequest,
@@ -12,6 +14,8 @@ from timeback.models.request import (
     TimebackDeleteAgentRequest,
     TimebackGetUserRequest,
     TimebackGetAllUsersRequest,
+    TimebackRegisterStudentCredentialsRequest,
+    TimebackDecryptCredentialRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -43,6 +47,12 @@ from timeback.services.oneroster.rostering.endpoints.get_agents import (
 )
 from timeback.services.oneroster.rostering.endpoints.add_agent import (
     add_agent as add_agent_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.register_student_credentials import (
+    register_student_credentials as register_student_credentials_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.decrypt_credential import (
+    decrypt_credential as decrypt_credential_endpoint,
 )
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAgentsResponse
@@ -98,3 +108,17 @@ class RosteringService:
     def add_agent(self, request: TimebackAddAgentRequest) -> Dict[str, Any]:
         """Add an agent for a user. Returns raw provider response."""
         return add_agent_endpoint(self._http, request)
+
+    def register_student_credentials(
+        self, request: TimebackRegisterStudentCredentialsRequest
+    ) -> TimebackRegisterStudentCredentialsResponse:
+        """Register student credentials for third-party applications."""
+        return register_student_credentials_endpoint(self._http, request)
+
+    def decrypt_credential(
+        self, request: TimebackDecryptCredentialRequest
+    ) -> TimebackDecryptCredentialResponse:
+        """Decrypt and return the password for a specific user credential."""
+        return decrypt_credential_endpoint(self._http, request)
+
+

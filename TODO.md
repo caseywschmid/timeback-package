@@ -4,18 +4,18 @@
 
 ### /ims/oneroster/gradebook/v1p2/scoreScales/
 
-- [ ] `get_all_score_scales`
-- [ ] `create_score_scale`
+- [x] `get_all_score_scales`
+- [x] `create_score_scale`
 
 ### /ims/oneroster/gradebook/v1p2/scoreScales/{sourcedId}
 
-- [ ] `get_score_scale`
-- [ ] `put_score_scale`
-- [ ] `delete_score_scale`
+- [x] `get_score_scale`
+- [x] `put_score_scale`
+- [x] `delete_score_scale`
 
 ### /ims/oneroster/gradebook/v1p2/schools/{sourcedId}/scoreScales
 
-- [ ] `get_score_scales_for_school`
+- [x] `get_score_scales_for_school`
 
 ### /ims/oneroster/rostering/v1p2/schools/
 
@@ -198,11 +198,11 @@
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/credentials
 
-- [ ] `register_student_credentials`
+- [x] `register_student_credentials`
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/credentials/{credentialId}/decrypt
 
-- [ ] `decrypt_credential`
+- [x] `decrypt_credential`
 
 ### /ims/oneroster/rostering/v1p2/users/{userSourcedId}/classes
 

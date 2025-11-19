@@ -4,6 +4,15 @@ from .timeback_create_user_response import TimebackCreateUserResponse
 from .timeback_get_agent_for_response import TimebackGetAgentForResponse
 from .timeback_get_agents_response import TimebackGetAgentsResponse
 from .timeback_get_user_response import TimebackGetUserResponse
+from .timeback_register_student_credentials_response import (
+    TimebackRegisterStudentCredentialsResponse,
+)
+from .timeback_decrypt_credential_response import TimebackDecryptCredentialResponse
+from .timeback_get_all_score_scales_response import TimebackGetAllScoreScalesResponse
+from .timeback_create_score_scale_response import TimebackCreateScoreScaleResponse
+from .timeback_get_score_scale_response import TimebackGetScoreScaleResponse
+from .timeback_put_score_scale_response import TimebackPutScoreScaleResponse
+from .timeback_get_score_scales_for_school_response import TimebackGetScoreScalesForSchoolResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -12,4 +21,11 @@ __all__ = [
     "TimebackGetAgentForResponse",
     "TimebackGetAgentsResponse",
     "TimebackGetUserResponse",
+    "TimebackRegisterStudentCredentialsResponse",
+    "TimebackDecryptCredentialResponse",
+    "TimebackGetAllScoreScalesResponse",
+    "TimebackCreateScoreScaleResponse",
+    "TimebackGetScoreScaleResponse",
+    "TimebackPutScoreScaleResponse",
+    "TimebackGetScoreScalesForSchoolResponse",
 ]
