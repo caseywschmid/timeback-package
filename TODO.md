@@ -181,7 +181,7 @@
 
 ### /ims/oneroster/rostering/v1p2/users/{sourcedId}/demographics
 
-- [ ] `get_user_with_demographics`
+- [x] `get_user_with_demographics`
 
 ### /ims/oneroster/rostering/v1p2/users/{userId}/agentFor
 

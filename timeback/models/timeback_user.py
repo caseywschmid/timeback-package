@@ -26,25 +26,34 @@ from .timeback_org_ref import TimebackOrgRef
 class TimebackUser(BaseModel):
     """OneRoster User model with simplified reference handling.
 
-    Required Fields:
+    Required Fields (when full response is returned):
     - sourcedId: Unique identifier
-    - status: active or tobedeleted
-    - enabledUser: Whether user has system access
     - givenName: First name
     - familyName: Last name
-    - roles: List of role assignments (at least one required)
+
+    Optional Fields (may be missing when using `fields` query parameter):
+    - status: active or tobedeleted (defaults to ACTIVE if not provided)
+    - enabledUser: Whether user has system access
+    - roles: List of role assignments
+    - dateLastModified: Last modification timestamp
+
+    Note: When using the `fields` query parameter, the API returns only the requested fields.
+    Fields like `enabledUser`, `roles`, and `dateLastModified` may be missing in partial responses.
+    Always check for None before accessing these fields when field filtering is used.
     """
 
-    # Required fields
+    # Always required
     sourcedId: str = Field(..., description="Unique identifier")
-    status: TimebackStatus = Field(
-        default=TimebackStatus.ACTIVE, description="User's status"
-    )
-    enabledUser: bool = Field(..., description="Whether user has system access")
     givenName: str = Field(..., description="First name")
     familyName: str = Field(..., description="Last name")
-    roles: List[TimebackUserRole] = Field(
-        ..., description="User's roles and organizations", min_length=1
+    
+    # Optional - may be missing when fields parameter is used
+    status: Optional[TimebackStatus] = Field(
+        default=TimebackStatus.ACTIVE, description="User's status"
+    )
+    enabledUser: Optional[bool] = Field(None, description="Whether user has system access")
+    roles: Optional[List[TimebackUserRole]] = Field(
+        None, description="User's roles and organizations"
     )
     # Optional per schema
     agents: Optional[List[TimebackAgentRef]] = Field(
@@ -55,9 +64,9 @@ class TimebackUser(BaseModel):
         None, description="User profiles"
     )
 
-    # Required by schema
-    dateLastModified: str = Field(
-        ..., description="Last modification timestamp (ISO datetime with UTC timezone)"
+    # Optional - may be missing when fields parameter is used
+    dateLastModified: Optional[str] = Field(
+        None, description="Last modification timestamp (ISO datetime with UTC timezone)"
     )
     # Optional fields
     metadata: Optional[Dict[str, Any]] = Field(None, description="Custom metadata")

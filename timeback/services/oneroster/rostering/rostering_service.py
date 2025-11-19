@@ -17,6 +17,9 @@ from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
     get_user as get_user_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_user_with_demographics import (
+    get_user_with_demographics as get_user_with_demographics_endpoint,
+)
 from timeback.services.oneroster.rostering.endpoints.get_all_users import (
     get_all_users as get_all_users_endpoint,
 )
@@ -54,6 +57,10 @@ class RosteringService:
     def get_user(self, request: TimebackGetUserRequest) -> TimebackGetUserResponse:
         """Fetch a single user by sourcedId."""
         return get_user_endpoint(self._http, request)
+
+    def get_user_with_demographics(self, request: TimebackGetUserRequest) -> TimebackGetUserResponse:
+        """Get a specific user with demographics by sourcedId."""
+        return get_user_with_demographics_endpoint(self._http, request)
 
     def get_all_users(
         self,
