@@ -18,6 +18,7 @@ from timeback.services.oneroster.gradebook.endpoints.create_result_for_line_item
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_school import get_line_items_for_school
 from timeback.services.oneroster.gradebook.endpoints.create_line_items_for_school import create_line_items_for_school
 from timeback.services.oneroster.gradebook.endpoints.post_results_for_academic_session_for_class import post_results_for_academic_session_for_class
+from timeback.services.oneroster.gradebook.endpoints.post_line_items_for_class import post_line_items_for_class
 
 __all__ = [
     "get_all_score_scales",
@@ -40,4 +41,5 @@ __all__ = [
     "get_line_items_for_school",
     "create_line_items_for_school",
     "post_results_for_academic_session_for_class",
+    "post_line_items_for_class",
 ]
