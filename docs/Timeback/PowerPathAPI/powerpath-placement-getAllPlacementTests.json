@@ -1,0 +1,158 @@
+{
+  "get": {
+    "operationId": "getAllPlacementTests",
+    "summary": "Get all placement tests",
+    "description": "\nReturns all placement tests for a subject, including available results for each.\n\nA 'Lesson' (placement test) in this context is a ComponentResource object which has a Resource object with metadata.lessonType = \"placement\" associated with it.\n",
+    "tags": ["PowerPath - Placement"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "subject",
+        "description": "The subject name",
+        "schema": {
+          "type": "string",
+          "description": "The subject name",
+          "enum": [
+            "Reading",
+            "Language",
+            "Vocabulary",
+            "Social Studies",
+            "Writing",
+            "Science",
+            "FastMath",
+            "Math"
+          ]
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "placementTests": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "component_resources": {
+                        "type": "object"
+                      },
+                      "resources": {
+                        "type": "object"
+                      },
+                      "resources_metadata": {
+                        "type": "object"
+                      },
+                      "assessment_line_items": {
+                        "type": ["object", "null"]
+                      },
+                      "assessment_results": {
+                        "type": ["array", "null"],
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    },
+                    "required": [
+                      "component_resources",
+                      "resources",
+                      "resources_metadata",
+                      "assessment_line_items",
+                      "assessment_results"
+                    ]
+                  }
+                }
+              },
+              "required": ["placementTests"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

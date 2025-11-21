@@ -1,0 +1,282 @@
+{
+  "post": {
+    "operationId": "createExternalPlacementTest",
+    "summary": "Create an External Placement Test",
+    "description": "\nCreates or updates a ComponentResource to act as a Placement Test lesson in a course.\nThis allows integrating with external test-taking platforms (like Edulastic) for content delivery.\n\nThe endpoint creates or updates (if they already exist) the following entities:\n- A CourseComponent for the course to hold the Placement Test lesson\n- A Resource with lessonType = \"placement\" and the external service details as metadata\n- A ComponentResource acting as the Placement Test lesson\n\nA test assignment is mandatory in order to obtain access credentials for this test on the external platform, as well as to obtain the IDs necessary for fetching test results later on:\n- For test assignments, use the \"makeExternalTestAssignment\" endpoint.\n- For test results retrieval, use the \"importExternalTestAssignmentResults\" endpoint.\n\nIf a 'courseIdOnFail' parameter is supplied, its Course's sourcedId will be used to automatically enroll the student when the placement test is completed with a score below 90 %. When the parameter is omitted (or set to null), no automatic enrollment will happen.\n\nThis request fails if:\n- The 'course' provided does not exist, or a non-null 'courseIdOnFail' references a non-existent course\n- An existing Placement Test lesson in the course, targeting the same grade, has a different toolProvider than the one provided (need to perform an update to the Resource first, altering the \"toolProvider\", before trying again)\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object with lessonType = \"placement\" associated with it.\n",
+    "tags": ["PowerPath - Course Mastery"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CreateExternalTestOutInput"
+              },
+              {
+                "$ref": "#/components/schemas/CreateExternalPlacementInput"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "lessonType",
+              "mapping": {
+                "test-out": "#/components/schemas/CreateExternalTestOutInput",
+                "placement": "#/components/schemas/CreateExternalPlacementInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonType": {
+                  "type": "string",
+                  "enum": [
+                    "powerpath-100",
+                    "quiz",
+                    "test-out",
+                    "placement",
+                    "unit-test",
+                    "alpha-read-article"
+                  ]
+                },
+                "lessonId": {
+                  "type": "string",
+                  "description": "The sourcedId of the created external test reference (ComponentResource)"
+                },
+                "courseComponentId": {
+                  "type": "string",
+                  "description": "The sourcedId of the component (unit) containing the test"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The sourcedId of the resource representing the external test"
+                },
+                "launchUrl": {
+                  "type": "string",
+                  "description": "The URL to the external test system"
+                },
+                "toolProvider": {
+                  "type": "string",
+                  "description": "The tool provider id"
+                },
+                "vendorId": {
+                  "type": "string",
+                  "description": "The ID of the test in the spreadsheet"
+                },
+                "courseIdOnFail": {
+                  "type": ["string", "null"],
+                  "description": "The courseId to enroll the student in if they fail the placement test (optional)"
+                },
+                "grades": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/GradeEnum"
+                      }
+                    ],
+                    "description": "The grades of the course",
+                    "enum": [
+                      "-1",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5",
+                      "6",
+                      "7",
+                      "8",
+                      "9",
+                      "10",
+                      "11",
+                      "12",
+                      "13"
+                    ]
+                  },
+                  "description": "The grades for the resource"
+                }
+              },
+              "required": [
+                "lessonType",
+                "lessonId",
+                "courseComponentId",
+                "resourceId",
+                "toolProvider"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "CreateExternalPlacementInput": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "description": "The sourcedId of the Course to create the external test for"
+        },
+        "lessonTitle": {
+          "type": "string",
+          "description": "The title of the external test reference"
+        },
+        "launchUrl": {
+          "type": "string",
+          "description": "The URL to the external test system (e.g., Edulastic, QTI, etc.)"
+        },
+        "toolProvider": {
+          "type": "string",
+          "enum": [
+            "edulastic",
+            "mastery-track"
+          ],
+          "description": "The type of external service (e.g.: 'edulastic')"
+        },
+        "unitTitle": {
+          "type": "string",
+          "description": "The title of the unit containing the external test"
+        },
+        "courseComponentSourcedId": {
+          "type": "string",
+          "description": "The sourcedId of an existing CourseComponent (unit) for the test. If not provided, a new unit will be created."
+        },
+        "vendorId": {
+          "type": "string",
+          "description": "The ID of the test in the spreadsheet"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the external test that will be added to the Resource entity's metadata"
+        },
+        "resourceMetadata": {
+          "type": "null",
+          "description": "Additional metadata for the external test resource"
+        },
+        "grades": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The grades of the course",
+            "enum": [
+              "-1",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13"
+            ]
+          },
+          "description": "The grades for the resource"
+        },
+        "lessonType": {
+          "type": "string",
+          "const": "placement"
+        },
+        "courseIdOnFail": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The courseId to enroll the student in if they fail the placement test (optional)"
+        },
+        "xp": {
+          "type": "number",
+          "description": "The XP value for the resource"
+        }
+      },
+      "required": [
+        "courseId",
+        "toolProvider",
+        "grades",
+        "lessonType"
+      ],
+      "description": "Input for creating an external placement test"
+    }
+  }
+}

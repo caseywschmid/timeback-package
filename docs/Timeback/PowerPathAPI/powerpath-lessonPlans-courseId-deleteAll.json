@@ -1,0 +1,47 @@
+{
+  "delete": {
+    "operationId": "deleteLessonPlansByCourseId",
+    "summary": "Delete all lesson plans for a course",
+    "description": "\n    Deletes all lesson plans for a course by its ID.",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "courseId",
+        "description": "Course ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Lesson Plans deleted"
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Course not found"
+      }
+    }
+  }
+}

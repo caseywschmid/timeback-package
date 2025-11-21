@@ -1,0 +1,180 @@
+{
+  "get": {
+    "operationId": "getNextPlacementTest",
+    "summary": "Get next placement test",
+    "description": "\nReturns the next placement test for the student in a subject:\n- If the student has completed all placement tests for the subject, the next test's lesson ID will be null. Tests will also be marked as exhausted.\n- If the student hasn't completed a single placement test, returns the first placement test's lesson ID for the subject.\n- If the student has completed some placement tests, it will return null for the next test's lesson ID if the last completed test had a score smaller than 90.\n- Alternatively, it will return the next available placement test's lesson ID if the score was greater than or equal to 90.\n\nAlso returns the 'onboarded' boolean that indicates if the student completed the onboarding process for the subject:\n- A 'onboarded = true' means they either completed and passed all placement tests or they have gotten a score smaller than 90 in the last completed placement test.\n- A 'onboarded = false' means they haven't completed placement tests yet or have achieved a score of 90 or greater in the last completed placement test and there are more tests to take.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object with metadata.lessonType = \"placement\" associated with it.\n",
+    "tags": ["PowerPath - Placement"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "subject",
+        "description": "The subject name",
+        "schema": {
+          "type": "string",
+          "description": "The subject name",
+          "enum": [
+            "Reading",
+            "Language",
+            "Vocabulary",
+            "Social Studies",
+            "Writing",
+            "Science",
+            "FastMath",
+            "Math"
+          ]
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "exhaustedTests": {
+                  "type": "boolean",
+                  "description": "Whether the student has exhausted all placement tests"
+                },
+                "gradeLevel": {
+                  "oneOf": [
+                    {
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/GradeEnum"
+                        }
+                      ],
+                      "description": "The grades of the course",
+                      "enum": [
+                        "-1",
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "description": "The grade level of the next placement test"
+                },
+                "lesson": {
+                  "type": ["string", "null"],
+                  "description": "The sourcedId of the next placement test (ComponentResource)"
+                },
+                "onboarded": {
+                  "type": "boolean",
+                  "description": "Whether the student has completed the onboarding process for the subject"
+                },
+                "availableTests": {
+                  "type": "number",
+                  "description": "The number of placement tests available for the subject"
+                }
+              },
+              "required": [
+                "exhaustedTests",
+                "gradeLevel",
+                "lesson",
+                "onboarded",
+                "availableTests"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

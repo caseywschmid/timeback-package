@@ -1,0 +1,192 @@
+{
+  "post": {
+    "operationId": "assignTest",
+    "summary": "Assign test",
+    "description": "Assign test to a user",
+    "tags": ["PowerPath - Placement"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "userId": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string",
+                "enum": ["Math", "Reading", "Language", "Science"]
+              }
+            },
+            "required": ["userId", "subject"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Test assigned",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nweaStudentId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "createdOn": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "proctorId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "pin": {
+                  "type": "string"
+                },
+                "testSessionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["active", "inactive"]
+                },
+                "assignment": {
+                  "type": "object",
+                  "properties": {
+                    "assignedTestKey": {
+                      "type": ["string", "null"]
+                    },
+                    "status": {
+                      "type": ["string", "null"],
+                      "enum": [
+                        "enqueued",
+                        "assigned",
+                        "in_progress",
+                        "blocked",
+                        "completed",
+                        "abandoned",
+                        "failed",
+                        null
+                      ]
+                    },
+                    "nweaStatus": {
+                      "type": ["string", "null"],
+                      "enum": [
+                        "ENQUEUED",
+                        "AWAITING_STUDENT",
+                        "IN_PROGRESS",
+                        "PAUSED",
+                        "SUSPENDED",
+                        "TERMINATED",
+                        "ABANDONED",
+                        "COMPLETED",
+                        "FAILED",
+                        null
+                      ]
+                    }
+                  },
+                  "required": ["assignedTestKey", "status", "nweaStatus"]
+                },
+                "termId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "nweaStudentId",
+                "createdOn",
+                "password",
+                "name",
+                "proctorId",
+                "pin",
+                "testSessionId",
+                "status",
+                "assignment",
+                "termId"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

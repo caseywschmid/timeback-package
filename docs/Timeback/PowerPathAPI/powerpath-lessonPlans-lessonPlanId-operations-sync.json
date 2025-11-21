@@ -1,0 +1,87 @@
+{
+  "post": {
+    "operationId": "syncOperations",
+    "summary": "Sync the operations for a lesson plan",
+    "description": "Purpose: Apply pending operations to update the lesson plan\n\nWhen to use:\n- After storing operations, to see the changes take effect\n- For incremental updates without full recreation\n- When you want to apply only recent changes (e.g after running a script to add a lot of operations)\n\nWhat it does:\n- Finds operations that haven't been applied yet\n- Executes them in sequence\n- Updates the lesson plan structure\n- Returns results of each operation\n  ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "lessonPlanId",
+        "description": "Lesson plan ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Operations synced",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "operationCount": {
+                  "type": "number"
+                },
+                "operationResults": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["message"]
+                        }
+                      }
+                    },
+                    "required": ["success"]
+                  }
+                }
+              },
+              "required": ["success", "operationCount", "operationResults"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

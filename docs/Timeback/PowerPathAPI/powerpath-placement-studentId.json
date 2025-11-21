@@ -1,0 +1,1398 @@
+{
+  "get": {
+    "operationId": "getStudentPlacementData",
+    "parameters": [
+      {
+        "in": "path",
+        "name": "studentId",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Reading": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Language": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Vocabulary": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Social Studies": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Writing": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Science": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "FastMath": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                },
+                "Math": {
+                  "type": "object",
+                  "properties": {
+                    "startingGrade": {
+                      "type": "integer"
+                    },
+                    "currentGrade": {
+                      "type": "integer"
+                    },
+                    "subjectLowestGrade": {
+                      "type": "integer"
+                    },
+                    "subjectHighestGrade": {
+                      "type": "integer"
+                    },
+                    "RIT": {
+                      "type": "object",
+                      "properties": {
+                        "GROWTH": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        },
+                        "SCREENING": {
+                          "type": "object",
+                          "properties": {
+                            "score": {
+                              "type": "integer"
+                            },
+                            "grade": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["score", "grade"]
+                        }
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "PLACEMENT"
+                              },
+                              "masteryTrackProcessed": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "testId": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "subject": {
+                                "type": "string"
+                              },
+                              "grade": {
+                                "type": "integer"
+                              },
+                              "status": {
+                                "type": "string",
+                                "enum": [
+                                  "PASSED",
+                                  "FAILED",
+                                  "STARTED",
+                                  "NOT_STARTED",
+                                  "SKIP"
+                                ]
+                              },
+                              "score": {
+                                "type": "number"
+                              },
+                              "completedAt": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string",
+                                "const": "EDULASTIC"
+                              }
+                            },
+                            "required": [
+                              "testId",
+                              "title",
+                              "subject",
+                              "grade",
+                              "status",
+                              "source"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "nextTestId": {
+                      "type": ["string", "null"]
+                    }
+                  },
+                  "required": [
+                    "startingGrade",
+                    "currentGrade",
+                    "subjectLowestGrade",
+                    "subjectHighestGrade",
+                    "RIT",
+                    "results",
+                    "status",
+                    "nextTestId"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

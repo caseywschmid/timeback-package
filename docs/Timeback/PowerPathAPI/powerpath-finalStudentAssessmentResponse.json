@@ -1,0 +1,125 @@
+{
+  "post": {
+    "operationId": "finalStudentAssessmentResponse",
+    "summary": "Finalize a test assessments",
+    "description": "\nFinalize a lesson of type `quiz`, `test-out`, or `placement` after all questions have been answered:\n- Evaluates answered questions, attribute scores for each question, and overall lesson score.\n- Checks the correctness of the response using the QTI question's `<qti-response-declaration>` element and update the score accordingly.\n- Creates/updates the AssessmentLineItem and AssessmentResult objects for the student/question pair if it doesn't exist yet.\n\nNot supported for external test lessons as the 3rd party tool is responsible for finalizing the test. Use the **importExternalTestAssignmentResults** endpoint instead.\n\nNotice this may perform a course enrollment for the student if the lesson is a placement test or test-out, and the respective subject and grade are mapped to the Subject Track with a valid course set. \n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object with metadata.lessonType = \"quiz\", \"test-out\", or \"placement\" associated with it.\n",
+    "tags": ["PowerPath - Lesson Mastery", "PowerPath - Course Mastery"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "student": {
+                "type": "string",
+                "description": "The sourcedId of the student"
+              },
+              "lesson": {
+                "type": "string",
+                "description": "The sourcedId of the lesson (ComponentResource)"
+              }
+            },
+            "required": ["student", "lesson"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonType": {
+                  "type": "string",
+                  "enum": ["quiz", "test-out", "placement", "unit-test"]
+                },
+                "finalized": {
+                  "type": "boolean",
+                  "description": "Whether the lesson has been finalized in the current attempt"
+                },
+                "attempt": {
+                  "type": "number",
+                  "description": "The attempt number"
+                }
+              },
+              "required": ["lessonType", "finalized", "attempt"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

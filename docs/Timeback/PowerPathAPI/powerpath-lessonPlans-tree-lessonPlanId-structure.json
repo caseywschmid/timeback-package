@@ -1,0 +1,121 @@
+{
+  "get": {
+    "operationId": "getLessonPlanStructure",
+    "summary": "Get a lesson plan tree structure by its ID",
+    "description": "Purpose: Get a simplified structure for inspection and debugging.\n\nWhen to use:\n- For administractive tools and debugging\n- When you need to see the internal lesson plan structure without the full metadata\n\nWhat it does:\n- Returns a lightweight view of the lesson plan structure\n- Shows both skipped and non-skipped items\n- Includes order information and component/resource IDs (alos includes item ids but these should'n be relied on since they are not stable)\n- Useful for understanding the current state\n  ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "lessonPlanId",
+        "description": "Lesson plan ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Lesson plan tree structure",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonPlan": {
+                  "type": "object",
+                  "properties": {
+                    "lessonPlan": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "courseId": {
+                          "type": "string"
+                        },
+                        "courseTitle": {
+                          "type": "string"
+                        },
+                        "structure": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/LessonPlanStructureNode"
+                          }
+                        }
+                      },
+                      "required": ["id", "courseId", "courseTitle", "structure"]
+                    }
+                  },
+                  "required": ["lessonPlan"]
+                }
+              },
+              "required": ["lessonPlan"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    },
+    "LessonPlanStructureNode": {
+      "type": "object",
+      "properties": {
+        "componentResourceId": {
+          "type": "string"
+        },
+        "componentId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["component", "resource"]
+        },
+        "title": {
+          "type": "string"
+        },
+        "order": {
+          "type": "string"
+        },
+        "skipped": {
+          "type": "boolean"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "componentResources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/LessonPlanStructureNode"
+          }
+        },
+        "subComponents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/LessonPlanStructureNode"
+          }
+        }
+      },
+      "required": ["type", "title", "order", "skipped", "itemId"]
+    }
+  }
+}
