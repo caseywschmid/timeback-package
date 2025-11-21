@@ -31,7 +31,7 @@
 ### /ims/oneroster/gradebook/v1p2/results/
 
 - [x] `get_all_results`
-- [ ] `create_result`
+- [x] `create_result`
 
 ### /ims/oneroster/gradebook/v1p2/results/{sourcedId}
 

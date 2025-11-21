@@ -33,6 +33,10 @@ from .timeback_update_school_request import (
     TimebackUpdateSchoolBody,
 )
 from .timeback_get_all_results_request import TimebackGetAllResultsRequest
+from .timeback_create_result_request import (
+    TimebackCreateResultRequest,
+    TimebackCreateResultBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -60,4 +64,6 @@ __all__ = [
     "TimebackUpdateSchoolRequest",
     "TimebackUpdateSchoolBody",
     "TimebackGetAllResultsRequest",
+    "TimebackCreateResultRequest",
+    "TimebackCreateResultBody",
 ]
