@@ -69,7 +69,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/lineItems/{lineItemSourcedId}/results
 
-- [ ] `get_results_for_line_item_for_class`
+- [x] `get_results_for_line_item_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/students/{studentSourcedId}/results
 
