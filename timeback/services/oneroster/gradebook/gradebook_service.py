@@ -13,6 +13,7 @@ from timeback.models.request import (
     TimebackPutResultRequest,
     TimebackDeleteResultRequest,
     TimebackGetAllLineItemsRequest,
+    TimebackCreateLineItemRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -25,6 +26,7 @@ from timeback.models.response import (
     TimebackGetResultResponse,
     TimebackPutResultResponse,
     TimebackGetAllLineItemsResponse,
+    TimebackCreateLineItemResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -61,6 +63,9 @@ from timeback.services.oneroster.gradebook.endpoints.delete_result import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_line_items import (
     get_all_line_items as get_all_line_items_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_line_item import (
+    create_line_item as create_line_item_endpoint,
 )
 
 
@@ -141,6 +146,12 @@ class GradebookService:
     ) -> TimebackGetAllLineItemsResponse:
         """Fetch a paginated list of line items."""
         return get_all_line_items_endpoint(self._http, request)
+
+    def create_line_item(
+        self, request: TimebackCreateLineItemRequest
+    ) -> TimebackCreateLineItemResponse:
+        """Create a new line item."""
+        return create_line_item_endpoint(self._http, request)
 
 
 
