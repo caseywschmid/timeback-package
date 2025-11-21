@@ -27,6 +27,7 @@ from .timeback_get_line_item_response import TimebackGetLineItemResponse
 from .timeback_put_line_item_response import TimebackPutLineItemResponse
 from .timeback_create_result_for_line_item_response import TimebackCreateResultForLineItemResponse
 from .timeback_create_line_items_for_school_response import TimebackCreateLineItemsForSchoolResponse
+from .timeback_post_results_for_academic_session_for_class_response import TimebackPostResultsForAcademicSessionForClassResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -56,4 +57,5 @@ __all__ = [
     "TimebackPutLineItemResponse",
     "TimebackCreateResultForLineItemResponse",
     "TimebackCreateLineItemsForSchoolResponse",
+    "TimebackPostResultsForAcademicSessionForClassResponse",
 ]

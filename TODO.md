@@ -61,7 +61,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/academicSessions/{academicSessionSourcedId}/results
 
-- [ ] `post_results_for_academic_session_for_class`
+- [x] `post_results_for_academic_session_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/lineItems
 
