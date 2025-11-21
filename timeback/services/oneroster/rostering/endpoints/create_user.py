@@ -13,7 +13,7 @@ def create_user(http: HttpClient, request: TimebackCreateUserRequest) -> Timebac
 
     POST /ims/oneroster/rostering/v1p2/users/
     """
-    body: Dict[str, Any] = request.to_dict()
+    body: Dict[str, Any] = request.model_dump(exclude_none=True)
     log.debug(f"POST body: {body}")
     data: Dict[str, Any] = http.post(
         "/ims/oneroster/rostering/v1p2/users/", json=body

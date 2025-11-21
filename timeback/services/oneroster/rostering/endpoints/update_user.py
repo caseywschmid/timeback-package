@@ -25,7 +25,7 @@ def update_user(
         TimebackUpdateUserResponse containing the updated user
     """
     log.debug(f"Request: {request}")
-    body: Dict[str, Any] = request.to_dict()
+    body: Dict[str, Any] = request.model_dump(exclude_none=True)
     log.debug(f"PUT body: {body}")
     # Extract sourcedId from body for path parameter
     sourced_id = request.user.sourcedId

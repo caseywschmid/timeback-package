@@ -23,6 +23,11 @@ Using the path, determine which service class this endpoint belongs to.
 
 Analyze the endpoint to determine what parameters it requires (path params, query params, request body params). Do a thorough review of the contents of the /models directory to determine the correct models to use.
 
+**IMPORTANT: Check for existing reusable models before creating new ones:**
+- If you need a model that only contains a `sourcedId` field, use `TimebackSourcedIdReference` instead of creating a new model
+- Review existing models in `/models` to see if any can be reused or extended
+- Only create new models when existing ones don't fit the API requirements
+
 **Model Creation Rules:**
 - **Create request/response models when:**
   - 2+ attributes (any combination of path params, query params, or body params)
@@ -52,6 +57,12 @@ Create the new models that you'll need for the request and response body for the
 - Use descriptive field names following Python conventions (snake_case)
 - Use aliases when the API uses different naming (e.g., `alias="userId"` for `user_id`)
 
+**Reuse Existing Models:**
+- **For simple sourcedId references**: Use `TimebackSourcedIdReference` instead of creating new models
+  - Example: If the API requires `{"sourcedId": "..."}`, use `TimebackSourcedIdReference` rather than creating a custom model
+  - This model is specifically designed for cases where only `sourcedId` is needed (not the full reference structure)
+- **Check existing models first**: Before creating a new model, check if `TimebackOrgRef`, `TimebackSourcedIdReference`, or other existing models can be used
+
 **Docstring Standards:**
 
 All models MUST include comprehensive docstrings documenting attributes for IDE hover tooltips.
@@ -74,7 +85,10 @@ All models MUST include comprehensive docstrings documenting attributes for IDE 
 
 **Example Request Model:**
 ```python
+from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field
+from timeback.models.timeback_sourced_id_ref import TimebackSourcedIdReference
+from timeback.enums import TimebackOrgType
 
 class TimebackAddAgentRequest(BaseModel):
     """Request model for adding an agent to a user.
@@ -88,6 +102,23 @@ class TimebackAddAgentRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     user_id: str = Field(..., description="The sourcedId of the user", alias="userId")
     agent_sourced_id: str = Field(..., description="The sourcedId of the agent to add", alias="agentSourcedId")
+
+class TimebackCreateSchoolBody(BaseModel):
+    """Body payload for school creation.
+    
+    Attributes:
+        Required:
+            - name (str): Name of the school
+            - type (TimebackOrgType): Must be TimebackOrgType.SCHOOL
+        
+        Optional:
+            - parent (TimebackSourcedIdReference, optional): Reference to parent organization.
+              See TimebackSourcedIdReference for structure.
+    """
+    
+    name: str = Field(..., description="Name of the school")
+    type: TimebackOrgType = Field(default=TimebackOrgType.SCHOOL)
+    parent: Optional[TimebackSourcedIdReference] = None  # Reuse existing model instead of creating new one
 ```
 
 **Example Response Model:**
@@ -117,7 +148,11 @@ While writing endpoint functions, it is absolutely critical that you add type an
 If the endpoint requires a request model (2+ parameters or single non-primitive):
 - Accept the request model as a single parameter: `def endpoint_name(http: HttpClient, request: TimebackRequestModel) -> ReturnType:`
 - Extract path parameters from the request model and use them in the URL path: `f"/path/{request.user_id}/subpath/{request.agent_sourced_id}"`
-- Extract body parameters from the request model and use them in the JSON body: `{"agentSourcedId": request.agent_sourced_id}`
+- **For request body serialization, use Pydantic V2's `model_dump()` method:**
+  - Use `request.model_dump(exclude_none=True)` for standard serialization
+  - Use `request.model_dump(exclude_none=True, by_alias=True)` when field aliases need to be used (e.g., `scoreScale` instead of `score_scale`)
+  - Use `request.model_dump(exclude_none=True, exclude={'field_name'})` to exclude fields that shouldn't be in the body (e.g., path parameters)
+  - **DO NOT create custom `to_dict()` methods** - Pydantic V2's `model_dump()` handles all serialization needs
 - Extract query parameters from the request model and use them in the query string: `params={"limit": request.limit, "offset": request.offset}`
 - The endpoint function is responsible for extracting what it needs from the model and using it appropriately (path, body, query)
 
@@ -132,14 +167,27 @@ If the endpoint does NOT require a request model (single primitive parameter):
 
 **Example with Request Model:**
 ```python
-def add_agent(http: HttpClient, request: TimebackAddAgentRequest) -> Dict[str, Any]:
-    """Add an agent for a user."""
-    # Extract path param from request model
-    path = f"/ims/oneroster/rostering/v1p2/users/{request.user_id}/agents"
-    # Extract body param from request model
-    body = {"agentSourcedId": request.agent_sourced_id}
-    data = http.post(path, json=body)
-    return data
+def create_school(http: HttpClient, request: TimebackCreateSchoolRequest) -> TimebackCreateSchoolResponse:
+    """Create a new school."""
+    # Use model_dump() for body serialization - no custom to_dict() needed
+    body: Dict[str, Any] = request.model_dump(exclude_none=True)
+    data: Dict[str, Any] = http.post("/ims/oneroster/rostering/v1p2/schools", json=body)
+    return TimebackCreateSchoolResponse.model_validate(data)
+
+def put_score_scale(http: HttpClient, request: TimebackPutScoreScaleRequest) -> TimebackPutScoreScaleResponse:
+    """Update a score scale."""
+    # Exclude sourced_id from body (it's used in URL path)
+    # Use by_alias=True to get "scoreScale" instead of "score_scale"
+    body: Dict[str, Any] = request.model_dump(
+        exclude_none=True, 
+        exclude={'sourced_id'}, 
+        by_alias=True
+    )
+    data: Dict[str, Any] = http.put(
+        f"/ims/oneroster/gradebook/v1p2/scoreScales/{request.sourced_id}", 
+        json=body
+    )
+    return TimebackPutScoreScaleResponse.model_validate(data)
 ```
 
 **Example without Request Model:**

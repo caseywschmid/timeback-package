@@ -29,7 +29,9 @@ def put_score_scale(
     Returns:
         TimebackPutScoreScaleResponse containing the updated/created score scale
     """
-    body: Dict[str, Any] = request.to_dict()
+    # Exclude sourced_id from body since it's used in the URL path
+    # Use by_alias=True to get "scoreScale" instead of "score_scale"
+    body: Dict[str, Any] = request.model_dump(exclude_none=True, exclude={'sourced_id'}, by_alias=True)
     log.debug(f"PUT body: {body}")
     log.debug(f"Sourced ID: {request.sourced_id}")
     

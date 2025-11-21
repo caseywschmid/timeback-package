@@ -20,7 +20,7 @@
 ### /ims/oneroster/rostering/v1p2/schools/
 
 - [x] `get_all_schools`
-- [ ] `create_school`
+- [x] `create_school`
 
 ### /ims/oneroster/rostering/v1p2/schools/{sourcedId}
 
