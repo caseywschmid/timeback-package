@@ -53,6 +53,7 @@ from .timeback_put_line_item_request import (
     TimebackPutLineItemRequest,
     TimebackPutLineItemBody,
 )
+from .timeback_delete_line_item_request import TimebackDeleteLineItemRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -92,4 +93,5 @@ __all__ = [
     "TimebackGetLineItemRequest",
     "TimebackPutLineItemRequest",
     "TimebackPutLineItemBody",
+    "TimebackDeleteLineItemRequest",
 ]
