@@ -1,0 +1,375 @@
+{
+  "post": {
+    "operationId": "uploadCFPackage",
+    "summary": "Upload CASE Package",
+    "description": "Upload a complete CASE package with document, items, and associations",
+    "tags": ["CASE - Learning Standards"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "CFDocument": {
+                "type": "object",
+                "properties": {
+                  "identifier": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "uri": {
+                    "type": "string"
+                  },
+                  "lastChangeDateTime": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "creator": {
+                    "type": "string"
+                  },
+                  "officialSourceURL": {
+                    "type": "string"
+                  },
+                  "publisher": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "language": {
+                    "type": "string"
+                  },
+                  "version": {
+                    "type": "string"
+                  },
+                  "caseVersion": {
+                    "type": "string"
+                  },
+                  "adoptionStatus": {
+                    "type": "string"
+                  },
+                  "statusStartDate": {
+                    "type": "string"
+                  },
+                  "statusEndDate": {
+                    "type": "string"
+                  },
+                  "licenseUri": {
+                    "type": "string"
+                  },
+                  "notes": {
+                    "type": "string"
+                  },
+                  "subject": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "identifier",
+                  "uri",
+                  "lastChangeDateTime",
+                  "title",
+                  "creator"
+                ]
+              },
+              "CFItems": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "uri": {
+                      "type": "string"
+                    },
+                    "lastChangeDateTime": {
+                      "type": "string"
+                    },
+                    "fullStatement": {
+                      "type": "string"
+                    },
+                    "alternativeLabel": {
+                      "type": "string"
+                    },
+                    "CFItemType": {
+                      "type": "string"
+                    },
+                    "cfItemType": {
+                      "type": "string"
+                    },
+                    "humanCodingScheme": {
+                      "type": "string"
+                    },
+                    "listEnumeration": {
+                      "type": "string"
+                    },
+                    "abbreviatedStatement": {
+                      "type": "string"
+                    },
+                    "conceptKeywords": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "notes": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "language": {
+                      "type": "string"
+                    },
+                    "educationLevel": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "CFItemTypeURI": {},
+                    "licenseURI": {},
+                    "statusStartDate": {
+                      "type": "string"
+                    },
+                    "statusEndDate": {
+                      "type": "string"
+                    },
+                    "extensions": {}
+                  },
+                  "required": [
+                    "identifier",
+                    "uri",
+                    "lastChangeDateTime",
+                    "fullStatement"
+                  ]
+                }
+              },
+              "CFAssociations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "identifier": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "uri": {
+                      "type": "string"
+                    },
+                    "lastChangeDateTime": {
+                      "type": "string"
+                    },
+                    "associationType": {
+                      "type": "string"
+                    },
+                    "originNodeURI": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "identifier": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "uri": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["title", "identifier", "uri"]
+                    },
+                    "destinationNodeURI": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string"
+                        },
+                        "identifier": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "uri": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["title", "identifier", "uri"]
+                    },
+                    "sequenceNumber": {
+                      "type": "number"
+                    },
+                    "extensions": {}
+                  },
+                  "required": [
+                    "identifier",
+                    "uri",
+                    "lastChangeDateTime",
+                    "associationType",
+                    "originNodeURI",
+                    "destinationNodeURI"
+                  ]
+                }
+              },
+              "CFDefinitions": {
+                "type": "object",
+                "properties": {
+                  "CFItemTypes": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "CFSubjects": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "CFConcepts": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "CFLicenses": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "CFAssociationGroupings": {
+                    "type": "array",
+                    "items": {}
+                  },
+                  "extensions": {}
+                }
+              },
+              "extensions": {}
+            },
+            "required": ["CFDocument", "CFItems", "CFAssociations"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "CASE Package Upload Result",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "result": {
+                  "type": "object",
+                  "properties": {
+                    "documentId": {
+                      "type": "string"
+                    },
+                    "stats": {
+                      "type": "object",
+                      "properties": {
+                        "documents": {
+                          "type": "number"
+                        },
+                        "items": {
+                          "type": "number"
+                        },
+                        "associations": {
+                          "type": "number"
+                        }
+                      },
+                      "required": ["documents", "items", "associations"]
+                    },
+                    "success": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["documentId", "stats", "success"]
+                }
+              },
+              "required": ["success", "message", "result"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
