@@ -12,6 +12,7 @@ from timeback.models.request import (
     TimebackGetResultRequest,
     TimebackPutResultRequest,
     TimebackDeleteResultRequest,
+    TimebackGetAllLineItemsRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -23,6 +24,7 @@ from timeback.models.response import (
     TimebackCreateResultResponse,
     TimebackGetResultResponse,
     TimebackPutResultResponse,
+    TimebackGetAllLineItemsResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -56,6 +58,9 @@ from timeback.services.oneroster.gradebook.endpoints.put_result import (
 )
 from timeback.services.oneroster.gradebook.endpoints.delete_result import (
     delete_result as delete_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_all_line_items import (
+    get_all_line_items as get_all_line_items_endpoint,
 )
 
 
@@ -130,6 +135,12 @@ class GradebookService:
     ) -> Optional[Dict[str, Any]]:
         """Delete a result."""
         return delete_result_endpoint(self._http, request)
+
+    def get_all_line_items(
+        self, request: TimebackGetAllLineItemsRequest
+    ) -> TimebackGetAllLineItemsResponse:
+        """Fetch a paginated list of line items."""
+        return get_all_line_items_endpoint(self._http, request)
 
 
 

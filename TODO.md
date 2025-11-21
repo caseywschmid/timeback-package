@@ -41,7 +41,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/lineItems/
 
-- [ ] `get_all_line_items`
+- [x] `get_all_line_items`
 - [ ] `create_line_item`
 
 ### /ims/oneroster/gradebook/v1p2/lineItems/{sourcedId}
