@@ -1,0 +1,396 @@
+{
+  "get": {
+    "operationId": "getCourseComponent",
+    "summary": "Get a specific Course Component",
+    "description": "Get a specific Course Component on the service provider. If the corresponding record cannot be located, the api will return a 404 error code and message 'Course Component not found.'",
+    "tags": ["Courses Management", "Course Components Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the course component",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      {
+        "in": "query",
+        "name": "fields",
+        "description": "Comma-separated list of fields to include in the response",
+        "schema": {
+          "type": "string",
+          "description": "Comma-separated list of fields to include in the response",
+          "example": "sourcedId,name"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Single Course Component",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "courseComponent": {
+                  "type": "object",
+                  "properties": {
+                    "sourcedId": { "type": "string", "minLength": 1 },
+                    "status": {
+                      "type": "string",
+                      "enum": ["active", "tobedeleted"]
+                    },
+                    "dateLastModified": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": true,
+                      "nullable": true,
+                      "description": "Additional metadata for the object"
+                    },
+                    "course": {
+                      "type": "object",
+                      "properties": { "sourcedId": { "type": "string" } },
+                      "required": ["sourcedId"]
+                    },
+                    "courseComponent": {
+                      "type": ["object", "null"],
+                      "properties": { "sourcedId": { "type": "string" } },
+                      "required": ["sourcedId"]
+                    },
+                    "parent": {
+                      "type": ["object", "null"],
+                      "properties": { "sourcedId": { "type": "string" } },
+                      "required": ["sourcedId"]
+                    },
+                    "title": { "type": "string" },
+                    "sortOrder": { "type": "number", "example": 1 },
+                    "prerequisites": {
+                      "type": ["array", "null"],
+                      "items": { "type": "string" }
+                    },
+                    "prerequisiteCriteria": { "type": ["string", "null"] },
+                    "unlockDate": {
+                      "type": "string",
+                      "description": "The date the component is unlocked for the student",
+                      "example": "2021-01-01T00:00:00.000Z"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "course",
+                    "title",
+                    "sortOrder",
+                    "unlockDate"
+                  ],
+                  "description": "Represents a component of a course."
+                }
+              },
+              "required": ["courseComponent"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Course Component Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "put": {
+    "operationId": "putCourseComponent",
+    "summary": "Update a Course Component",
+    "description": "To update an existing Course Component. The sourcedId for the record to be updated is supplied by the requesting system.",
+    "tags": ["Courses Management", "Course Components Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the course component to update",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "courseComponent": {
+                "type": "object",
+                "properties": {
+                  "sourcedId": { "type": "string", "minLength": 1 },
+                  "status": {
+                    "type": "string",
+                    "enum": ["active", "tobedeleted"]
+                  },
+                  "dateLastModified": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true,
+                    "description": "Additional metadata for the object"
+                  },
+                  "course": {
+                    "type": "object",
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "courseComponent": {
+                    "type": ["object", "null"],
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "parent": {
+                    "type": ["object", "null"],
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "title": { "type": "string" },
+                  "sortOrder": { "type": "number", "example": 1 },
+                  "prerequisites": {
+                    "type": ["array", "null"],
+                    "items": { "type": "string" }
+                  },
+                  "prerequisiteCriteria": { "type": ["string", "null"] },
+                  "unlockDate": {
+                    "type": "string",
+                    "description": "The date the component is unlocked for the student",
+                    "example": "2021-01-01T00:00:00.000Z"
+                  }
+                },
+                "required": ["status", "course", "title"],
+                "description": "Represents a component of a course."
+              }
+            },
+            "required": ["courseComponent"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Course Component Updated Successfully",
+        "content": {
+          "application/json": {
+            "schema": { "type": "object", "additionalProperties": true }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Course Component Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "delete": {
+    "operationId": "deleteCourseComponent",
+    "summary": "Delete a Course Component",
+    "description": "Perform a soft delete on a specific Course Component on the service provider. This operation changes the status of the Course Component to 'tobedeleted'.",
+    "tags": ["Courses Management", "Course Components Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the course component to delete",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Course component successfully deleted",
+        "content": {}
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Course Component Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

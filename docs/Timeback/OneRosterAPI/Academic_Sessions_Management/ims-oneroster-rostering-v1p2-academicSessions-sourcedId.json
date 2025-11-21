@@ -1,0 +1,383 @@
+{
+  "get": {
+    "operationId": "getAcademicSession",
+    "summary": "Get a specific Academic Session",
+    "description": "Get a specific Academic Session on the service provider. If the corresponding record cannot be located, the api will return a 404 error code and message 'Academic session not found.'",
+    "tags": ["Academic Sessions Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the academic session",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      {
+        "in": "query",
+        "name": "fields",
+        "description": "Comma-separated list of fields to include in the response",
+        "schema": {
+          "type": "string",
+          "description": "Comma-separated list of fields to include in the response",
+          "example": "sourcedId,name"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "academicSession": {
+                  "$ref": "#/components/schemas/AcademicSession"
+                }
+              },
+              "required": ["academicSession"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Academic session not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "put": {
+    "operationId": "putAcademicSession",
+    "summary": "Update an Academic Session",
+    "description": "To update an existing Academic Session. The sourcedId for the record to be updated is supplied by the requesting system.",
+    "tags": ["Academic Sessions Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the academic session to update",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "academicSession": {
+                "type": "object",
+                "properties": {
+                  "sourcedId": { "type": "string" },
+                  "status": {
+                    "type": "string",
+                    "enum": ["active", "tobedeleted"]
+                  },
+                  "dateLastModified": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true,
+                    "description": "Additional metadata for the object"
+                  },
+                  "title": { "type": "string" },
+                  "startDate": { "type": "string" },
+                  "endDate": { "type": "string" },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "gradingPeriod",
+                      "semester",
+                      "schoolYear",
+                      "term"
+                    ]
+                  },
+                  "parent": {
+                    "type": ["object", "null"],
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "schoolYear": { "type": "string" },
+                  "org": {
+                    "type": "object",
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "children": {
+                    "type": ["array", "null"],
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "href": { "type": "string", "format": "uri" },
+                        "sourcedId": { "type": "string" },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "academicSession",
+                            "assessmentLineItem",
+                            "category",
+                            "class",
+                            "course",
+                            "demographics",
+                            "enrollment",
+                            "gradingPeriod",
+                            "lineItem",
+                            "org",
+                            "resource",
+                            "result",
+                            "scoreScale",
+                            "student",
+                            "teacher",
+                            "term",
+                            "user",
+                            "componentResource",
+                            "courseComponent"
+                          ]
+                        }
+                      },
+                      "required": ["href", "sourcedId", "type"]
+                    }
+                  }
+                },
+                "required": [
+                  "sourcedId",
+                  "status",
+                  "title",
+                  "startDate",
+                  "endDate",
+                  "type",
+                  "schoolYear",
+                  "org"
+                ]
+              }
+            },
+            "required": ["academicSession"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Academic session updated",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/AcademicSession" }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Academic session not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "delete": {
+    "operationId": "deleteAcademicSession",
+    "summary": "Delete an Academic Session",
+    "description": "Perform a soft delete on a specific Academic Session on the service provider. This operation changes the status of the Academic Session to 'tobedeleted'.",
+    "tags": ["Academic Sessions Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the academic session to delete",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Academic session successfully deleted",
+        "content": {}
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Academic session not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

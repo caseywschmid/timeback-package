@@ -1,0 +1,100 @@
+{
+  "post": {
+    "operationId": "exportResourceToCommonCartridge",
+    "summary": "Export Resource to Common Cartridge",
+    "description": "Export a resource to Common Cartridge (.imscc) format for import into LMS systems.",
+    "tags": ["Resources Management"],
+    "parameters": [
+      {
+        "name": "sourceId",
+        "description": "The sourcedId of the resource to export",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Common Cartridge file successfully generated",
+        "headers": {
+          "Content-Disposition": {
+            "description": "Attachment filename",
+            "schema": {
+              "type": "string",
+              "example": "attachment; filename=\"assessment.imscc\""
+            }
+          }
+        },
+        "content": {
+          "application/zip": {
+            "schema": { "type": "string", "format": "binary" }
+          }
+        }
+      },
+      "400": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}
