@@ -19,6 +19,7 @@ from .timeback_get_school_response import TimebackGetSchoolResponse
 from .timeback_update_school_response import TimebackUpdateSchoolResponse
 from .timeback_get_all_results_response import TimebackGetAllResultsResponse
 from .timeback_create_result_response import TimebackCreateResultResponse
+from .timeback_get_result_response import TimebackGetResultResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -40,4 +41,5 @@ __all__ = [
     "TimebackUpdateSchoolResponse",
     "TimebackGetAllResultsResponse",
     "TimebackCreateResultResponse",
+    "TimebackGetResultResponse",
 ]

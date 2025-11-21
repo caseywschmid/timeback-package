@@ -35,7 +35,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/results/{sourcedId}
 
-- [ ] `get_result`
+- [x] `get_result`
 - [ ] `put_result`
 - [ ] `delete_result`
 
