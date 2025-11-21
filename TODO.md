@@ -81,7 +81,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/lineItems
 
-- [ ] `get_line_items_for_class`
+- [x] `get_line_items_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/results
 
