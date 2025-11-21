@@ -10,6 +10,7 @@ from timeback.models.request import (
     TimebackGetAllResultsRequest,
     TimebackCreateResultRequest,
     TimebackGetResultRequest,
+    TimebackPutResultRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -20,6 +21,7 @@ from timeback.models.response import (
     TimebackGetAllResultsResponse,
     TimebackCreateResultResponse,
     TimebackGetResultResponse,
+    TimebackPutResultResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -47,6 +49,9 @@ from timeback.services.oneroster.gradebook.endpoints.create_result import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_result import (
     get_result as get_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.put_result import (
+    put_result as put_result_endpoint,
 )
 
 
@@ -109,6 +114,12 @@ class GradebookService:
     ) -> TimebackGetResultResponse:
         """Fetch a single result by sourcedId."""
         return get_result_endpoint(self._http, request)
+
+    def put_result(
+        self, request: TimebackPutResultRequest
+    ) -> TimebackPutResultResponse:
+        """Update or create a result."""
+        return put_result_endpoint(self._http, request)
 
 
 

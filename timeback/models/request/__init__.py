@@ -38,6 +38,10 @@ from .timeback_create_result_request import (
     TimebackCreateResultBody,
 )
 from .timeback_get_result_request import TimebackGetResultRequest
+from .timeback_put_result_request import (
+    TimebackPutResultRequest,
+    TimebackPutResultBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -68,4 +72,6 @@ __all__ = [
     "TimebackCreateResultRequest",
     "TimebackCreateResultBody",
     "TimebackGetResultRequest",
+    "TimebackPutResultRequest",
+    "TimebackPutResultBody",
 ]
