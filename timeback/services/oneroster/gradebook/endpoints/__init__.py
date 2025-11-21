@@ -8,6 +8,7 @@ from timeback.services.oneroster.gradebook.endpoints.get_all_results import get_
 from timeback.services.oneroster.gradebook.endpoints.create_result import create_result
 from timeback.services.oneroster.gradebook.endpoints.get_result import get_result
 from timeback.services.oneroster.gradebook.endpoints.put_result import put_result
+from timeback.services.oneroster.gradebook.endpoints.delete_result import delete_result
 
 __all__ = [
     "get_all_score_scales",
@@ -20,4 +21,5 @@ __all__ = [
     "create_result",
     "get_result",
     "put_result",
+    "delete_result",
 ]

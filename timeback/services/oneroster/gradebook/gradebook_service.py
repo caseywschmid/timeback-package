@@ -11,6 +11,7 @@ from timeback.models.request import (
     TimebackCreateResultRequest,
     TimebackGetResultRequest,
     TimebackPutResultRequest,
+    TimebackDeleteResultRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -52,6 +53,9 @@ from timeback.services.oneroster.gradebook.endpoints.get_result import (
 )
 from timeback.services.oneroster.gradebook.endpoints.put_result import (
     put_result as put_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.delete_result import (
+    delete_result as delete_result_endpoint,
 )
 
 
@@ -120,6 +124,12 @@ class GradebookService:
     ) -> TimebackPutResultResponse:
         """Update or create a result."""
         return put_result_endpoint(self._http, request)
+
+    def delete_result(
+        self, request: TimebackDeleteResultRequest
+    ) -> Optional[Dict[str, Any]]:
+        """Delete a result."""
+        return delete_result_endpoint(self._http, request)
 
 
 

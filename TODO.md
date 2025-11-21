@@ -37,7 +37,7 @@
 
 - [x] `get_result`
 - [x] `put_result`
-- [ ] `delete_result`
+- [x] `delete_result`
 
 ### /ims/oneroster/gradebook/v1p2/lineItems/
 
