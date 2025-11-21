@@ -52,7 +52,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/lineItems/{sourcedId}/results
 
-- [ ] `create_result_for_line_item`
+- [x] `create_result_for_line_item`
 
 ### /ims/oneroster/gradebook/v1p2/schools/{sourcedId}/lineItems
 

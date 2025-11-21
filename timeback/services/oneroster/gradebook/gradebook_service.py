@@ -17,6 +17,7 @@ from timeback.models.request import (
     TimebackGetLineItemRequest,
     TimebackPutLineItemRequest,
     TimebackDeleteLineItemRequest,
+    TimebackCreateResultForLineItemRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -32,6 +33,7 @@ from timeback.models.response import (
     TimebackCreateLineItemResponse,
     TimebackGetLineItemResponse,
     TimebackPutLineItemResponse,
+    TimebackCreateResultForLineItemResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -80,6 +82,9 @@ from timeback.services.oneroster.gradebook.endpoints.put_line_item import (
 )
 from timeback.services.oneroster.gradebook.endpoints.delete_line_item import (
     delete_line_item as delete_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_result_for_line_item import (
+    create_result_for_line_item as create_result_for_line_item_endpoint,
 )
 
 
@@ -184,6 +189,12 @@ class GradebookService:
     ) -> Optional[Dict[str, Any]]:
         """Soft delete a line item."""
         return delete_line_item_endpoint(self._http, request)
+
+    def create_result_for_line_item(
+        self, request: TimebackCreateResultForLineItemRequest
+    ) -> TimebackCreateResultForLineItemResponse:
+        """Create results for a specific line item."""
+        return create_result_for_line_item_endpoint(self._http, request)
 
 
 
