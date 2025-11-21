@@ -23,6 +23,7 @@ from timeback.models.request import (
     TimebackPostResultsForAcademicSessionForClassRequest,
     TimebackPostLineItemsForClassRequest,
     TimebackGetResultsForLineItemForClassRequest,
+    TimebackGetResultsForStudentForClassRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -108,6 +109,9 @@ from timeback.services.oneroster.gradebook.endpoints.post_line_items_for_class i
 )
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_line_item_for_class import (
     get_results_for_line_item_for_class as get_results_for_line_item_for_class_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_results_for_student_for_class import (
+    get_results_for_student_for_class as get_results_for_student_for_class_endpoint,
 )
 
 
@@ -248,6 +252,12 @@ class GradebookService:
     ) -> TimebackGetAllResultsResponse:
         """Get results for a specific line item and class."""
         return get_results_for_line_item_for_class_endpoint(self._http, request)
+
+    def get_results_for_student_for_class(
+        self, request: TimebackGetResultsForStudentForClassRequest
+    ) -> TimebackGetAllResultsResponse:
+        """Get results for a specific student and class."""
+        return get_results_for_student_for_class_endpoint(self._http, request)
 
 
 

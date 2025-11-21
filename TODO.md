@@ -73,7 +73,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/students/{studentSourcedId}/results
 
-- [ ] `get_results_for_student_for_class`
+- [x] `get_results_for_student_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/categories
 
