@@ -55,6 +55,7 @@ from .timeback_put_line_item_request import (
 )
 from .timeback_delete_line_item_request import TimebackDeleteLineItemRequest
 from .timeback_create_result_for_line_item_request import TimebackCreateResultForLineItemRequest
+from .timeback_get_line_items_for_school_request import TimebackGetLineItemsForSchoolRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -96,4 +97,5 @@ __all__ = [
     "TimebackPutLineItemBody",
     "TimebackDeleteLineItemRequest",
     "TimebackCreateResultForLineItemRequest",
+    "TimebackGetLineItemsForSchoolRequest",
 ]
