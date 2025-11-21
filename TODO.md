@@ -85,7 +85,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/results
 
-- [ ] `get_results_for_class`
+- [x] `get_results_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/scoreScales
 
