@@ -49,6 +49,10 @@ from .timeback_create_line_item_request import (
     TimebackCreateLineItemBody,
 )
 from .timeback_get_line_item_request import TimebackGetLineItemRequest
+from .timeback_put_line_item_request import (
+    TimebackPutLineItemRequest,
+    TimebackPutLineItemBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -86,4 +90,6 @@ __all__ = [
     "TimebackCreateLineItemRequest",
     "TimebackCreateLineItemBody",
     "TimebackGetLineItemRequest",
+    "TimebackPutLineItemRequest",
+    "TimebackPutLineItemBody",
 ]

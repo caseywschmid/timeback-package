@@ -15,6 +15,7 @@ from timeback.models.request import (
     TimebackGetAllLineItemsRequest,
     TimebackCreateLineItemRequest,
     TimebackGetLineItemRequest,
+    TimebackPutLineItemRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -29,6 +30,7 @@ from timeback.models.response import (
     TimebackGetAllLineItemsResponse,
     TimebackCreateLineItemResponse,
     TimebackGetLineItemResponse,
+    TimebackPutLineItemResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -71,6 +73,9 @@ from timeback.services.oneroster.gradebook.endpoints.create_line_item import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_item import (
     get_line_item as get_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.put_line_item import (
+    put_line_item as put_line_item_endpoint,
 )
 
 
@@ -163,6 +168,12 @@ class GradebookService:
     ) -> TimebackGetLineItemResponse:
         """Fetch a single line item by sourcedId."""
         return get_line_item_endpoint(self._http, request)
+
+    def put_line_item(
+        self, request: TimebackPutLineItemRequest
+    ) -> TimebackPutLineItemResponse:
+        """Update or create a line item."""
+        return put_line_item_endpoint(self._http, request)
 
 
 
