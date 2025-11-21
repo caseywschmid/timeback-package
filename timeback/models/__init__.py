@@ -59,7 +59,8 @@ from .timeback_term_ref import TimebackTermRef
 from .timeback_sourced_id_ref import TimebackSourcedIdReference
 from .timeback_component import TimebackComponent
 from .timeback_enrollment import TimebackEnrollment
-from .timeback_sourced_id_pairs import TimebackSourcedIdPairs   
+from .timeback_sourced_id_pairs import TimebackSourcedIdPairs
+from .timeback_result import TimebackResult
 from .request import TimebackUpdateUserRequest
 from .response import TimebackUpdateUserResponse
 
@@ -125,4 +126,5 @@ __all__ = [
     "TimebackUpdateUserRequest",
     "TimebackUpdateUserResponse",
     "TimebackSourcedIdPairs",
+    "TimebackResult",
 ]

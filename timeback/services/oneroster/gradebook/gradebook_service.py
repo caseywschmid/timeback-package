@@ -7,6 +7,7 @@ from timeback.models.request import (
     TimebackPutScoreScaleRequest,
     TimebackDeleteScoreScaleRequest,
     TimebackGetScoreScalesForSchoolRequest,
+    TimebackGetAllResultsRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -14,6 +15,7 @@ from timeback.models.response import (
     TimebackGetScoreScaleResponse,
     TimebackPutScoreScaleResponse,
     TimebackGetScoreScalesForSchoolResponse,
+    TimebackGetAllResultsResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -32,6 +34,9 @@ from timeback.services.oneroster.gradebook.endpoints.delete_score_scale import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_score_scales_for_school import (
     get_score_scales_for_school as get_score_scales_for_school_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_all_results import (
+    get_all_results as get_all_results_endpoint,
 )
 
 
@@ -76,6 +81,12 @@ class GradebookService:
     ) -> TimebackGetScoreScalesForSchoolResponse:
         """Fetch score scales for a specific school."""
         return get_score_scales_for_school_endpoint(self._http, request)
+
+    def get_all_results(
+        self, request: TimebackGetAllResultsRequest
+    ) -> TimebackGetAllResultsResponse:
+        """Fetch a paginated list of results."""
+        return get_all_results_endpoint(self._http, request)
 
 
 
