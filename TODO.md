@@ -46,7 +46,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/lineItems/{sourcedId}
 
-- [ ] `get_line_item`
+- [x] `get_line_item`
 - [ ] `put_line_item`
 - [ ] `delete_line_item`
 
