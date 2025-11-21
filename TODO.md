@@ -89,7 +89,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/scoreScales
 
-- [ ] `get_score_scales_for_class`
+- [x] `get_score_scales_for_class`
 
 ### /ims/oneroster/rostering/v1p2/classes/
 

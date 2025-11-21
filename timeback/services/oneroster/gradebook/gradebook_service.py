@@ -27,6 +27,7 @@ from timeback.models.request import (
     TimebackGetCategoriesForClassRequest,
     TimebackGetLineItemsForClassRequest,
     TimebackGetResultsForClassRequest,
+    TimebackGetScoreScalesForClassRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -125,6 +126,9 @@ from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class im
 )
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_class import (
     get_results_for_class as get_results_for_class_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_score_scales_for_class import (
+    get_score_scales_for_class as get_score_scales_for_class_endpoint,
 )
 
 
@@ -289,6 +293,12 @@ class GradebookService:
     ) -> TimebackGetAllResultsResponse:
         """Get results for a specific class."""
         return get_results_for_class_endpoint(self._http, request)
+
+    def get_score_scales_for_class(
+        self, request: TimebackGetScoreScalesForClassRequest
+    ) -> TimebackGetScoreScalesForSchoolResponse:
+        """Get score scales for a specific class."""
+        return get_score_scales_for_class_endpoint(self._http, request)
 
 
 
