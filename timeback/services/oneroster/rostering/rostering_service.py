@@ -6,6 +6,7 @@ from timeback.models.response import (
     TimebackGetUserResponse,
     TimebackRegisterStudentCredentialsResponse,
     TimebackDecryptCredentialResponse,
+    TimebackGetAllSchoolsResponse,
 )
 from timeback.models.request import (
     TimebackUpdateUserRequest,
@@ -14,6 +15,7 @@ from timeback.models.request import (
     TimebackDeleteAgentRequest,
     TimebackGetUserRequest,
     TimebackGetAllUsersRequest,
+    TimebackGetAllSchoolsRequest,
     TimebackRegisterStudentCredentialsRequest,
     TimebackDecryptCredentialRequest,
 )
@@ -26,6 +28,9 @@ from timeback.services.oneroster.rostering.endpoints.get_user_with_demographics 
 )
 from timeback.services.oneroster.rostering.endpoints.get_all_users import (
     get_all_users as get_all_users_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_all_schools import (
+    get_all_schools as get_all_schools_endpoint,
 )
 from timeback.services.oneroster.rostering.endpoints.update_user import (
     update_user as update_user_endpoint,
@@ -78,6 +83,13 @@ class RosteringService:
     ) -> TimebackGetAllUsersResponse:
         """Fetch a paginated list of users."""
         return get_all_users_endpoint(self._http, request)
+
+    def get_all_schools(
+        self,
+        request: TimebackGetAllSchoolsRequest,
+    ) -> TimebackGetAllSchoolsResponse:
+        """Fetch a paginated list of schools."""
+        return get_all_schools_endpoint(self._http, request)
 
     def update_user(
         self, request: TimebackUpdateUserRequest

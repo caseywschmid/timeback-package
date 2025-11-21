@@ -22,6 +22,7 @@ from .timeback_get_score_scale_request import TimebackGetScoreScaleRequest
 from .timeback_put_score_scale_request import TimebackPutScoreScaleRequest
 from .timeback_delete_score_scale_request import TimebackDeleteScoreScaleRequest
 from .timeback_get_score_scales_for_school_request import TimebackGetScoreScalesForSchoolRequest
+from .timeback_get_all_schools_request import TimebackGetAllSchoolsRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -42,4 +43,5 @@ __all__ = [
     "TimebackPutScoreScaleRequest",
     "TimebackDeleteScoreScaleRequest",
     "TimebackGetScoreScalesForSchoolRequest",
+    "TimebackGetAllSchoolsRequest",
 ]
