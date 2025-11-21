@@ -61,6 +61,7 @@ from .timeback_post_results_for_academic_session_for_class_request import Timeba
 from .timeback_post_line_items_for_class_request import TimebackPostLineItemsForClassRequest
 from .timeback_get_results_for_line_item_for_class_request import TimebackGetResultsForLineItemForClassRequest
 from .timeback_get_results_for_student_for_class_request import TimebackGetResultsForStudentForClassRequest
+from .timeback_get_categories_for_class_request import TimebackGetCategoriesForClassRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -108,4 +109,5 @@ __all__ = [
     "TimebackPostLineItemsForClassRequest",
     "TimebackGetResultsForLineItemForClassRequest",
     "TimebackGetResultsForStudentForClassRequest",
+    "TimebackGetCategoriesForClassRequest",
 ]

@@ -24,6 +24,7 @@ from timeback.models.request import (
     TimebackPostLineItemsForClassRequest,
     TimebackGetResultsForLineItemForClassRequest,
     TimebackGetResultsForStudentForClassRequest,
+    TimebackGetCategoriesForClassRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -43,6 +44,7 @@ from timeback.models.response import (
     TimebackCreateLineItemsForSchoolResponse,
     TimebackPostResultsForAcademicSessionForClassResponse,
     TimebackPostLineItemsForClassResponse,
+    TimebackGetAllCategoriesResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -112,6 +114,9 @@ from timeback.services.oneroster.gradebook.endpoints.get_results_for_line_item_f
 )
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_student_for_class import (
     get_results_for_student_for_class as get_results_for_student_for_class_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_categories_for_class import (
+    get_categories_for_class as get_categories_for_class_endpoint,
 )
 
 
@@ -258,6 +263,12 @@ class GradebookService:
     ) -> TimebackGetAllResultsResponse:
         """Get results for a specific student and class."""
         return get_results_for_student_for_class_endpoint(self._http, request)
+
+    def get_categories_for_class(
+        self, request: TimebackGetCategoriesForClassRequest
+    ) -> TimebackGetAllCategoriesResponse:
+        """Get categories for a specific class."""
+        return get_categories_for_class_endpoint(self._http, request)
 
 
 

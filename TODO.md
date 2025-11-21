@@ -77,7 +77,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/categories
 
-- [ ] `get_categories_for_class`
+- [x] `get_categories_for_class`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{sourcedId}/lineItems
 

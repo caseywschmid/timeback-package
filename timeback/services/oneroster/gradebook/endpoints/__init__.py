@@ -21,6 +21,7 @@ from timeback.services.oneroster.gradebook.endpoints.post_results_for_academic_s
 from timeback.services.oneroster.gradebook.endpoints.post_line_items_for_class import post_line_items_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_line_item_for_class import get_results_for_line_item_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_student_for_class import get_results_for_student_for_class
+from timeback.services.oneroster.gradebook.endpoints.get_categories_for_class import get_categories_for_class
 
 __all__ = [
     "get_all_score_scales",
@@ -46,4 +47,5 @@ __all__ = [
     "post_line_items_for_class",
     "get_results_for_line_item_for_class",
     "get_results_for_student_for_class",
+    "get_categories_for_class",
 ]
