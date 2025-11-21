@@ -57,7 +57,7 @@
 ### /ims/oneroster/gradebook/v1p2/schools/{sourcedId}/lineItems
 
 - [x] `get_line_items_for_school`
-- [ ] `create_line_items_for_school`
+- [x] `create_line_items_for_school`
 
 ### /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/academicSessions/{academicSessionSourcedId}/results
 

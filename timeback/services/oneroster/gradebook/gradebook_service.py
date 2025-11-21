@@ -19,6 +19,7 @@ from timeback.models.request import (
     TimebackDeleteLineItemRequest,
     TimebackCreateResultForLineItemRequest,
     TimebackGetLineItemsForSchoolRequest,
+    TimebackCreateLineItemsForSchoolRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -35,6 +36,7 @@ from timeback.models.response import (
     TimebackGetLineItemResponse,
     TimebackPutLineItemResponse,
     TimebackCreateResultForLineItemResponse,
+    TimebackCreateLineItemsForSchoolResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -89,6 +91,9 @@ from timeback.services.oneroster.gradebook.endpoints.create_result_for_line_item
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_school import (
     get_line_items_for_school as get_line_items_for_school_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_line_items_for_school import (
+    create_line_items_for_school as create_line_items_for_school_endpoint,
 )
 
 
@@ -205,6 +210,12 @@ class GradebookService:
     ) -> TimebackGetAllLineItemsResponse:
         """Get line items for a specific school."""
         return get_line_items_for_school_endpoint(self._http, request)
+
+    def create_line_items_for_school(
+        self, request: TimebackCreateLineItemsForSchoolRequest
+    ) -> TimebackCreateLineItemsForSchoolResponse:
+        """Create line items for a specific school."""
+        return create_line_items_for_school_endpoint(self._http, request)
 
 
 
