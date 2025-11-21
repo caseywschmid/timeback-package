@@ -27,6 +27,11 @@ from .timeback_create_school_request import (
     TimebackCreateSchoolRequest,
     TimebackCreateSchoolBody,
 )
+from .timeback_get_school_request import TimebackGetSchoolRequest
+from .timeback_update_school_request import (
+    TimebackUpdateSchoolRequest,
+    TimebackUpdateSchoolBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -50,4 +55,7 @@ __all__ = [
     "TimebackGetAllSchoolsRequest",
     "TimebackCreateSchoolRequest",
     "TimebackCreateSchoolBody",
+    "TimebackGetSchoolRequest",
+    "TimebackUpdateSchoolRequest",
+    "TimebackUpdateSchoolBody",
 ]

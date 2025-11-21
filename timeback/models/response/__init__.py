@@ -15,6 +15,8 @@ from .timeback_put_score_scale_response import TimebackPutScoreScaleResponse
 from .timeback_get_score_scales_for_school_response import TimebackGetScoreScalesForSchoolResponse
 from .timeback_get_all_schools_response import TimebackGetAllSchoolsResponse
 from .timeback_create_school_response import TimebackCreateSchoolResponse
+from .timeback_get_school_response import TimebackGetSchoolResponse
+from .timeback_update_school_response import TimebackUpdateSchoolResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -32,4 +34,6 @@ __all__ = [
     "TimebackGetScoreScalesForSchoolResponse",
     "TimebackGetAllSchoolsResponse",
     "TimebackCreateSchoolResponse",
+    "TimebackGetSchoolResponse",
+    "TimebackUpdateSchoolResponse",
 ]

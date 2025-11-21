@@ -3,6 +3,9 @@ from timeback.services.oneroster.rostering.endpoints.get_user_with_demographics 
 from timeback.services.oneroster.rostering.endpoints.get_all_users import get_all_users
 from timeback.services.oneroster.rostering.endpoints.get_all_schools import get_all_schools
 from timeback.services.oneroster.rostering.endpoints.create_school import create_school
+from timeback.services.oneroster.rostering.endpoints.get_school import get_school
+from timeback.services.oneroster.rostering.endpoints.update_school import update_school
+from timeback.services.oneroster.rostering.endpoints.delete_school import delete_school
 from timeback.services.oneroster.rostering.endpoints.get_agent_for import get_agent_for
 from timeback.services.oneroster.rostering.endpoints.get_agents import get_agents
 from timeback.services.oneroster.rostering.endpoints.add_agent import add_agent
@@ -15,6 +18,9 @@ __all__ = [
     "get_all_users", 
     "get_all_schools",
     "create_school",
+    "get_school",
+    "update_school",
+    "delete_school",
     "get_agent_for", 
     "get_agents", 
     "add_agent",

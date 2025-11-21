@@ -24,9 +24,9 @@
 
 ### /ims/oneroster/rostering/v1p2/schools/{sourcedId}
 
-- [ ] `get_school`
-- [ ] `update_school`
-- [ ] `delete_school`
+- [x] `get_school`
+- [x] `update_school`
+- [x] `delete_school`
 
 ### /ims/oneroster/gradebook/v1p2/results/
 

@@ -8,6 +8,8 @@ from timeback.models.response import (
     TimebackDecryptCredentialResponse,
     TimebackGetAllSchoolsResponse,
     TimebackCreateSchoolResponse,
+    TimebackGetSchoolResponse,
+    TimebackUpdateSchoolResponse,
 )
 from timeback.models.request import (
     TimebackUpdateUserRequest,
@@ -18,6 +20,8 @@ from timeback.models.request import (
     TimebackGetAllUsersRequest,
     TimebackGetAllSchoolsRequest,
     TimebackCreateSchoolRequest,
+    TimebackGetSchoolRequest,
+    TimebackUpdateSchoolRequest,
     TimebackRegisterStudentCredentialsRequest,
     TimebackDecryptCredentialRequest,
 )
@@ -36,6 +40,15 @@ from timeback.services.oneroster.rostering.endpoints.get_all_schools import (
 )
 from timeback.services.oneroster.rostering.endpoints.create_school import (
     create_school as create_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_school import (
+    get_school as get_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_school import (
+    update_school as update_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_school import (
+    delete_school as delete_school_endpoint,
 )
 from timeback.services.oneroster.rostering.endpoints.update_user import (
     update_user as update_user_endpoint,
@@ -102,6 +115,20 @@ class RosteringService:
     ) -> TimebackCreateSchoolResponse:
         """Create a new school."""
         return create_school_endpoint(self._http, request)
+
+    def get_school(self, request: TimebackGetSchoolRequest) -> TimebackGetSchoolResponse:
+        """Fetch a single school by sourcedId."""
+        return get_school_endpoint(self._http, request)
+
+    def update_school(
+        self, request: TimebackUpdateSchoolRequest
+    ) -> TimebackUpdateSchoolResponse:
+        """Update an existing school by sourcedId."""
+        return update_school_endpoint(self._http, request)
+
+    def delete_school(self, sourced_id: str):
+        """Delete (tombstone) a school by sourcedId. Returns raw provider response (None for 204)."""
+        return delete_school_endpoint(self._http, sourced_id)
 
     def update_user(
         self, request: TimebackUpdateUserRequest
