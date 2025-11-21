@@ -641,3 +641,37 @@
 ### /caliper/events:
 
 - [ ] `list_caliper_events`
+
+## CASE API
+
+### /ims/case/v1p1/CFAssociations/{sourcedId}
+
+- [ ] `get_cf_association`
+
+### /ims/case/v1p1/CFDocuments
+
+- [ ] `get_all_cf_documents`
+
+### /ims/case/v1p1/CFDocuments/{sourcedId}
+
+- [ ] `get_cf_document`
+
+### /ims/case/v1p1/CFItems
+
+- [ ] `get_all_cf_items`
+
+### /ims/case/v1p1/CFItems/{sourcedId}
+
+- [ ] `get_cf_item`
+
+### /ims/case/v1p1/CFPackages
+
+- [ ] `upload_cf_package`
+
+### /ims/case/v1p1/CFPackages/{sourcedId}
+
+- [ ] `get_cf_package`
+
+### /ims/case/v1p1/CFPackages/{sourcedId}/groups
+
+- [ ] `get_cf_package_with_groups`
