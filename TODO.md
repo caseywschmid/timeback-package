@@ -94,7 +94,7 @@
 ### /ims/oneroster/rostering/v1p2/classes/
 
 - [x] `get_all_classes`
-- [ ] `create_class`
+- [x] `create_class`
 
 ### /ims/oneroster/rostering/v1p2/classes/{sourcedId}
 

@@ -66,6 +66,7 @@ from .timeback_get_line_items_for_class_request import TimebackGetLineItemsForCl
 from .timeback_get_results_for_class_request import TimebackGetResultsForClassRequest
 from .timeback_get_score_scales_for_class_request import TimebackGetScoreScalesForClassRequest
 from .timeback_get_all_classes_request import TimebackGetAllClassesRequest
+from .timeback_create_class_request import TimebackCreateClassRequest, TimebackCreateClassBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -118,4 +119,6 @@ __all__ = [
     "TimebackGetResultsForClassRequest",
     "TimebackGetScoreScalesForClassRequest",
     "TimebackGetAllClassesRequest",
+    "TimebackCreateClassRequest",
+    "TimebackCreateClassBody",
 ]

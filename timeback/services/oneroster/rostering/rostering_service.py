@@ -11,6 +11,7 @@ from timeback.models.response import (
     TimebackGetSchoolResponse,
     TimebackUpdateSchoolResponse,
     TimebackGetAllClassesResponse,
+    TimebackCreateClassResponse,
 )
 from timeback.models.request import (
     TimebackUpdateUserRequest,
@@ -26,6 +27,7 @@ from timeback.models.request import (
     TimebackRegisterStudentCredentialsRequest,
     TimebackDecryptCredentialRequest,
     TimebackGetAllClassesRequest,
+    TimebackCreateClassRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -42,6 +44,9 @@ from timeback.services.oneroster.rostering.endpoints.get_all_schools import (
 )
 from timeback.services.oneroster.rostering.endpoints.get_all_classes import (
     get_all_classes as get_all_classes_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_class import (
+    create_class as create_class_endpoint,
 )
 from timeback.services.oneroster.rostering.endpoints.create_school import (
     create_school as create_school_endpoint,
@@ -120,6 +125,13 @@ class RosteringService:
     ) -> TimebackGetAllClassesResponse:
         """Fetch a paginated list of classes."""
         return get_all_classes_endpoint(self._http, request)
+
+    def create_class(
+        self,
+        request: TimebackCreateClassRequest,
+    ) -> TimebackCreateClassResponse:
+        """Create a new class."""
+        return create_class_endpoint(self._http, request)
 
     def create_school(
         self,
