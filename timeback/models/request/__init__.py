@@ -145,6 +145,10 @@ from .timeback_update_enrollment_request import TimebackUpdateEnrollmentRequest,
 from .timeback_patch_enrollment_request import TimebackPatchEnrollmentRequest, TimebackPatchEnrollmentBody
 from .timeback_get_enrollments_for_class_in_school_request import TimebackGetEnrollmentsForClassInSchoolRequest
 from .timeback_get_enrollments_for_school_request import TimebackGetEnrollmentsForSchoolRequest
+from .timeback_get_all_demographics_request import TimebackGetAllDemographicsRequest
+from .timeback_create_demographic_request import TimebackCreateDemographicRequest, TimebackCreateDemographicBody
+from .timeback_get_demographic_request import TimebackGetDemographicRequest
+from .timeback_update_demographic_request import TimebackUpdateDemographicRequest, TimebackUpdateDemographicBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -271,4 +275,10 @@ __all__ = [
     "TimebackPatchEnrollmentBody",
     "TimebackGetEnrollmentsForClassInSchoolRequest",
     "TimebackGetEnrollmentsForSchoolRequest",
+    "TimebackGetAllDemographicsRequest",
+    "TimebackCreateDemographicRequest",
+    "TimebackCreateDemographicBody",
+    "TimebackGetDemographicRequest",
+    "TimebackUpdateDemographicRequest",
+    "TimebackUpdateDemographicBody",
 ]

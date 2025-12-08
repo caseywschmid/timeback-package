@@ -56,6 +56,11 @@ from timeback.services.oneroster.rostering.endpoints.patch_enrollment import pat
 from timeback.services.oneroster.rostering.endpoints.delete_enrollment import delete_enrollment
 from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_class_in_school import get_enrollments_for_class_in_school
 from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_school import get_enrollments_for_school
+from timeback.services.oneroster.rostering.endpoints.get_all_demographics import get_all_demographics
+from timeback.services.oneroster.rostering.endpoints.create_demographic import create_demographic
+from timeback.services.oneroster.rostering.endpoints.get_demographic import get_demographic
+from timeback.services.oneroster.rostering.endpoints.update_demographic import update_demographic
+from timeback.services.oneroster.rostering.endpoints.delete_demographic import delete_demographic
 
 __all__ = [
     "get_user", 
@@ -116,4 +121,9 @@ __all__ = [
     "delete_enrollment",
     "get_enrollments_for_class_in_school",
     "get_enrollments_for_school",
+    "get_all_demographics",
+    "create_demographic",
+    "get_demographic",
+    "update_demographic",
+    "delete_demographic",
 ]

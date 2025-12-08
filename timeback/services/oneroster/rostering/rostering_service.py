@@ -69,6 +69,10 @@ from timeback.models.request import (
     TimebackPatchEnrollmentRequest,
     TimebackGetEnrollmentsForClassInSchoolRequest,
     TimebackGetEnrollmentsForSchoolRequest,
+    TimebackGetAllDemographicsRequest,
+    TimebackCreateDemographicRequest,
+    TimebackGetDemographicRequest,
+    TimebackUpdateDemographicRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -257,7 +261,26 @@ from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_class_i
 from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_school import (
     get_enrollments_for_school as get_enrollments_for_school_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_all_demographics import (
+    get_all_demographics as get_all_demographics_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_demographic import (
+    create_demographic as create_demographic_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_demographic import (
+    get_demographic as get_demographic_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_demographic import (
+    update_demographic as update_demographic_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_demographic import (
+    delete_demographic as delete_demographic_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAllDemographicsResponse
+from timeback.models.response import TimebackCreateDemographicResponse
+from timeback.models.response import TimebackGetDemographicResponse
+from timeback.models.response import TimebackUpdateDemographicResponse
 from timeback.models.response import TimebackGetAllEnrollmentsResponse
 from timeback.models.response import TimebackCreateEnrollmentResponse
 from timeback.models.response import TimebackGetEnrollmentResponse
@@ -631,5 +654,37 @@ class RosteringService:
     ) -> TimebackGetAllEnrollmentsResponse:
         """Fetch enrollments for a specific school."""
         return get_enrollments_for_school_endpoint(self._http, request)
+
+    # -------------------------------------------------------------------------
+    # Demographics Endpoints
+    # -------------------------------------------------------------------------
+
+    def get_all_demographics(
+        self, request: TimebackGetAllDemographicsRequest
+    ) -> TimebackGetAllDemographicsResponse:
+        """Fetch all demographics (paginated list)."""
+        return get_all_demographics_endpoint(self._http, request)
+
+    def create_demographic(
+        self, request: TimebackCreateDemographicRequest
+    ) -> TimebackCreateDemographicResponse:
+        """Create a new demographic."""
+        return create_demographic_endpoint(self._http, request)
+
+    def get_demographic(
+        self, request: TimebackGetDemographicRequest
+    ) -> TimebackGetDemographicResponse:
+        """Fetch a single demographic by sourcedId."""
+        return get_demographic_endpoint(self._http, request)
+
+    def update_demographic(
+        self, request: TimebackUpdateDemographicRequest
+    ) -> TimebackUpdateDemographicResponse:
+        """Update an existing demographic."""
+        return update_demographic_endpoint(self._http, request)
+
+    def delete_demographic(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) a demographic by sourcedId."""
+        return delete_demographic_endpoint(self._http, sourced_id)
 
 

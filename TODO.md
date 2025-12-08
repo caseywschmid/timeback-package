@@ -323,14 +323,14 @@
 
 ### /ims/oneroster/rostering/v1p2/demographics/
 
-- [ ] `get_all_demographics`
-- [ ] `post_demographics`
+- [x] `get_all_demographics`
+- [x] `post_demographics`
 
 ### /ims/oneroster/rostering/v1p2/demographics/{sourcedId}
 
-- [ ] `get_demographics`
-- [ ] `put_demographics`
-- [ ] `delete_demographics`
+- [x] `get_demographics`
+- [x] `put_demographics`
+- [x] `delete_demographics`
 
 ### /ims/oneroster/rostering/v1p2/courses/
 
