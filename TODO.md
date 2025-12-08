@@ -104,7 +104,7 @@
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes
 
-- [ ] `get_classes_for_school`
+- [x] `get_classes_for_school`
 
 ### /ims/oneroster/gradebook/v1p2/categories/
 

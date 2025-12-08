@@ -32,6 +32,7 @@ from timeback.models.request import (
     TimebackCreateClassRequest,
     TimebackGetClassRequest,
     TimebackUpdateClassRequest,
+    TimebackGetClassesForSchoolRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -60,6 +61,9 @@ from timeback.services.oneroster.rostering.endpoints.update_class import (
 )
 from timeback.services.oneroster.rostering.endpoints.delete_class import (
     delete_class as delete_class_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_school import (
+    get_classes_for_school as get_classes_for_school_endpoint,
 )
 from timeback.services.oneroster.rostering.endpoints.create_school import (
     create_school as create_school_endpoint,
@@ -159,6 +163,12 @@ class RosteringService:
     def delete_class(self, sourced_id: str):
         """Delete (tombstone) a class by sourcedId. Returns raw provider response (None for 204)."""
         return delete_class_endpoint(self._http, sourced_id)
+
+    def get_classes_for_school(
+        self, request: TimebackGetClassesForSchoolRequest
+    ) -> TimebackGetAllClassesResponse:
+        """Fetch a paginated list of classes for a specific school."""
+        return get_classes_for_school_endpoint(self._http, request)
 
     def create_school(
         self,
