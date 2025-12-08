@@ -143,22 +143,22 @@
 
 ### /ims/oneroster/resources/v1p2/resources/
 
-- [ ] `get_all_resources`
-- [ ] `create_resource`
+- [x] `get_all_resources`
+- [x] `create_resource`
 
 ### /ims/oneroster/resources/v1p2/resources/{sourcedId}
 
-- [ ] `get_resource`
-- [ ] `update_resource`
-- [ ] `delete_resource`
+- [x] `get_resource`
+- [x] `update_resource`
+- [x] `delete_resource`
 
 ### /ims/oneroster/resources/v1p2/resources/classes/{classSourcedId}/resources
 
-- [ ] `get_resources_for_class`
+- [x] `get_resources_for_class`
 
 ### /ims/oneroster/resources/v1p2/resources/courses/{courseSourcedId}/resources
 
-- [ ] `get_resources_for_course`
+- [x] `get_resources_for_course`
 
 ### /ims/oneroster/resources/v1p2/resources/export/{sourceId}
 
@@ -166,7 +166,7 @@
 
 ### /ims/oneroster/resources/v1p2/resources/users/{userSourcedId}/resources
 
-- [ ] `get_resources_for_user`
+- [x] `get_resources_for_user`
 
 ### /ims/oneroster/rostering/v1p2/users/
 

@@ -102,6 +102,13 @@ from .timeback_patch_assessment_line_item_request import (
     TimebackPatchAssessmentLineItemRequest,
     TimebackPatchAssessmentLineItemBody,
 )
+from .timeback_get_all_resources_request import TimebackGetAllResourcesRequest
+from .timeback_create_resource_request import TimebackCreateResourceRequest, TimebackCreateResourceBody
+from .timeback_get_resource_request import TimebackGetResourceRequest
+from .timeback_update_resource_request import TimebackUpdateResourceRequest, TimebackUpdateResourceBody
+from .timeback_get_resources_for_class_request import TimebackGetResourcesForClassRequest
+from .timeback_get_resources_for_course_request import TimebackGetResourcesForCourseRequest
+from .timeback_get_resources_for_user_request import TimebackGetResourcesForUserRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -180,4 +187,13 @@ __all__ = [
     "TimebackPutAssessmentLineItemBody",
     "TimebackPatchAssessmentLineItemRequest",
     "TimebackPatchAssessmentLineItemBody",
+    "TimebackGetAllResourcesRequest",
+    "TimebackCreateResourceRequest",
+    "TimebackCreateResourceBody",
+    "TimebackGetResourceRequest",
+    "TimebackUpdateResourceRequest",
+    "TimebackUpdateResourceBody",
+    "TimebackGetResourcesForClassRequest",
+    "TimebackGetResourcesForCourseRequest",
+    "TimebackGetResourcesForUserRequest",
 ]

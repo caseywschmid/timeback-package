@@ -47,6 +47,10 @@ from .timeback_create_assessment_line_item_response import TimebackCreateAssessm
 from .timeback_get_assessment_line_item_response import TimebackGetAssessmentLineItemResponse
 from .timeback_put_assessment_line_item_response import TimebackPutAssessmentLineItemResponse
 from .timeback_patch_assessment_line_item_response import TimebackPatchAssessmentLineItemResponse
+from .timeback_get_all_resources_response import TimebackGetAllResourcesResponse
+from .timeback_create_resource_response import TimebackCreateResourceResponse
+from .timeback_get_resource_response import TimebackGetResourceResponse
+from .timeback_update_resource_response import TimebackUpdateResourceResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -96,4 +100,8 @@ __all__ = [
     "TimebackGetAssessmentLineItemResponse",
     "TimebackPutAssessmentLineItemResponse",
     "TimebackPatchAssessmentLineItemResponse",
+    "TimebackGetAllResourcesResponse",
+    "TimebackCreateResourceResponse",
+    "TimebackGetResourceResponse",
+    "TimebackUpdateResourceResponse",
 ]
