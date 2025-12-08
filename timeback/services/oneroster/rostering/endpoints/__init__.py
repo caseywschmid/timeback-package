@@ -25,6 +25,14 @@ from timeback.services.oneroster.rostering.endpoints.get_classes_for_term import
 from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class import get_teachers_for_class
 from timeback.services.oneroster.rostering.endpoints.add_teacher_to_class import add_teacher_to_class
 from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class_in_school import get_teachers_for_class_in_school
+from timeback.services.oneroster.rostering.endpoints.get_teachers_for_school import get_teachers_for_school
+from timeback.services.oneroster.rostering.endpoints.get_all_teachers import get_all_teachers
+from timeback.services.oneroster.rostering.endpoints.get_teacher import get_teacher
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_teacher import get_classes_for_teacher
+from timeback.services.oneroster.rostering.endpoints.get_students_for_class import get_students_for_class
+from timeback.services.oneroster.rostering.endpoints.add_student_to_class import add_student_to_class
+from timeback.services.oneroster.rostering.endpoints.get_students_for_class_in_school import get_students_for_class_in_school
+from timeback.services.oneroster.rostering.endpoints.get_students_for_school import get_students_for_school
 
 __all__ = [
     "get_user", 
@@ -54,4 +62,12 @@ __all__ = [
     "get_teachers_for_class",
     "add_teacher_to_class",
     "get_teachers_for_class_in_school",
+    "get_teachers_for_school",
+    "get_all_teachers",
+    "get_teacher",
+    "get_classes_for_teacher",
+    "get_students_for_class",
+    "add_student_to_class",
+    "get_students_for_class_in_school",
+    "get_students_for_school",
 ]

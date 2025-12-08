@@ -117,6 +117,14 @@ from .timeback_get_classes_for_term_request import TimebackGetClassesForTermRequ
 from .timeback_get_teachers_for_class_request import TimebackGetTeachersForClassRequest
 from .timeback_add_teacher_to_class_request import TimebackAddTeacherToClassRequest
 from .timeback_get_teachers_for_class_in_school_request import TimebackGetTeachersForClassInSchoolRequest
+from .timeback_get_teachers_for_school_request import TimebackGetTeachersForSchoolRequest
+from .timeback_get_all_teachers_request import TimebackGetAllTeachersRequest
+from .timeback_get_teacher_request import TimebackGetTeacherRequest
+from .timeback_get_classes_for_teacher_request import TimebackGetClassesForTeacherRequest
+from .timeback_get_students_for_class_request import TimebackGetStudentsForClassRequest
+from .timeback_add_student_to_class_request import TimebackAddStudentToClassRequest
+from .timeback_get_students_for_class_in_school_request import TimebackGetStudentsForClassInSchoolRequest
+from .timeback_get_students_for_school_request import TimebackGetStudentsForSchoolRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -212,4 +220,12 @@ __all__ = [
     "TimebackGetTeachersForClassRequest",
     "TimebackAddTeacherToClassRequest",
     "TimebackGetTeachersForClassInSchoolRequest",
+    "TimebackGetTeachersForSchoolRequest",
+    "TimebackGetAllTeachersRequest",
+    "TimebackGetTeacherRequest",
+    "TimebackGetClassesForTeacherRequest",
+    "TimebackGetStudentsForClassRequest",
+    "TimebackAddStudentToClassRequest",
+    "TimebackGetStudentsForClassInSchoolRequest",
+    "TimebackGetStudentsForSchoolRequest",
 ]

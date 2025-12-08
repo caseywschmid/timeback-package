@@ -54,6 +54,7 @@ from .timeback_update_resource_response import TimebackUpdateResourceResponse
 from .timeback_get_all_terms_response import TimebackGetAllTermsResponse
 from .timeback_get_term_response import TimebackGetTermResponse
 from .timeback_add_teacher_to_class_response import TimebackAddTeacherToClassResponse
+from .timeback_add_student_to_class_response import TimebackAddStudentToClassResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -110,4 +111,5 @@ __all__ = [
     "TimebackGetAllTermsResponse",
     "TimebackGetTermResponse",
     "TimebackAddTeacherToClassResponse",
+    "TimebackAddStudentToClassResponse",
 ]
