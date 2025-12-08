@@ -288,7 +288,7 @@
 ### /ims/oneroster/rostering/v1p2/gradingPeriods/
 
 - [x] `get_all_grading_periods`
-- [ ] `create_grading_period`
+- [x] `create_grading_period`
 
 ### /ims/oneroster/rostering/v1p2/gradingPeriods/{sourcedId}
 

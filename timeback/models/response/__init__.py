@@ -59,6 +59,7 @@ from .timeback_get_all_orgs_response import TimebackGetAllOrgsResponse
 from .timeback_get_org_response import TimebackGetOrgResponse
 from .timeback_create_org_response import TimebackCreateOrgResponse
 from .timeback_update_org_response import TimebackUpdateOrgResponse
+from .timeback_create_grading_period_response import TimebackCreateGradingPeriodResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -120,4 +121,5 @@ __all__ = [
     "TimebackGetOrgResponse",
     "TimebackCreateOrgResponse",
     "TimebackUpdateOrgResponse",
+    "TimebackCreateGradingPeriodResponse",
 ]

@@ -42,6 +42,7 @@ from timeback.services.oneroster.rostering.endpoints.get_org import get_org
 from timeback.services.oneroster.rostering.endpoints.update_org import update_org
 from timeback.services.oneroster.rostering.endpoints.delete_org import delete_org
 from timeback.services.oneroster.rostering.endpoints.get_all_grading_periods import get_all_grading_periods
+from timeback.services.oneroster.rostering.endpoints.create_grading_period import create_grading_period
 
 __all__ = [
     "get_user", 
@@ -88,4 +89,5 @@ __all__ = [
     "update_org",
     "delete_org",
     "get_all_grading_periods",
+    "create_grading_period",
 ]

@@ -57,6 +57,7 @@ from timeback.models.request import (
     TimebackGetOrgRequest,
     TimebackUpdateOrgRequest,
     TimebackGetAllGradingPeriodsRequest,
+    TimebackCreateGradingPeriodRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -203,7 +204,11 @@ from timeback.services.oneroster.rostering.endpoints.delete_org import (
 from timeback.services.oneroster.rostering.endpoints.get_all_grading_periods import (
     get_all_grading_periods as get_all_grading_periods_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.create_grading_period import (
+    create_grading_period as create_grading_period_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackCreateGradingPeriodResponse
 from timeback.models.response import TimebackGetAgentsResponse
 from timeback.models.response import TimebackGetAllTermsResponse
 from timeback.models.response import TimebackGetTermResponse
@@ -487,5 +492,11 @@ class RosteringService:
     ) -> TimebackGetAllTermsResponse:
         """Fetch all grading periods (paginated list)."""
         return get_all_grading_periods_endpoint(self._http, request)
+
+    def create_grading_period(
+        self, request: TimebackCreateGradingPeriodRequest
+    ) -> TimebackCreateGradingPeriodResponse:
+        """Create a new grading period."""
+        return create_grading_period_endpoint(self._http, request)
 
 
