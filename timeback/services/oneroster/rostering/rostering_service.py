@@ -33,6 +33,14 @@ from timeback.models.request import (
     TimebackGetClassRequest,
     TimebackUpdateClassRequest,
     TimebackGetClassesForSchoolRequest,
+    TimebackGetClassesForUserRequest,
+    TimebackGetTermsForSchoolRequest,
+    TimebackGetAllTermsRequest,
+    TimebackGetTermRequest,
+    TimebackGetClassesForTermRequest,
+    TimebackGetTeachersForClassRequest,
+    TimebackAddTeacherToClassRequest,
+    TimebackGetTeachersForClassInSchoolRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -104,8 +112,35 @@ from timeback.services.oneroster.rostering.endpoints.register_student_credential
 from timeback.services.oneroster.rostering.endpoints.decrypt_credential import (
     decrypt_credential as decrypt_credential_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_user import (
+    get_classes_for_user as get_classes_for_user_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_terms_for_school import (
+    get_terms_for_school as get_terms_for_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_all_terms import (
+    get_all_terms as get_all_terms_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_term import (
+    get_term as get_term_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_term import (
+    get_classes_for_term as get_classes_for_term_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class import (
+    get_teachers_for_class as get_teachers_for_class_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.add_teacher_to_class import (
+    add_teacher_to_class as add_teacher_to_class_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class_in_school import (
+    get_teachers_for_class_in_school as get_teachers_for_class_in_school_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAgentsResponse
+from timeback.models.response import TimebackGetAllTermsResponse
+from timeback.models.response import TimebackGetTermResponse
+from timeback.models.response import TimebackAddTeacherToClassResponse
 
 
 class RosteringService:
@@ -232,5 +267,53 @@ class RosteringService:
     ) -> TimebackDecryptCredentialResponse:
         """Decrypt and return the password for a specific user credential."""
         return decrypt_credential_endpoint(self._http, request)
+
+    def get_classes_for_user(
+        self, request: TimebackGetClassesForUserRequest
+    ) -> TimebackGetAllClassesResponse:
+        """Fetch classes for a specific user."""
+        return get_classes_for_user_endpoint(self._http, request)
+
+    def get_terms_for_school(
+        self, request: TimebackGetTermsForSchoolRequest
+    ) -> TimebackGetAllTermsResponse:
+        """Fetch terms for a specific school."""
+        return get_terms_for_school_endpoint(self._http, request)
+
+    def get_all_terms(
+        self, request: TimebackGetAllTermsRequest
+    ) -> TimebackGetAllTermsResponse:
+        """Fetch all terms (paginated list)."""
+        return get_all_terms_endpoint(self._http, request)
+
+    def get_term(
+        self, request: TimebackGetTermRequest
+    ) -> TimebackGetTermResponse:
+        """Fetch a single term by sourcedId."""
+        return get_term_endpoint(self._http, request)
+
+    def get_classes_for_term(
+        self, request: TimebackGetClassesForTermRequest
+    ) -> TimebackGetAllClassesResponse:
+        """Fetch classes for a specific term."""
+        return get_classes_for_term_endpoint(self._http, request)
+
+    def get_teachers_for_class(
+        self, request: TimebackGetTeachersForClassRequest
+    ) -> TimebackGetAllUsersResponse:
+        """Fetch teachers for a specific class."""
+        return get_teachers_for_class_endpoint(self._http, request)
+
+    def add_teacher_to_class(
+        self, request: TimebackAddTeacherToClassRequest
+    ) -> TimebackAddTeacherToClassResponse:
+        """Add a teacher to a class."""
+        return add_teacher_to_class_endpoint(self._http, request)
+
+    def get_teachers_for_class_in_school(
+        self, request: TimebackGetTeachersForClassInSchoolRequest
+    ) -> TimebackGetAllUsersResponse:
+        """Fetch teachers for a class in a specific school."""
+        return get_teachers_for_class_in_school_endpoint(self._http, request)
 
 

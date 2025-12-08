@@ -206,32 +206,32 @@
 
 ### /ims/oneroster/rostering/v1p2/users/{userSourcedId}/classes
 
-- [ ] `get_classes_for_user`
+- [x] `get_classes_for_user`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/terms
 
-- [ ] `get_terms_for_school`
+- [x] `get_terms_for_school`
 
 ### /ims/oneroster/rostering/v1p2/terms/
 
-- [ ] `get_all_terms`
+- [x] `get_all_terms`
 
 ### /ims/oneroster/rostering/v1p2/terms/{sourcedId}
 
-- [ ] `get_term`
+- [x] `get_term`
 
 ### /ims/oneroster/rostering/v1p2/terms/{termSourcedId}/classes
 
-- [ ] `get_classes_for_term`
+- [x] `get_classes_for_term`
 
 ### /ims/oneroster/rostering/v1p2/classes/{classSourcedId}/teachers
 
-- [ ] `get_teachers_for_class`
-- [ ] `add_teacher_to_class`
+- [x] `get_teachers_for_class`
+- [x] `add_teacher_to_class`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes/{classSourcedId}/teachers
 
-- [ ] `get_teachers_for_class_in_school`
+- [x] `get_teachers_for_class_in_school`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/teachers
 

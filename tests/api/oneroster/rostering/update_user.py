@@ -11,30 +11,29 @@ from timeback.enums.timeback_agent_type import TimebackAgentType
 def main():
     client = Timeback()
     
-    # Mother (Tina Kevorkian)
-    sourced_id = "9069005b-a061-466a-bd02-5018ac4ffd7b"
+    # Fitz Davis (test student)
+    sourced_id = "20268c57-3828-4f4a-8144-2ef896681010"
 
-    # Correct agents (her 3 children)
-    correct_agents = [
-        TimebackAgentRef(sourcedId="8ef6786a-48fa-4edb-922b-e28493e75511", type=TimebackAgentType.USER),  # Arshag
-        TimebackAgentRef(sourcedId="d1d3cf29-5743-478e-b9cd-889336765e01", type=TimebackAgentType.USER),  # Yeremya
-        TimebackAgentRef(sourcedId="975f0849-8f4e-423f-9560-1b94af66b59e", type=TimebackAgentType.USER),  # NEW Siyon
+    # Agent reference (parent)
+    agents = [
+        TimebackAgentRef(sourcedId="e7c72bb0-9264-49c0-a191-388f5741bbb1", type=TimebackAgentType.USER),
     ]
 
     body = TimebackUpdateUserBody(
         sourcedId=sourced_id,
         enabledUser=True,
-        givenName="Tina",
-        familyName="Kevorkian",
-        email="tinakevork@me.com",
+        givenName="Fitz",
+        familyName="Davis",
+        email="fitz.davis@2hourlearning.com",
         roles=[
             TimebackUserRole(
                 roleType=TimebackRoleType.PRIMARY,
-                role=TimebackRoleName.PARENT,
-                org=TimebackOrgRef(sourcedId="346488d3-efb9-4f56-95ea-f4a441de2370"),
+                role=TimebackRoleName.STUDENT,
+                org=TimebackOrgRef(sourcedId="f47ac10b-58cc-4372-a567-0e02b2c3d479"),
             )
         ],
-        agents=correct_agents,
+        agents=agents,
+        grades=["3"],  # Setting grade to 3
     )
     req = TimebackUpdateUserRequest(user=body)
 
@@ -45,13 +44,11 @@ def main():
         from timeback.models.request import TimebackGetUserRequest
         verify = client.oneroster.rostering.get_user(TimebackGetUserRequest(sourced_id=sourced_id))
         print(f"User: {verify.user.sourcedId}, {verify.user.givenName} {verify.user.familyName}")
-        print(f"Agents: {verify.user.agents}")
+        print(f"Grades: {verify.user.grades}")
         return
     print(f"Updated: {resp.user.sourcedId}, {resp.user.givenName} {resp.user.familyName}")
-    print(f"Agents: {resp.user.agents}")
+    print(f"Grades: {resp.user.grades}")
 
 
 if __name__ == "__main__":
     main()
-
-

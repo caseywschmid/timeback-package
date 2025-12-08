@@ -17,6 +17,14 @@ from timeback.services.oneroster.rostering.endpoints.get_agents import get_agent
 from timeback.services.oneroster.rostering.endpoints.add_agent import add_agent
 from timeback.services.oneroster.rostering.endpoints.register_student_credentials import register_student_credentials
 from timeback.services.oneroster.rostering.endpoints.decrypt_credential import decrypt_credential
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_user import get_classes_for_user
+from timeback.services.oneroster.rostering.endpoints.get_terms_for_school import get_terms_for_school
+from timeback.services.oneroster.rostering.endpoints.get_all_terms import get_all_terms
+from timeback.services.oneroster.rostering.endpoints.get_term import get_term
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_term import get_classes_for_term
+from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class import get_teachers_for_class
+from timeback.services.oneroster.rostering.endpoints.add_teacher_to_class import add_teacher_to_class
+from timeback.services.oneroster.rostering.endpoints.get_teachers_for_class_in_school import get_teachers_for_class_in_school
 
 __all__ = [
     "get_user", 
@@ -38,4 +46,12 @@ __all__ = [
     "add_agent",
     "register_student_credentials",
     "decrypt_credential",
+    "get_classes_for_user",
+    "get_terms_for_school",
+    "get_all_terms",
+    "get_term",
+    "get_classes_for_term",
+    "get_teachers_for_class",
+    "add_teacher_to_class",
+    "get_teachers_for_class_in_school",
 ]
