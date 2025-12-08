@@ -35,6 +35,8 @@ from timeback.models.request import (
     TimebackGetAllAssessmentResultsRequest,
     TimebackCreateAssessmentResultRequest,
     TimebackGetAssessmentResultRequest,
+    TimebackPutAssessmentResultRequest,
+    TimebackPatchAssessmentResultRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -61,6 +63,8 @@ from timeback.models.response import (
     TimebackGetAllAssessmentResultsResponse,
     TimebackCreateAssessmentResultResponse,
     TimebackGetAssessmentResultResponse,
+    TimebackPutAssessmentResultResponse,
+    TimebackPatchAssessmentResultResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -157,6 +161,15 @@ from timeback.services.oneroster.gradebook.endpoints.create_assessment_result im
 )
 from timeback.services.oneroster.gradebook.endpoints.get_assessment_result import (
     get_assessment_result as get_assessment_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.put_assessment_result import (
+    put_assessment_result as put_assessment_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.patch_assessment_result import (
+    patch_assessment_result as patch_assessment_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.delete_assessment_result import (
+    delete_assessment_result as delete_assessment_result_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -364,6 +377,22 @@ class GradebookService:
     ) -> TimebackGetAssessmentResultResponse:
         """Fetch a single assessment result by sourcedId."""
         return get_assessment_result_endpoint(self._http, request)
+
+    def put_assessment_result(
+        self, request: TimebackPutAssessmentResultRequest
+    ) -> TimebackPutAssessmentResultResponse:
+        """Update or create an assessment result by sourcedId."""
+        return put_assessment_result_endpoint(self._http, request)
+
+    def patch_assessment_result(
+        self, request: TimebackPatchAssessmentResultRequest
+    ) -> TimebackPatchAssessmentResultResponse:
+        """Partially update an assessment result by sourcedId."""
+        return patch_assessment_result_endpoint(self._http, request)
+
+    def delete_assessment_result(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) an assessment result by sourcedId. Returns raw provider response (None for 204)."""
+        return delete_assessment_result_endpoint(self._http, sourced_id)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest

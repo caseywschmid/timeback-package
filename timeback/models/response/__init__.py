@@ -40,6 +40,8 @@ from .timeback_put_category_response import TimebackPutCategoryResponse
 from .timeback_get_all_assessment_results_response import TimebackGetAllAssessmentResultsResponse
 from .timeback_create_assessment_result_response import TimebackCreateAssessmentResultResponse
 from .timeback_get_assessment_result_response import TimebackGetAssessmentResultResponse
+from .timeback_put_assessment_result_response import TimebackPutAssessmentResultResponse
+from .timeback_patch_assessment_result_response import TimebackPatchAssessmentResultResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -82,4 +84,6 @@ __all__ = [
     "TimebackGetAllAssessmentResultsResponse",
     "TimebackCreateAssessmentResultResponse",
     "TimebackGetAssessmentResultResponse",
+    "TimebackPutAssessmentResultResponse",
+    "TimebackPatchAssessmentResultResponse",
 ]

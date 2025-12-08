@@ -125,9 +125,9 @@
 ### /ims/oneroster/gradebook/v1p2/assessmentResults/{sourcedId}
 
 - [x] `get_assessment_result`
-- [ ] `put_assessment_result`
-- [ ] `patch_assessment_result`
-- [ ] `delete_assessment_result`
+- [x] `put_assessment_result`
+- [x] `patch_assessment_result`
+- [x] `delete_assessment_result`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/
 
