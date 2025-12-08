@@ -60,6 +60,8 @@ from timeback.models.request import (
     TimebackCreateGradingPeriodRequest,
     TimebackGetGradingPeriodRequest,
     TimebackUpdateGradingPeriodRequest,
+    TimebackGetGradingPeriodsForTermRequest,
+    TimebackCreateGradingPeriodForTermRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -217,6 +219,12 @@ from timeback.services.oneroster.rostering.endpoints.update_grading_period impor
 )
 from timeback.services.oneroster.rostering.endpoints.delete_grading_period import (
     delete_grading_period as delete_grading_period_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_grading_periods_for_term import (
+    get_grading_periods_for_term as get_grading_periods_for_term_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_grading_period_for_term import (
+    create_grading_period_for_term as create_grading_period_for_term_endpoint,
 )
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackCreateGradingPeriodResponse
@@ -526,5 +534,17 @@ class RosteringService:
     def delete_grading_period(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) a grading period by sourcedId."""
         return delete_grading_period_endpoint(self._http, sourced_id)
+
+    def get_grading_periods_for_term(
+        self, request: TimebackGetGradingPeriodsForTermRequest
+    ) -> TimebackGetAllTermsResponse:
+        """Fetch grading periods for a specific term."""
+        return get_grading_periods_for_term_endpoint(self._http, request)
+
+    def create_grading_period_for_term(
+        self, request: TimebackCreateGradingPeriodForTermRequest
+    ) -> TimebackCreateGradingPeriodResponse:
+        """Create a grading period for a specific term."""
+        return create_grading_period_for_term_endpoint(self._http, request)
 
 

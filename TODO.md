@@ -298,8 +298,8 @@
 
 ### /ims/oneroster/rostering/v1p2/terms/{termSourcedId}/gradingPeriods
 
-- [ ] `get_grading_periods_for_term`
-- [ ] `create_grading_period_for_term`
+- [x] `get_grading_periods_for_term`
+- [x] `create_grading_period_for_term`
 
 ### /ims/oneroster/rostering/v1p2/enrollments/
 
