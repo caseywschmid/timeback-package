@@ -33,6 +33,7 @@ from timeback.models.request import (
     TimebackGetCategoryRequest,
     TimebackPutCategoryRequest,
     TimebackGetAllAssessmentResultsRequest,
+    TimebackCreateAssessmentResultRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -57,6 +58,7 @@ from timeback.models.response import (
     TimebackGetCategoryResponse,
     TimebackPutCategoryResponse,
     TimebackGetAllAssessmentResultsResponse,
+    TimebackCreateAssessmentResultResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -147,6 +149,9 @@ from timeback.services.oneroster.gradebook.endpoints.delete_category import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_assessment_results import (
     get_all_assessment_results as get_all_assessment_results_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_assessment_result import (
+    create_assessment_result as create_assessment_result_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -342,6 +347,12 @@ class GradebookService:
     ) -> TimebackGetAllAssessmentResultsResponse:
         """Fetch a paginated list of assessment results."""
         return get_all_assessment_results_endpoint(self._http, request)
+
+    def create_assessment_result(
+        self, request: TimebackCreateAssessmentResultRequest
+    ) -> TimebackCreateAssessmentResultResponse:
+        """Create a new assessment result."""
+        return create_assessment_result_endpoint(self._http, request)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest

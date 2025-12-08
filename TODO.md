@@ -120,7 +120,7 @@
 ### /ims/oneroster/gradebook/v1p2/assessmentResults/
 
 - [x] `get_all_assessment_results`
-- [ ] `create_assessment_result`
+- [x] `create_assessment_result`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentResults/{sourcedId}
 

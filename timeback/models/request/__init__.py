@@ -75,6 +75,10 @@ from .timeback_create_category_request import TimebackCreateCategoryRequest
 from .timeback_get_category_request import TimebackGetCategoryRequest
 from .timeback_put_category_request import TimebackPutCategoryRequest
 from .timeback_get_all_assessment_results_request import TimebackGetAllAssessmentResultsRequest
+from .timeback_create_assessment_result_request import (
+    TimebackCreateAssessmentResultRequest,
+    TimebackCreateAssessmentResultBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -138,4 +142,6 @@ __all__ = [
     "TimebackGetCategoryRequest",
     "TimebackPutCategoryRequest",
     "TimebackGetAllAssessmentResultsRequest",
+    "TimebackCreateAssessmentResultRequest",
+    "TimebackCreateAssessmentResultBody",
 ]
