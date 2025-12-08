@@ -4,7 +4,7 @@ from timeback.models.request import TimebackGetUserRequest, TimebackQueryParams
 
 def main():
     client = Timeback()
-    sourced_id = "77823ff2-6d52-4cf9-ab4a-111011006736"
+    sourced_id = "20268c57-3828-4f4a-8144-2ef896681010"
 
     # Basic request without query params
     request = TimebackGetUserRequest(sourced_id=sourced_id)

@@ -1,20 +1,13 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 from timeback.enums.timeback_agent_type import TimebackAgentType
 
 
 class TimebackAgentRef(BaseModel):
-    """Agent reference with limited types."""
+    """Agent reference with limited types.
+    
+    Represents a reference to an agent (student, user, or parent).
+    Used in user models to specify agent relationships.
+    """
 
     sourcedId: str = Field(..., description="Unique identifier of the agent")
-    type: str = Field(..., description="Type of agent reference")
-
-    @field_validator("type")
-    def validate_type(cls, v):
-        """Validate agent type includes student, user, or parent."""
-        if v not in [
-            TimebackAgentType.STUDENT,
-            TimebackAgentType.USER,
-            TimebackAgentType.PARENT,
-        ]:
-            raise ValueError("Agent type must be student, user, or parent")
-        return v
+    type: TimebackAgentType = Field(..., description="Type of agent reference. See TimebackAgentType enum.")

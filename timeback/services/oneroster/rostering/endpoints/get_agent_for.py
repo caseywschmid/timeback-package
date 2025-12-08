@@ -12,7 +12,7 @@ from timeback.http import HttpClient
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.logs import logger
 
-log = logger.configure_logging(__name__, log_level="INFO")
+log = logger.configure_logging(__name__, log_level="DEBUG")
 
 
 def get_agent_for(http: HttpClient, user_id: str) -> TimebackGetAgentForResponse:

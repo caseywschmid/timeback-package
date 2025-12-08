@@ -156,8 +156,8 @@ class RosteringService:
 
     def update_user(
         self, request: TimebackUpdateUserRequest
-    ) -> TimebackUpdateUserResponse:
-        """Update an existing user by sourcedId."""
+    ) -> Optional[TimebackUpdateUserResponse]:
+        """Update an existing user by sourcedId. Returns None if server returned no content."""
         return update_user_endpoint(self._http, request)
 
     def create_user(self, request: TimebackCreateUserRequest) -> TimebackCreateUserResponse:

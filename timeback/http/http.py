@@ -98,7 +98,7 @@ class HttpClient:
                     continue
                 raise
 
-    def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
         url = f"{self._base_url}{path}"
         attempt = 0
         max_attempts = 3
@@ -112,6 +112,8 @@ class HttpClient:
                     "x-amzn-requestid"
                 )
                 if 200 <= resp.status_code < 300:
+                    if not resp.text:
+                        return None
                     return resp.json()
                 self._raise_for_status(resp, request_id, duration)
             except RateLimitError:
