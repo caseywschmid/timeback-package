@@ -98,7 +98,7 @@
 
 ### /ims/oneroster/rostering/v1p2/classes/{sourcedId}
 
-- [ ] `get_class`
+- [x] `get_class`
 - [ ] `update_class`
 - [ ] `delete_class`
 
