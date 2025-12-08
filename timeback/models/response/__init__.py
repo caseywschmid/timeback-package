@@ -37,6 +37,7 @@ from .timeback_update_class_response import TimebackUpdateClassResponse
 from .timeback_create_category_response import TimebackCreateCategoryResponse
 from .timeback_get_category_response import TimebackGetCategoryResponse
 from .timeback_put_category_response import TimebackPutCategoryResponse
+from .timeback_get_all_assessment_results_response import TimebackGetAllAssessmentResultsResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -76,4 +77,5 @@ __all__ = [
     "TimebackCreateCategoryResponse",
     "TimebackGetCategoryResponse",
     "TimebackPutCategoryResponse",
+    "TimebackGetAllAssessmentResultsResponse",
 ]

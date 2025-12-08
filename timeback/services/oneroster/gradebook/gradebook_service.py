@@ -32,6 +32,7 @@ from timeback.models.request import (
     TimebackCreateCategoryRequest,
     TimebackGetCategoryRequest,
     TimebackPutCategoryRequest,
+    TimebackGetAllAssessmentResultsRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -55,6 +56,7 @@ from timeback.models.response import (
     TimebackCreateCategoryResponse,
     TimebackGetCategoryResponse,
     TimebackPutCategoryResponse,
+    TimebackGetAllAssessmentResultsResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -142,6 +144,9 @@ from timeback.services.oneroster.gradebook.endpoints.put_category import (
 )
 from timeback.services.oneroster.gradebook.endpoints.delete_category import (
     delete_category as delete_category_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_all_assessment_results import (
+    get_all_assessment_results as get_all_assessment_results_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -331,6 +336,12 @@ class GradebookService:
     def delete_category(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) a category by sourcedId. Returns raw provider response (None for 204)."""
         return delete_category_endpoint(self._http, sourced_id)
+
+    def get_all_assessment_results(
+        self, request: TimebackGetAllAssessmentResultsRequest
+    ) -> TimebackGetAllAssessmentResultsResponse:
+        """Fetch a paginated list of assessment results."""
+        return get_all_assessment_results_endpoint(self._http, request)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest
