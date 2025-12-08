@@ -124,7 +124,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/assessmentResults/{sourcedId}
 
-- [ ] `get_assessment_result`
+- [x] `get_assessment_result`
 - [ ] `put_assessment_result`
 - [ ] `patch_assessment_result`
 - [ ] `delete_assessment_result`

@@ -79,6 +79,7 @@ from .timeback_create_assessment_result_request import (
     TimebackCreateAssessmentResultRequest,
     TimebackCreateAssessmentResultBody,
 )
+from .timeback_get_assessment_result_request import TimebackGetAssessmentResultRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -144,4 +145,5 @@ __all__ = [
     "TimebackGetAllAssessmentResultsRequest",
     "TimebackCreateAssessmentResultRequest",
     "TimebackCreateAssessmentResultBody",
+    "TimebackGetAssessmentResultRequest",
 ]
