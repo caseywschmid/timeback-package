@@ -131,7 +131,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/
 
-- [ ] `get_all_assessment_line_items`
+- [x] `get_all_assessment_line_items`
 - [ ] `create_assessment_line_item`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/{sourcedId}

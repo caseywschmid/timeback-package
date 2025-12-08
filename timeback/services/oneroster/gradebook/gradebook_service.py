@@ -37,6 +37,7 @@ from timeback.models.request import (
     TimebackGetAssessmentResultRequest,
     TimebackPutAssessmentResultRequest,
     TimebackPatchAssessmentResultRequest,
+    TimebackGetAllAssessmentLineItemsRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -65,6 +66,7 @@ from timeback.models.response import (
     TimebackGetAssessmentResultResponse,
     TimebackPutAssessmentResultResponse,
     TimebackPatchAssessmentResultResponse,
+    TimebackGetAllAssessmentLineItemsResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -170,6 +172,9 @@ from timeback.services.oneroster.gradebook.endpoints.patch_assessment_result imp
 )
 from timeback.services.oneroster.gradebook.endpoints.delete_assessment_result import (
     delete_assessment_result as delete_assessment_result_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_all_assessment_line_items import (
+    get_all_assessment_line_items as get_all_assessment_line_items_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -393,6 +398,12 @@ class GradebookService:
     def delete_assessment_result(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) an assessment result by sourcedId. Returns raw provider response (None for 204)."""
         return delete_assessment_result_endpoint(self._http, sourced_id)
+
+    def get_all_assessment_line_items(
+        self, request: TimebackGetAllAssessmentLineItemsRequest
+    ) -> TimebackGetAllAssessmentLineItemsResponse:
+        """Fetch a paginated list of assessment line items."""
+        return get_all_assessment_line_items_endpoint(self._http, request)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest
