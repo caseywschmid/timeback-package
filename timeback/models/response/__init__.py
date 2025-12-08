@@ -69,6 +69,10 @@ from .timeback_get_all_demographics_response import TimebackGetAllDemographicsRe
 from .timeback_create_demographic_response import TimebackCreateDemographicResponse
 from .timeback_get_demographic_response import TimebackGetDemographicResponse
 from .timeback_update_demographic_response import TimebackUpdateDemographicResponse
+from .timeback_get_all_courses_response import TimebackGetAllCoursesResponse
+from .timeback_create_course_response import TimebackCreateCourseResponse
+from .timeback_get_course_response import TimebackGetCourseResponse
+from .timeback_update_course_response import TimebackUpdateCourseResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -140,4 +144,8 @@ __all__ = [
     "TimebackCreateDemographicResponse",
     "TimebackGetDemographicResponse",
     "TimebackUpdateDemographicResponse",
+    "TimebackGetAllCoursesResponse",
+    "TimebackCreateCourseResponse",
+    "TimebackGetCourseResponse",
+    "TimebackUpdateCourseResponse",
 ]

@@ -61,6 +61,12 @@ from timeback.services.oneroster.rostering.endpoints.create_demographic import c
 from timeback.services.oneroster.rostering.endpoints.get_demographic import get_demographic
 from timeback.services.oneroster.rostering.endpoints.update_demographic import update_demographic
 from timeback.services.oneroster.rostering.endpoints.delete_demographic import delete_demographic
+from timeback.services.oneroster.rostering.endpoints.get_all_courses import get_all_courses
+from timeback.services.oneroster.rostering.endpoints.create_course import create_course
+from timeback.services.oneroster.rostering.endpoints.get_course import get_course
+from timeback.services.oneroster.rostering.endpoints.update_course import update_course
+from timeback.services.oneroster.rostering.endpoints.delete_course import delete_course
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_course import get_classes_for_course
 
 __all__ = [
     "get_user", 
@@ -126,4 +132,10 @@ __all__ = [
     "get_demographic",
     "update_demographic",
     "delete_demographic",
+    "get_all_courses",
+    "create_course",
+    "get_course",
+    "update_course",
+    "delete_course",
+    "get_classes_for_course",
 ]

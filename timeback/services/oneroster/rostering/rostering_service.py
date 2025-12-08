@@ -73,6 +73,11 @@ from timeback.models.request import (
     TimebackCreateDemographicRequest,
     TimebackGetDemographicRequest,
     TimebackUpdateDemographicRequest,
+    TimebackGetAllCoursesRequest,
+    TimebackCreateCourseRequest,
+    TimebackGetCourseRequest,
+    TimebackUpdateCourseRequest,
+    TimebackGetClassesForCourseRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -276,7 +281,29 @@ from timeback.services.oneroster.rostering.endpoints.update_demographic import (
 from timeback.services.oneroster.rostering.endpoints.delete_demographic import (
     delete_demographic as delete_demographic_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_all_courses import (
+    get_all_courses as get_all_courses_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_course import (
+    create_course as create_course_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_course import (
+    get_course as get_course_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_course import (
+    update_course as update_course_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_course import (
+    delete_course as delete_course_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_course import (
+    get_classes_for_course as get_classes_for_course_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAllCoursesResponse
+from timeback.models.response import TimebackCreateCourseResponse
+from timeback.models.response import TimebackGetCourseResponse
+from timeback.models.response import TimebackUpdateCourseResponse
 from timeback.models.response import TimebackGetAllDemographicsResponse
 from timeback.models.response import TimebackCreateDemographicResponse
 from timeback.models.response import TimebackGetDemographicResponse
@@ -686,5 +713,43 @@ class RosteringService:
     def delete_demographic(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) a demographic by sourcedId."""
         return delete_demographic_endpoint(self._http, sourced_id)
+
+    # -------------------------------------------------------------------------
+    # Course Endpoints
+    # -------------------------------------------------------------------------
+
+    def get_all_courses(
+        self, request: TimebackGetAllCoursesRequest
+    ) -> TimebackGetAllCoursesResponse:
+        """Fetch all courses (paginated list)."""
+        return get_all_courses_endpoint(self._http, request)
+
+    def create_course(
+        self, request: TimebackCreateCourseRequest
+    ) -> TimebackCreateCourseResponse:
+        """Create a new course."""
+        return create_course_endpoint(self._http, request)
+
+    def get_course(
+        self, request: TimebackGetCourseRequest
+    ) -> TimebackGetCourseResponse:
+        """Fetch a single course by sourcedId."""
+        return get_course_endpoint(self._http, request)
+
+    def update_course(
+        self, request: TimebackUpdateCourseRequest
+    ) -> TimebackUpdateCourseResponse:
+        """Update an existing course."""
+        return update_course_endpoint(self._http, request)
+
+    def delete_course(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) a course by sourcedId."""
+        return delete_course_endpoint(self._http, sourced_id)
+
+    def get_classes_for_course(
+        self, request: TimebackGetClassesForCourseRequest
+    ) -> TimebackGetAllClassesResponse:
+        """Fetch classes for a specific course."""
+        return get_classes_for_course_endpoint(self._http, request)
 
 

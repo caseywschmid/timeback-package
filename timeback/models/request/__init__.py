@@ -149,6 +149,11 @@ from .timeback_get_all_demographics_request import TimebackGetAllDemographicsReq
 from .timeback_create_demographic_request import TimebackCreateDemographicRequest, TimebackCreateDemographicBody
 from .timeback_get_demographic_request import TimebackGetDemographicRequest
 from .timeback_update_demographic_request import TimebackUpdateDemographicRequest, TimebackUpdateDemographicBody
+from .timeback_get_all_courses_request import TimebackGetAllCoursesRequest
+from .timeback_create_course_request import TimebackCreateCourseRequest, TimebackCreateCourseBody
+from .timeback_get_course_request import TimebackGetCourseRequest
+from .timeback_update_course_request import TimebackUpdateCourseRequest, TimebackUpdateCourseBody
+from .timeback_get_classes_for_course_request import TimebackGetClassesForCourseRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -281,4 +286,11 @@ __all__ = [
     "TimebackGetDemographicRequest",
     "TimebackUpdateDemographicRequest",
     "TimebackUpdateDemographicBody",
+    "TimebackGetAllCoursesRequest",
+    "TimebackCreateCourseRequest",
+    "TimebackCreateCourseBody",
+    "TimebackGetCourseRequest",
+    "TimebackUpdateCourseRequest",
+    "TimebackUpdateCourseBody",
+    "TimebackGetClassesForCourseRequest",
 ]

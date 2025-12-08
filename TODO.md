@@ -334,18 +334,18 @@
 
 ### /ims/oneroster/rostering/v1p2/courses/
 
-- [ ] `get_all_courses`
-- [ ] `create_course`
+- [x] `get_all_courses`
+- [x] `create_course`
 
 ### /ims/oneroster/rostering/v1p2/courses/{courseSourcedId}/classes
 
-- [ ] `get_classes_for_course`
+- [x] `get_classes_for_course`
 
 ### /ims/oneroster/rostering/v1p2/courses/{sourcedId}
 
-- [ ] `get_course`
-- [ ] `put_course`
-- [ ] `delete_course`
+- [x] `get_course`
+- [x] `put_course`
+- [x] `delete_course`
 
 ### /ims/oneroster/rostering/v1p2/courses/component-resources
 
