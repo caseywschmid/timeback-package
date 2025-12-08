@@ -115,7 +115,7 @@
 
 - [x] `get_category`
 - [x] `put_category`
-- [ ] `delete_category`
+- [x] `delete_category`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentResults/
 

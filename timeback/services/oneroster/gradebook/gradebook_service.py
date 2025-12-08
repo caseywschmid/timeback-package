@@ -140,6 +140,9 @@ from timeback.services.oneroster.gradebook.endpoints.get_category import (
 from timeback.services.oneroster.gradebook.endpoints.put_category import (
     put_category as put_category_endpoint,
 )
+from timeback.services.oneroster.gradebook.endpoints.delete_category import (
+    delete_category as delete_category_endpoint,
+)
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
 )
@@ -324,6 +327,10 @@ class GradebookService:
     ) -> TimebackPutCategoryResponse:
         """Update or create a category by sourcedId."""
         return put_category_endpoint(self._http, request)
+
+    def delete_category(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) a category by sourcedId. Returns raw provider response (None for 204)."""
+        return delete_category_endpoint(self._http, sourced_id)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest
