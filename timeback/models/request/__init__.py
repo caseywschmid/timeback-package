@@ -132,6 +132,7 @@ from .timeback_get_all_orgs_request import TimebackGetAllOrgsRequest
 from .timeback_create_org_request import TimebackCreateOrgRequest
 from .timeback_get_org_request import TimebackGetOrgRequest
 from .timeback_update_org_request import TimebackUpdateOrgRequest
+from .timeback_get_all_grading_periods_request import TimebackGetAllGradingPeriodsRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -242,4 +243,5 @@ __all__ = [
     "TimebackCreateOrgRequest",
     "TimebackGetOrgRequest",
     "TimebackUpdateOrgRequest",
+    "TimebackGetAllGradingPeriodsRequest",
 ]

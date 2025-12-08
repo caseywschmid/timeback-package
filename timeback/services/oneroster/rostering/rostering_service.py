@@ -56,6 +56,7 @@ from timeback.models.request import (
     TimebackCreateOrgRequest,
     TimebackGetOrgRequest,
     TimebackUpdateOrgRequest,
+    TimebackGetAllGradingPeriodsRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -198,6 +199,9 @@ from timeback.services.oneroster.rostering.endpoints.update_org import (
 )
 from timeback.services.oneroster.rostering.endpoints.delete_org import (
     delete_org as delete_org_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_all_grading_periods import (
+    get_all_grading_periods as get_all_grading_periods_endpoint,
 )
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAgentsResponse
@@ -477,5 +481,11 @@ class RosteringService:
     def delete_org(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) an org by sourcedId."""
         return delete_org_endpoint(self._http, sourced_id)
+
+    def get_all_grading_periods(
+        self, request: TimebackGetAllGradingPeriodsRequest
+    ) -> TimebackGetAllTermsResponse:
+        """Fetch all grading periods (paginated list)."""
+        return get_all_grading_periods_endpoint(self._http, request)
 
 
