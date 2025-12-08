@@ -6,7 +6,7 @@ in the TimeBack API following the OneRoster 1.2 specification.
 
 from datetime import datetime, timezone
 from typing import Optional, Dict, Any
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from timeback.enums import TimebackStatus
 from timeback.enums import TimebackEnrollmentRole
 from timeback.models.timeback_sourced_id_ref import TimebackSourcedIdReference
@@ -22,7 +22,10 @@ class TimebackEnrollment(BaseModel):
     - role: The role of the user in the class
     - user: Reference to the user
     - class: Reference to the class
+    - school: Reference to the school
     """
+
+    model_config = ConfigDict(populate_by_name=True)
 
     sourcedId: str
     status: TimebackStatus = TimebackStatus.ACTIVE
@@ -37,4 +40,5 @@ class TimebackEnrollment(BaseModel):
     beginDate: Optional[str] = None
     endDate: Optional[str] = None
     user: TimebackSourcedIdReference
-    class_: TimebackSourcedIdReference
+    class_: TimebackSourcedIdReference = Field(..., alias="class")
+    school: Optional[TimebackSourcedIdReference] = None

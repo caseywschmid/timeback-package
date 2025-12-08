@@ -48,6 +48,12 @@ from timeback.services.oneroster.rostering.endpoints.update_grading_period impor
 from timeback.services.oneroster.rostering.endpoints.delete_grading_period import delete_grading_period
 from timeback.services.oneroster.rostering.endpoints.get_grading_periods_for_term import get_grading_periods_for_term
 from timeback.services.oneroster.rostering.endpoints.create_grading_period_for_term import create_grading_period_for_term
+from timeback.services.oneroster.rostering.endpoints.get_all_enrollments import get_all_enrollments
+from timeback.services.oneroster.rostering.endpoints.create_enrollment import create_enrollment
+from timeback.services.oneroster.rostering.endpoints.get_enrollment import get_enrollment
+from timeback.services.oneroster.rostering.endpoints.update_enrollment import update_enrollment
+from timeback.services.oneroster.rostering.endpoints.patch_enrollment import patch_enrollment
+from timeback.services.oneroster.rostering.endpoints.delete_enrollment import delete_enrollment
 
 __all__ = [
     "get_user", 
@@ -100,4 +106,10 @@ __all__ = [
     "delete_grading_period",
     "get_grading_periods_for_term",
     "create_grading_period_for_term",
+    "get_all_enrollments",
+    "create_enrollment",
+    "get_enrollment",
+    "update_enrollment",
+    "patch_enrollment",
+    "delete_enrollment",
 ]

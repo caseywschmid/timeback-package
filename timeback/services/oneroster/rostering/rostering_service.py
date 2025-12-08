@@ -62,6 +62,11 @@ from timeback.models.request import (
     TimebackUpdateGradingPeriodRequest,
     TimebackGetGradingPeriodsForTermRequest,
     TimebackCreateGradingPeriodForTermRequest,
+    TimebackGetAllEnrollmentsRequest,
+    TimebackCreateEnrollmentRequest,
+    TimebackGetEnrollmentRequest,
+    TimebackUpdateEnrollmentRequest,
+    TimebackPatchEnrollmentRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -226,7 +231,29 @@ from timeback.services.oneroster.rostering.endpoints.get_grading_periods_for_ter
 from timeback.services.oneroster.rostering.endpoints.create_grading_period_for_term import (
     create_grading_period_for_term as create_grading_period_for_term_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_all_enrollments import (
+    get_all_enrollments as get_all_enrollments_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_enrollment import (
+    create_enrollment as create_enrollment_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_enrollment import (
+    get_enrollment as get_enrollment_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_enrollment import (
+    update_enrollment as update_enrollment_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.patch_enrollment import (
+    patch_enrollment as patch_enrollment_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_enrollment import (
+    delete_enrollment as delete_enrollment_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAllEnrollmentsResponse
+from timeback.models.response import TimebackCreateEnrollmentResponse
+from timeback.models.response import TimebackGetEnrollmentResponse
+from timeback.models.response import TimebackUpdateEnrollmentResponse
 from timeback.models.response import TimebackCreateGradingPeriodResponse
 from timeback.models.response import TimebackUpdateGradingPeriodResponse
 from timeback.models.response import TimebackGetAgentsResponse
@@ -546,5 +573,43 @@ class RosteringService:
     ) -> TimebackCreateGradingPeriodResponse:
         """Create a grading period for a specific term."""
         return create_grading_period_for_term_endpoint(self._http, request)
+
+    # -------------------------------------------------------------------------
+    # Enrollment Endpoints
+    # -------------------------------------------------------------------------
+
+    def get_all_enrollments(
+        self, request: TimebackGetAllEnrollmentsRequest
+    ) -> TimebackGetAllEnrollmentsResponse:
+        """Fetch all enrollments (paginated list)."""
+        return get_all_enrollments_endpoint(self._http, request)
+
+    def create_enrollment(
+        self, request: TimebackCreateEnrollmentRequest
+    ) -> TimebackCreateEnrollmentResponse:
+        """Create a new enrollment."""
+        return create_enrollment_endpoint(self._http, request)
+
+    def get_enrollment(
+        self, request: TimebackGetEnrollmentRequest
+    ) -> TimebackGetEnrollmentResponse:
+        """Fetch a single enrollment by sourcedId."""
+        return get_enrollment_endpoint(self._http, request)
+
+    def update_enrollment(
+        self, request: TimebackUpdateEnrollmentRequest
+    ) -> TimebackUpdateEnrollmentResponse:
+        """Update an existing enrollment (PUT)."""
+        return update_enrollment_endpoint(self._http, request)
+
+    def patch_enrollment(
+        self, request: TimebackPatchEnrollmentRequest
+    ) -> TimebackUpdateEnrollmentResponse:
+        """Partially update an existing enrollment (PATCH) with metadata merging."""
+        return patch_enrollment_endpoint(self._http, request)
+
+    def delete_enrollment(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) an enrollment by sourcedId."""
+        return delete_enrollment_endpoint(self._http, sourced_id)
 
 

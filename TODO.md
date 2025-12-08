@@ -303,15 +303,15 @@
 
 ### /ims/oneroster/rostering/v1p2/enrollments/
 
-- [ ] `get_all_enrollments`
-- [ ] `create_enrollment`
+- [x] `get_all_enrollments`
+- [x] `create_enrollment`
 
 ### /ims/oneroster/rostering/v1p2/enrollments/{sourcedId}
 
-- [ ] `get_enrollment`
-- [ ] `update_enrollment`
-- [ ] `partially_update_enrollment`
-- [ ] `delete_enrollment`
+- [x] `get_enrollment`
+- [x] `update_enrollment`
+- [x] `partially_update_enrollment`
+- [x] `delete_enrollment`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes/{classSourcedId}/enrollments
 

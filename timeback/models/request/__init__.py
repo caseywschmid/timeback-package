@@ -138,6 +138,11 @@ from .timeback_get_grading_period_request import TimebackGetGradingPeriodRequest
 from .timeback_update_grading_period_request import TimebackUpdateGradingPeriodRequest
 from .timeback_get_grading_periods_for_term_request import TimebackGetGradingPeriodsForTermRequest
 from .timeback_create_grading_period_for_term_request import TimebackCreateGradingPeriodForTermRequest
+from .timeback_get_all_enrollments_request import TimebackGetAllEnrollmentsRequest
+from .timeback_create_enrollment_request import TimebackCreateEnrollmentRequest, TimebackCreateEnrollmentBody
+from .timeback_get_enrollment_request import TimebackGetEnrollmentRequest
+from .timeback_update_enrollment_request import TimebackUpdateEnrollmentRequest, TimebackUpdateEnrollmentBody
+from .timeback_patch_enrollment_request import TimebackPatchEnrollmentRequest, TimebackPatchEnrollmentBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -254,4 +259,12 @@ __all__ = [
     "TimebackUpdateGradingPeriodRequest",
     "TimebackGetGradingPeriodsForTermRequest",
     "TimebackCreateGradingPeriodForTermRequest",
+    "TimebackGetAllEnrollmentsRequest",
+    "TimebackCreateEnrollmentRequest",
+    "TimebackCreateEnrollmentBody",
+    "TimebackGetEnrollmentRequest",
+    "TimebackUpdateEnrollmentRequest",
+    "TimebackUpdateEnrollmentBody",
+    "TimebackPatchEnrollmentRequest",
+    "TimebackPatchEnrollmentBody",
 ]
