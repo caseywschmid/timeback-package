@@ -31,6 +31,7 @@ from timeback.models.request import (
     TimebackGetAllCategoriesRequest,
     TimebackCreateCategoryRequest,
     TimebackGetCategoryRequest,
+    TimebackPutCategoryRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -53,6 +54,7 @@ from timeback.models.response import (
     TimebackGetAllCategoriesResponse,
     TimebackCreateCategoryResponse,
     TimebackGetCategoryResponse,
+    TimebackPutCategoryResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -134,6 +136,9 @@ from timeback.services.oneroster.gradebook.endpoints.create_category import (
 )
 from timeback.services.oneroster.gradebook.endpoints.get_category import (
     get_category as get_category_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.put_category import (
+    put_category as put_category_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -313,6 +318,12 @@ class GradebookService:
     ) -> TimebackGetCategoryResponse:
         """Fetch a single category by sourcedId."""
         return get_category_endpoint(self._http, request)
+
+    def put_category(
+        self, request: TimebackPutCategoryRequest
+    ) -> TimebackPutCategoryResponse:
+        """Update or create a category by sourcedId."""
+        return put_category_endpoint(self._http, request)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest

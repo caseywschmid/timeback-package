@@ -25,6 +25,7 @@ from timeback.services.oneroster.gradebook.endpoints.get_categories_for_class im
 from timeback.services.oneroster.gradebook.endpoints.get_all_categories import get_all_categories
 from timeback.services.oneroster.gradebook.endpoints.create_category import create_category
 from timeback.services.oneroster.gradebook.endpoints.get_category import get_category
+from timeback.services.oneroster.gradebook.endpoints.put_category import put_category
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import get_line_items_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_class import get_results_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_score_scales_for_class import get_score_scales_for_class
@@ -57,6 +58,7 @@ __all__ = [
     "get_all_categories",
     "create_category",
     "get_category",
+    "put_category",
     "get_line_items_for_class",
     "get_results_for_class",
     "get_score_scales_for_class",
