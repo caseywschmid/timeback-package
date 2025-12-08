@@ -113,7 +113,7 @@
 
 ### /ims/oneroster/gradebook/v1p2/categories/{sourcedId}
 
-- [ ] `get_category`
+- [x] `get_category`
 - [ ] `put_category`
 - [ ] `delete_category`
 
