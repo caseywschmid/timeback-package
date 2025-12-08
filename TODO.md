@@ -99,7 +99,7 @@
 ### /ims/oneroster/rostering/v1p2/classes/{sourcedId}
 
 - [x] `get_class`
-- [ ] `update_class`
+- [x] `update_class`
 - [ ] `delete_class`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes

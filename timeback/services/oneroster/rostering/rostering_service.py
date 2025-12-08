@@ -13,6 +13,7 @@ from timeback.models.response import (
     TimebackGetAllClassesResponse,
     TimebackCreateClassResponse,
     TimebackGetClassResponse,
+    TimebackUpdateClassResponse,
 )
 from timeback.models.request import (
     TimebackUpdateUserRequest,
@@ -30,6 +31,7 @@ from timeback.models.request import (
     TimebackGetAllClassesRequest,
     TimebackCreateClassRequest,
     TimebackGetClassRequest,
+    TimebackUpdateClassRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -52,6 +54,9 @@ from timeback.services.oneroster.rostering.endpoints.create_class import (
 )
 from timeback.services.oneroster.rostering.endpoints.get_class import (
     get_class as get_class_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_class import (
+    update_class as update_class_endpoint,
 )
 from timeback.services.oneroster.rostering.endpoints.create_school import (
     create_school as create_school_endpoint,
@@ -141,6 +146,12 @@ class RosteringService:
     def get_class(self, request: TimebackGetClassRequest) -> TimebackGetClassResponse:
         """Fetch a single class by sourcedId."""
         return get_class_endpoint(self._http, request)
+
+    def update_class(
+        self, request: TimebackUpdateClassRequest
+    ) -> TimebackUpdateClassResponse:
+        """Update an existing class by sourcedId."""
+        return update_class_endpoint(self._http, request)
 
     def create_school(
         self,

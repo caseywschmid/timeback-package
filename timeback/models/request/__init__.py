@@ -68,6 +68,7 @@ from .timeback_get_score_scales_for_class_request import TimebackGetScoreScalesF
 from .timeback_get_all_classes_request import TimebackGetAllClassesRequest
 from .timeback_create_class_request import TimebackCreateClassRequest, TimebackCreateClassBody
 from .timeback_get_class_request import TimebackGetClassRequest
+from .timeback_update_class_request import TimebackUpdateClassRequest, TimebackUpdateClassBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -123,4 +124,6 @@ __all__ = [
     "TimebackCreateClassRequest",
     "TimebackCreateClassBody",
     "TimebackGetClassRequest",
+    "TimebackUpdateClassRequest",
+    "TimebackUpdateClassBody",
 ]
