@@ -132,14 +132,14 @@
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/
 
 - [x] `get_all_assessment_line_items`
-- [ ] `create_assessment_line_item`
+- [x] `create_assessment_line_item`
 
 ### /ims/oneroster/gradebook/v1p2/assessmentLineItems/{sourcedId}
 
-- [ ] `get_assessment_line_item`
-- [ ] `put_assessment_line_item`
-- [ ] `patch_assessment_line_item`
-- [ ] `delete_assessment_line_item`
+- [x] `get_assessment_line_item`
+- [x] `put_assessment_line_item`
+- [x] `patch_assessment_line_item`
+- [x] `delete_assessment_line_item`
 
 ### /ims/oneroster/resources/v1p2/resources/
 

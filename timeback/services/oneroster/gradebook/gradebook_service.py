@@ -38,6 +38,10 @@ from timeback.models.request import (
     TimebackPutAssessmentResultRequest,
     TimebackPatchAssessmentResultRequest,
     TimebackGetAllAssessmentLineItemsRequest,
+    TimebackCreateAssessmentLineItemRequest,
+    TimebackGetAssessmentLineItemRequest,
+    TimebackPutAssessmentLineItemRequest,
+    TimebackPatchAssessmentLineItemRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -67,6 +71,10 @@ from timeback.models.response import (
     TimebackPutAssessmentResultResponse,
     TimebackPatchAssessmentResultResponse,
     TimebackGetAllAssessmentLineItemsResponse,
+    TimebackCreateAssessmentLineItemResponse,
+    TimebackGetAssessmentLineItemResponse,
+    TimebackPutAssessmentLineItemResponse,
+    TimebackPatchAssessmentLineItemResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -175,6 +183,21 @@ from timeback.services.oneroster.gradebook.endpoints.delete_assessment_result im
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_assessment_line_items import (
     get_all_assessment_line_items as get_all_assessment_line_items_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_assessment_line_item import (
+    create_assessment_line_item as create_assessment_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.get_assessment_line_item import (
+    get_assessment_line_item as get_assessment_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.put_assessment_line_item import (
+    put_assessment_line_item as put_assessment_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.patch_assessment_line_item import (
+    patch_assessment_line_item as patch_assessment_line_item_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.delete_assessment_line_item import (
+    delete_assessment_line_item as delete_assessment_line_item_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -404,6 +427,34 @@ class GradebookService:
     ) -> TimebackGetAllAssessmentLineItemsResponse:
         """Fetch a paginated list of assessment line items."""
         return get_all_assessment_line_items_endpoint(self._http, request)
+
+    def create_assessment_line_item(
+        self, request: TimebackCreateAssessmentLineItemRequest
+    ) -> TimebackCreateAssessmentLineItemResponse:
+        """Create a new assessment line item."""
+        return create_assessment_line_item_endpoint(self._http, request)
+
+    def get_assessment_line_item(
+        self, request: TimebackGetAssessmentLineItemRequest
+    ) -> TimebackGetAssessmentLineItemResponse:
+        """Fetch a single assessment line item by sourcedId."""
+        return get_assessment_line_item_endpoint(self._http, request)
+
+    def put_assessment_line_item(
+        self, request: TimebackPutAssessmentLineItemRequest
+    ) -> TimebackPutAssessmentLineItemResponse:
+        """Update or create an assessment line item by sourcedId."""
+        return put_assessment_line_item_endpoint(self._http, request)
+
+    def patch_assessment_line_item(
+        self, request: TimebackPatchAssessmentLineItemRequest
+    ) -> TimebackPatchAssessmentLineItemResponse:
+        """Partially update an assessment line item by sourcedId."""
+        return patch_assessment_line_item_endpoint(self._http, request)
+
+    def delete_assessment_line_item(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) an assessment line item by sourcedId."""
+        return delete_assessment_line_item_endpoint(self._http, sourced_id)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest

@@ -34,6 +34,11 @@ from timeback.services.oneroster.gradebook.endpoints.put_assessment_result impor
 from timeback.services.oneroster.gradebook.endpoints.patch_assessment_result import patch_assessment_result
 from timeback.services.oneroster.gradebook.endpoints.delete_assessment_result import delete_assessment_result
 from timeback.services.oneroster.gradebook.endpoints.get_all_assessment_line_items import get_all_assessment_line_items
+from timeback.services.oneroster.gradebook.endpoints.create_assessment_line_item import create_assessment_line_item
+from timeback.services.oneroster.gradebook.endpoints.get_assessment_line_item import get_assessment_line_item
+from timeback.services.oneroster.gradebook.endpoints.put_assessment_line_item import put_assessment_line_item
+from timeback.services.oneroster.gradebook.endpoints.patch_assessment_line_item import patch_assessment_line_item
+from timeback.services.oneroster.gradebook.endpoints.delete_assessment_line_item import delete_assessment_line_item
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import get_line_items_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_results_for_class import get_results_for_class
 from timeback.services.oneroster.gradebook.endpoints.get_score_scales_for_class import get_score_scales_for_class
@@ -75,6 +80,11 @@ __all__ = [
     "patch_assessment_result",
     "delete_assessment_result",
     "get_all_assessment_line_items",
+    "create_assessment_line_item",
+    "get_assessment_line_item",
+    "put_assessment_line_item",
+    "patch_assessment_line_item",
+    "delete_assessment_line_item",
     "get_line_items_for_class",
     "get_results_for_class",
     "get_score_scales_for_class",

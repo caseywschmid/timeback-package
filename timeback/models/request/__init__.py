@@ -89,6 +89,19 @@ from .timeback_patch_assessment_result_request import (
     TimebackPatchAssessmentResultBody,
 )
 from .timeback_get_all_assessment_line_items_request import TimebackGetAllAssessmentLineItemsRequest
+from .timeback_create_assessment_line_item_request import (
+    TimebackCreateAssessmentLineItemRequest,
+    TimebackCreateAssessmentLineItemBody,
+)
+from .timeback_get_assessment_line_item_request import TimebackGetAssessmentLineItemRequest
+from .timeback_put_assessment_line_item_request import (
+    TimebackPutAssessmentLineItemRequest,
+    TimebackPutAssessmentLineItemBody,
+)
+from .timeback_patch_assessment_line_item_request import (
+    TimebackPatchAssessmentLineItemRequest,
+    TimebackPatchAssessmentLineItemBody,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -160,4 +173,11 @@ __all__ = [
     "TimebackPatchAssessmentResultRequest",
     "TimebackPatchAssessmentResultBody",
     "TimebackGetAllAssessmentLineItemsRequest",
+    "TimebackCreateAssessmentLineItemRequest",
+    "TimebackCreateAssessmentLineItemBody",
+    "TimebackGetAssessmentLineItemRequest",
+    "TimebackPutAssessmentLineItemRequest",
+    "TimebackPutAssessmentLineItemBody",
+    "TimebackPatchAssessmentLineItemRequest",
+    "TimebackPatchAssessmentLineItemBody",
 ]
