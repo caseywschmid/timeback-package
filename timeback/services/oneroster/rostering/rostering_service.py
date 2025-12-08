@@ -67,6 +67,8 @@ from timeback.models.request import (
     TimebackGetEnrollmentRequest,
     TimebackUpdateEnrollmentRequest,
     TimebackPatchEnrollmentRequest,
+    TimebackGetEnrollmentsForClassInSchoolRequest,
+    TimebackGetEnrollmentsForSchoolRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -248,6 +250,12 @@ from timeback.services.oneroster.rostering.endpoints.patch_enrollment import (
 )
 from timeback.services.oneroster.rostering.endpoints.delete_enrollment import (
     delete_enrollment as delete_enrollment_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_class_in_school import (
+    get_enrollments_for_class_in_school as get_enrollments_for_class_in_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_enrollments_for_school import (
+    get_enrollments_for_school as get_enrollments_for_school_endpoint,
 )
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAllEnrollmentsResponse
@@ -611,5 +619,17 @@ class RosteringService:
     def delete_enrollment(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) an enrollment by sourcedId."""
         return delete_enrollment_endpoint(self._http, sourced_id)
+
+    def get_enrollments_for_class_in_school(
+        self, request: TimebackGetEnrollmentsForClassInSchoolRequest
+    ) -> TimebackGetAllEnrollmentsResponse:
+        """Fetch enrollments for a specific class in a school."""
+        return get_enrollments_for_class_in_school_endpoint(self._http, request)
+
+    def get_enrollments_for_school(
+        self, request: TimebackGetEnrollmentsForSchoolRequest
+    ) -> TimebackGetAllEnrollmentsResponse:
+        """Fetch enrollments for a specific school."""
+        return get_enrollments_for_school_endpoint(self._http, request)
 
 

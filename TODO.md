@@ -315,11 +315,11 @@
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes/{classSourcedId}/enrollments
 
-- [ ] `get_enrollments_for_class_in_school`
+- [x] `get_enrollments_for_class_in_school`
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/enrollments
 
-- [ ] `get_enrollments_for_school`
+- [x] `get_enrollments_for_school`
 
 ### /ims/oneroster/rostering/v1p2/demographics/
 
