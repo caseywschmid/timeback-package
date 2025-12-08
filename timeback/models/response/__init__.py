@@ -34,6 +34,7 @@ from .timeback_post_line_items_for_class_response import TimebackPostLineItemsFo
 from .timeback_get_all_categories_response import TimebackGetAllCategoriesResponse
 from .timeback_get_class_response import TimebackGetClassResponse
 from .timeback_update_class_response import TimebackUpdateClassResponse
+from .timeback_create_category_response import TimebackCreateCategoryResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -70,4 +71,5 @@ __all__ = [
     "TimebackCreateClassResponse",
     "TimebackGetClassResponse",
     "TimebackUpdateClassResponse",
+    "TimebackCreateCategoryResponse",
 ]

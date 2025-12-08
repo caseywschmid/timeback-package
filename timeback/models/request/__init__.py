@@ -71,6 +71,7 @@ from .timeback_get_class_request import TimebackGetClassRequest
 from .timeback_update_class_request import TimebackUpdateClassRequest, TimebackUpdateClassBody
 from .timeback_get_classes_for_school_request import TimebackGetClassesForSchoolRequest
 from .timeback_get_all_categories_request import TimebackGetAllCategoriesRequest
+from .timeback_create_category_request import TimebackCreateCategoryRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -130,4 +131,5 @@ __all__ = [
     "TimebackUpdateClassBody",
     "TimebackGetClassesForSchoolRequest",
     "TimebackGetAllCategoriesRequest",
+    "TimebackCreateCategoryRequest",
 ]

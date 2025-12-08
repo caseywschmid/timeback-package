@@ -29,6 +29,7 @@ from timeback.models.request import (
     TimebackGetResultsForClassRequest,
     TimebackGetScoreScalesForClassRequest,
     TimebackGetAllCategoriesRequest,
+    TimebackCreateCategoryRequest,
 )
 from timeback.models.response import (
     TimebackGetAllScoreScalesResponse,
@@ -49,6 +50,7 @@ from timeback.models.response import (
     TimebackPostResultsForAcademicSessionForClassResponse,
     TimebackPostLineItemsForClassResponse,
     TimebackGetAllCategoriesResponse,
+    TimebackCreateCategoryResponse,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_score_scales import (
     get_all_score_scales as get_all_score_scales_endpoint,
@@ -124,6 +126,9 @@ from timeback.services.oneroster.gradebook.endpoints.get_categories_for_class im
 )
 from timeback.services.oneroster.gradebook.endpoints.get_all_categories import (
     get_all_categories as get_all_categories_endpoint,
+)
+from timeback.services.oneroster.gradebook.endpoints.create_category import (
+    create_category as create_category_endpoint,
 )
 from timeback.services.oneroster.gradebook.endpoints.get_line_items_for_class import (
     get_line_items_for_class as get_line_items_for_class_endpoint,
@@ -291,6 +296,12 @@ class GradebookService:
     ) -> TimebackGetAllCategoriesResponse:
         """Fetch a paginated list of all categories."""
         return get_all_categories_endpoint(self._http, request)
+
+    def create_category(
+        self, request: TimebackCreateCategoryRequest
+    ) -> TimebackCreateCategoryResponse:
+        """Create a new category."""
+        return create_category_endpoint(self._http, request)
 
     def get_line_items_for_class(
         self, request: TimebackGetLineItemsForClassRequest

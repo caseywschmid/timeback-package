@@ -109,7 +109,7 @@
 ### /ims/oneroster/gradebook/v1p2/categories/
 
 - [x] `get_all_categories`
-- [ ] `create_category`
+- [x] `create_category`
 
 ### /ims/oneroster/gradebook/v1p2/categories/{sourcedId}
 
