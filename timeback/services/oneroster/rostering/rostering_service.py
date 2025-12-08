@@ -58,6 +58,9 @@ from timeback.services.oneroster.rostering.endpoints.get_class import (
 from timeback.services.oneroster.rostering.endpoints.update_class import (
     update_class as update_class_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.delete_class import (
+    delete_class as delete_class_endpoint,
+)
 from timeback.services.oneroster.rostering.endpoints.create_school import (
     create_school as create_school_endpoint,
 )
@@ -152,6 +155,10 @@ class RosteringService:
     ) -> TimebackUpdateClassResponse:
         """Update an existing class by sourcedId."""
         return update_class_endpoint(self._http, request)
+
+    def delete_class(self, sourced_id: str):
+        """Delete (tombstone) a class by sourcedId. Returns raw provider response (None for 204)."""
+        return delete_class_endpoint(self._http, sourced_id)
 
     def create_school(
         self,

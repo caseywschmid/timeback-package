@@ -8,6 +8,7 @@ from timeback.services.oneroster.rostering.endpoints.create_school import create
 from timeback.services.oneroster.rostering.endpoints.get_school import get_school
 from timeback.services.oneroster.rostering.endpoints.get_class import get_class
 from timeback.services.oneroster.rostering.endpoints.update_class import update_class
+from timeback.services.oneroster.rostering.endpoints.delete_class import delete_class
 from timeback.services.oneroster.rostering.endpoints.update_school import update_school
 from timeback.services.oneroster.rostering.endpoints.delete_school import delete_school
 from timeback.services.oneroster.rostering.endpoints.get_agent_for import get_agent_for
@@ -27,6 +28,7 @@ __all__ = [
     "get_school",
     "get_class",
     "update_class",
+    "delete_class",
     "update_school",
     "delete_school",
     "get_agent_for", 
