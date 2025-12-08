@@ -264,26 +264,26 @@
 
 ### /ims/oneroster/rostering/v1p2/students/
 
-- [ ] `get_all_students`
+- [x] `get_all_students`
 
 ### /ims/oneroster/rostering/v1p2/students/{sourcedId}
 
-- [ ] `get_student`
+- [x] `get_student`
 
 ### /ims/oneroster/rostering/v1p2/students/{studentSourcedId}/classes
 
-- [ ] `get_classes_for_student`
+- [x] `get_classes_for_student`
 
 ### /ims/oneroster/rostering/v1p2/orgs/
 
-- [ ] `get_all_orgs`
-- [ ] `create_org`
+- [x] `get_all_orgs`
+- [x] `create_org`
 
 ### /ims/oneroster/rostering/v1p2/orgs/{sourcedId}
 
-- [ ] `get_org`
-- [ ] `update_org`
-- [ ] `delete_org`
+- [x] `get_org`
+- [x] `update_org`
+- [x] `delete_org`
 
 ### /ims/oneroster/rostering/v1p2/gradingPeriods/
 

@@ -125,6 +125,13 @@ from .timeback_get_students_for_class_request import TimebackGetStudentsForClass
 from .timeback_add_student_to_class_request import TimebackAddStudentToClassRequest
 from .timeback_get_students_for_class_in_school_request import TimebackGetStudentsForClassInSchoolRequest
 from .timeback_get_students_for_school_request import TimebackGetStudentsForSchoolRequest
+from .timeback_get_all_students_request import TimebackGetAllStudentsRequest
+from .timeback_get_student_request import TimebackGetStudentRequest
+from .timeback_get_classes_for_student_request import TimebackGetClassesForStudentRequest
+from .timeback_get_all_orgs_request import TimebackGetAllOrgsRequest
+from .timeback_create_org_request import TimebackCreateOrgRequest
+from .timeback_get_org_request import TimebackGetOrgRequest
+from .timeback_update_org_request import TimebackUpdateOrgRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -228,4 +235,11 @@ __all__ = [
     "TimebackAddStudentToClassRequest",
     "TimebackGetStudentsForClassInSchoolRequest",
     "TimebackGetStudentsForSchoolRequest",
+    "TimebackGetAllStudentsRequest",
+    "TimebackGetStudentRequest",
+    "TimebackGetClassesForStudentRequest",
+    "TimebackGetAllOrgsRequest",
+    "TimebackCreateOrgRequest",
+    "TimebackGetOrgRequest",
+    "TimebackUpdateOrgRequest",
 ]

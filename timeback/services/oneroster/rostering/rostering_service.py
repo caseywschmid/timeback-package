@@ -49,6 +49,13 @@ from timeback.models.request import (
     TimebackAddStudentToClassRequest,
     TimebackGetStudentsForClassInSchoolRequest,
     TimebackGetStudentsForSchoolRequest,
+    TimebackGetAllStudentsRequest,
+    TimebackGetStudentRequest,
+    TimebackGetClassesForStudentRequest,
+    TimebackGetAllOrgsRequest,
+    TimebackCreateOrgRequest,
+    TimebackGetOrgRequest,
+    TimebackUpdateOrgRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -168,12 +175,40 @@ from timeback.services.oneroster.rostering.endpoints.get_students_for_class_in_s
 from timeback.services.oneroster.rostering.endpoints.get_students_for_school import (
     get_students_for_school as get_students_for_school_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_all_students import (
+    get_all_students as get_all_students_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_student import (
+    get_student as get_student_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_classes_for_student import (
+    get_classes_for_student as get_classes_for_student_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_all_orgs import (
+    get_all_orgs as get_all_orgs_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_org import (
+    create_org as create_org_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_org import (
+    get_org as get_org_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_org import (
+    update_org as update_org_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_org import (
+    delete_org as delete_org_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackGetAgentsResponse
 from timeback.models.response import TimebackGetAllTermsResponse
 from timeback.models.response import TimebackGetTermResponse
 from timeback.models.response import TimebackAddTeacherToClassResponse
 from timeback.models.response import TimebackAddStudentToClassResponse
+from timeback.models.response import TimebackGetAllOrgsResponse
+from timeback.models.response import TimebackGetOrgResponse
+from timeback.models.response import TimebackCreateOrgResponse
+from timeback.models.response import TimebackUpdateOrgResponse
 
 
 class RosteringService:
@@ -396,5 +431,51 @@ class RosteringService:
     ) -> TimebackGetAllUsersResponse:
         """Fetch students for a specific school."""
         return get_students_for_school_endpoint(self._http, request)
+
+    def get_all_students(
+        self, request: TimebackGetAllStudentsRequest
+    ) -> TimebackGetAllUsersResponse:
+        """Fetch all students (paginated list)."""
+        return get_all_students_endpoint(self._http, request)
+
+    def get_student(
+        self, request: TimebackGetStudentRequest
+    ) -> TimebackGetUserResponse:
+        """Fetch a single student by sourcedId."""
+        return get_student_endpoint(self._http, request)
+
+    def get_classes_for_student(
+        self, request: TimebackGetClassesForStudentRequest
+    ) -> TimebackGetAllClassesResponse:
+        """Fetch classes for a specific student."""
+        return get_classes_for_student_endpoint(self._http, request)
+
+    def get_all_orgs(
+        self, request: TimebackGetAllOrgsRequest
+    ) -> TimebackGetAllOrgsResponse:
+        """Fetch all orgs (paginated list)."""
+        return get_all_orgs_endpoint(self._http, request)
+
+    def create_org(
+        self, request: TimebackCreateOrgRequest
+    ) -> TimebackCreateOrgResponse:
+        """Create a new org."""
+        return create_org_endpoint(self._http, request)
+
+    def get_org(
+        self, request: TimebackGetOrgRequest
+    ) -> TimebackGetOrgResponse:
+        """Fetch a single org by sourcedId."""
+        return get_org_endpoint(self._http, request)
+
+    def update_org(
+        self, request: TimebackUpdateOrgRequest
+    ) -> TimebackUpdateOrgResponse:
+        """Update an existing org."""
+        return update_org_endpoint(self._http, request)
+
+    def delete_org(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) an org by sourcedId."""
+        return delete_org_endpoint(self._http, sourced_id)
 
 
