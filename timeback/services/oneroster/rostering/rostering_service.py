@@ -58,6 +58,8 @@ from timeback.models.request import (
     TimebackUpdateOrgRequest,
     TimebackGetAllGradingPeriodsRequest,
     TimebackCreateGradingPeriodRequest,
+    TimebackGetGradingPeriodRequest,
+    TimebackUpdateGradingPeriodRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -207,8 +209,18 @@ from timeback.services.oneroster.rostering.endpoints.get_all_grading_periods imp
 from timeback.services.oneroster.rostering.endpoints.create_grading_period import (
     create_grading_period as create_grading_period_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_grading_period import (
+    get_grading_period as get_grading_period_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_grading_period import (
+    update_grading_period as update_grading_period_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_grading_period import (
+    delete_grading_period as delete_grading_period_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
 from timeback.models.response import TimebackCreateGradingPeriodResponse
+from timeback.models.response import TimebackUpdateGradingPeriodResponse
 from timeback.models.response import TimebackGetAgentsResponse
 from timeback.models.response import TimebackGetAllTermsResponse
 from timeback.models.response import TimebackGetTermResponse
@@ -498,5 +510,21 @@ class RosteringService:
     ) -> TimebackCreateGradingPeriodResponse:
         """Create a new grading period."""
         return create_grading_period_endpoint(self._http, request)
+
+    def get_grading_period(
+        self, request: TimebackGetGradingPeriodRequest
+    ) -> TimebackGetTermResponse:
+        """Fetch a single grading period by sourcedId."""
+        return get_grading_period_endpoint(self._http, request)
+
+    def update_grading_period(
+        self, request: TimebackUpdateGradingPeriodRequest
+    ) -> TimebackUpdateGradingPeriodResponse:
+        """Update an existing grading period."""
+        return update_grading_period_endpoint(self._http, request)
+
+    def delete_grading_period(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) a grading period by sourcedId."""
+        return delete_grading_period_endpoint(self._http, sourced_id)
 
 

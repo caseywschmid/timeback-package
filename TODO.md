@@ -292,9 +292,9 @@
 
 ### /ims/oneroster/rostering/v1p2/gradingPeriods/{sourcedId}
 
-- [ ] `get_grading_period`
-- [ ] `update_grading_period`
-- [ ] `delete_grading_period`
+- [x] `get_grading_period`
+- [x] `update_grading_period`
+- [x] `delete_grading_period`
 
 ### /ims/oneroster/rostering/v1p2/terms/{termSourcedId}/gradingPeriods
 
