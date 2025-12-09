@@ -47,6 +47,14 @@ from .get_attempts import get_attempts
 from .get_next_question import get_next_question
 from .reset_attempt import reset_attempt
 from .update_student_question_response import update_student_question_response
+from .create_test_assignment import create_test_assignment
+from .list_student_test_assignments import list_student_test_assignments
+from .list_all_test_assignments import list_all_test_assignments
+from .create_bulk_test_assignments import create_bulk_test_assignments
+from .import_test_assignments import import_test_assignments
+from .get_test_assignment import get_test_assignment
+from .update_test_assignment import update_test_assignment
+from .delete_test_assignment import delete_test_assignment
 
 __all__ = [
     "get_all_placement_tests",
@@ -86,5 +94,13 @@ __all__ = [
     "get_next_question",
     "reset_attempt",
     "update_student_question_response",
+    "create_test_assignment",
+    "list_student_test_assignments",
+    "list_all_test_assignments",
+    "create_bulk_test_assignments",
+    "import_test_assignments",
+    "get_test_assignment",
+    "update_test_assignment",
+    "delete_test_assignment",
 ]
 

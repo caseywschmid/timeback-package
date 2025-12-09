@@ -82,6 +82,12 @@ from .timeback_student_placement_data import (
 )
 from .request import TimebackUpdateUserRequest
 from .response import TimebackUpdateUserResponse
+from .timeback_test_assignment import (
+    TimebackTestAssignment,
+    TimebackTestAssignmentResult,
+    TimebackTestAssignmentError,
+    TimebackTestAssignmentStatus,
+)
 
 __all__ = [
     "TimebackTimeSpentEvent",
@@ -160,4 +166,9 @@ __all__ = [
     "TimebackRitScores",
     "TimebackPlacementTestResult",
     "TimebackSubjectPlacementData",
+    # Test Assignment Models
+    "TimebackTestAssignment",
+    "TimebackTestAssignmentResult",
+    "TimebackTestAssignmentError",
+    "TimebackTestAssignmentStatus",
 ]

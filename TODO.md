@@ -537,25 +537,26 @@
 
 ### /powerpath/test-assignments:
 
-- [ ] `create_test_assignment`
+- [x] `create_test_assignment`
+- [x] `list_student_test_assignments`
 
 ### /powerpath/test-assignments/admin:
 
-- [ ] `list_all_test_assignments`
+- [x] `list_all_test_assignments`
 
 ### /powerpath/test-assignments/bulk:
 
-- [ ] `create_bulk_test_assignments`
+- [x] `create_bulk_test_assignments`
 
 ### /powerpath/test-assignments/import:
 
-- [ ] `import_test_assignments`
+- [x] `import_test_assignments`
 
 ### /powerpath/test-assignments/{id}:
 
-- [ ] `get_test_assignment`
-- [ ] `update_test_assignment`
-- [ ] `delete_test_assignment`
+- [x] `get_test_assignment`
+- [x] `update_test_assignment`
+- [x] `delete_test_assignment`
 
 ## QTI API - All Endpoints
 

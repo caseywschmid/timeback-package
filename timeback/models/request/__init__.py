@@ -209,6 +209,13 @@ from .timeback_reset_attempt_request import TimebackResetAttemptRequest
 from .timeback_update_student_question_response_request import (
     TimebackUpdateStudentQuestionResponseRequest,
 )
+from .timeback_create_test_assignment_request import TimebackCreateTestAssignmentRequest
+from .timeback_bulk_test_assignments_request import (
+    TimebackBulkTestAssignmentsRequest,
+    TimebackBulkTestAssignmentItem,
+)
+from .timeback_import_test_assignments_request import TimebackImportTestAssignmentsRequest
+from .timeback_update_test_assignment_request import TimebackUpdateTestAssignmentRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -395,4 +402,9 @@ __all__ = [
     "TimebackFinalStudentAssessmentRequest",
     "TimebackResetAttemptRequest",
     "TimebackUpdateStudentQuestionResponseRequest",
+    "TimebackCreateTestAssignmentRequest",
+    "TimebackBulkTestAssignmentsRequest",
+    "TimebackBulkTestAssignmentItem",
+    "TimebackImportTestAssignmentsRequest",
+    "TimebackUpdateTestAssignmentRequest",
 ]

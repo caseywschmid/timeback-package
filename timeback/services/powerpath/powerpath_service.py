@@ -38,6 +38,10 @@ from timeback.models.request import (
     TimebackFinalStudentAssessmentRequest,
     TimebackResetAttemptRequest,
     TimebackUpdateStudentQuestionResponseRequest,
+    TimebackCreateTestAssignmentRequest,
+    TimebackBulkTestAssignmentsRequest,
+    TimebackImportTestAssignmentsRequest,
+    TimebackUpdateTestAssignmentRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -68,8 +72,16 @@ from timeback.models.response import (
     TimebackNextQuestionResponse,
     TimebackResetAttemptResponse,
     TimebackUpdateStudentQuestionResponseResponse,
+    TimebackCreateTestAssignmentResponse,
+    TimebackListTestAssignmentsResponse,
+    TimebackBulkTestAssignmentsResponse,
 )
 from timeback.models import TimebackScreeningSession, LessonPlan
+from timeback.models.timeback_test_assignment import (
+    TimebackTestAssignment,
+    TimebackTestAssignmentStatus,
+)
+from timeback.enums import TimebackSubject, TimebackGrade
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
     get_all_placement_tests as get_all_placement_tests_endpoint,
 )
@@ -181,6 +193,30 @@ from timeback.services.powerpath.endpoints.reset_attempt import (
 )
 from timeback.services.powerpath.endpoints.update_student_question_response import (
     update_student_question_response as update_student_question_response_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_test_assignment import (
+    create_test_assignment as create_test_assignment_endpoint,
+)
+from timeback.services.powerpath.endpoints.list_student_test_assignments import (
+    list_student_test_assignments as list_student_test_assignments_endpoint,
+)
+from timeback.services.powerpath.endpoints.list_all_test_assignments import (
+    list_all_test_assignments as list_all_test_assignments_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_bulk_test_assignments import (
+    create_bulk_test_assignments as create_bulk_test_assignments_endpoint,
+)
+from timeback.services.powerpath.endpoints.import_test_assignments import (
+    import_test_assignments as import_test_assignments_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_test_assignment import (
+    get_test_assignment as get_test_assignment_endpoint,
+)
+from timeback.services.powerpath.endpoints.update_test_assignment import (
+    update_test_assignment as update_test_assignment_endpoint,
+)
+from timeback.services.powerpath.endpoints.delete_test_assignment import (
+    delete_test_assignment as delete_test_assignment_endpoint,
 )
 
 
@@ -904,5 +940,147 @@ class PowerPathService:
         """
         return update_student_question_response_endpoint(self._http, request)
 
-    # TODO: Implement test-assignments endpoints
+    # ==================== Test Assignments ====================
+
+    def create_test_assignment(
+        self, request: TimebackCreateTestAssignmentRequest
+    ) -> TimebackCreateTestAssignmentResponse:
+        """Create an individual test assignment (unlisted test-out).
+
+        Creates a standalone test-out assignment for a student.
+
+        Args:
+            request: Request with student, subject, grade, and optional testName
+
+        Returns:
+            TimebackCreateTestAssignmentResponse with assignmentId, lessonId, resourceId
+        """
+        return create_test_assignment_endpoint(self._http, request)
+
+    def list_student_test_assignments(
+        self,
+        student: str,
+        limit: int = 100,
+        offset: int = 0,
+        status: Optional[TimebackTestAssignmentStatus] = None,
+        subject: Optional[TimebackSubject] = None,
+        grade: Optional[TimebackGrade] = None,
+    ) -> TimebackListTestAssignmentsResponse:
+        """List test assignments for a student.
+
+        Returns paginated list filtered by student with optional filters.
+
+        Args:
+            student: The student sourcedId (required)
+            limit: Max items (1-3000, default 100)
+            offset: Items to skip (default 0)
+            status: Optional status filter
+            subject: Optional subject filter
+            grade: Optional grade filter
+
+        Returns:
+            TimebackListTestAssignmentsResponse with assignments and pagination
+        """
+        return list_student_test_assignments_endpoint(
+            self._http, student, limit, offset, status, subject, grade
+        )
+
+    def list_all_test_assignments(
+        self,
+        limit: int = 100,
+        offset: int = 0,
+        student: Optional[str] = None,
+        status: Optional[TimebackTestAssignmentStatus] = None,
+        subject: Optional[TimebackSubject] = None,
+        grade: Optional[TimebackGrade] = None,
+    ) -> TimebackListTestAssignmentsResponse:
+        """List all test assignments (admin).
+
+        Returns paginated list across all students with optional filters.
+
+        Args:
+            limit: Max items (1-3000, default 100)
+            offset: Items to skip (default 0)
+            student: Optional student sourcedId filter
+            status: Optional status filter
+            subject: Optional subject filter
+            grade: Optional grade filter
+
+        Returns:
+            TimebackListTestAssignmentsResponse with assignments and pagination
+        """
+        return list_all_test_assignments_endpoint(
+            self._http, limit, offset, student, status, subject, grade
+        )
+
+    def create_bulk_test_assignments(
+        self, request: TimebackBulkTestAssignmentsRequest
+    ) -> TimebackBulkTestAssignmentsResponse:
+        """Create multiple test assignments in bulk.
+
+        All-or-nothing operation: validates all items first.
+
+        Args:
+            request: Request with items array
+
+        Returns:
+            TimebackBulkTestAssignmentsResponse with success, results, errors
+        """
+        return create_bulk_test_assignments_endpoint(self._http, request)
+
+    def import_test_assignments(
+        self, request: TimebackImportTestAssignmentsRequest
+    ) -> TimebackBulkTestAssignmentsResponse:
+        """Import test assignments from Google Sheets.
+
+        Fetches a public Google Sheet and creates assignments in bulk.
+        Sheet must have columns: student, subject, grade.
+
+        Args:
+            request: Request with spreadsheetUrl and sheet name
+
+        Returns:
+            TimebackBulkTestAssignmentsResponse with success, results, errors
+        """
+        return import_test_assignments_endpoint(self._http, request)
+
+    def get_test_assignment(self, assignment_id: str) -> TimebackTestAssignment:
+        """Get a test assignment by ID.
+
+        Args:
+            assignment_id: The test assignment sourcedId
+
+        Returns:
+            TimebackTestAssignment with assignment details
+        """
+        return get_test_assignment_endpoint(self._http, assignment_id)
+
+    def update_test_assignment(
+        self, assignment_id: str, request: TimebackUpdateTestAssignmentRequest
+    ) -> None:
+        """Update a test assignment.
+
+        Currently only supports updating the test name.
+
+        Args:
+            assignment_id: The test assignment sourcedId
+            request: Request with testName
+
+        Returns:
+            None (204 response)
+        """
+        return update_test_assignment_endpoint(self._http, assignment_id, request)
+
+    def delete_test_assignment(self, assignment_id: str) -> None:
+        """Delete a test assignment.
+
+        Soft deletes a test assignment by ID.
+
+        Args:
+            assignment_id: The test assignment sourcedId
+
+        Returns:
+            None (204 response)
+        """
+        return delete_test_assignment_endpoint(self._http, assignment_id)
 

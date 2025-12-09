@@ -20,6 +20,7 @@ from .timeback_question_type import TimebackQuestionType
 from .timeback_resource_sub_type import TimebackResourceSubType
 from .timeback_resource_type import TimebackResourceType
 from .timeback_subject import TimebackSubject
+from .timeback_grade import TimebackGrade
 
 __all__ = [
     "TimebackRoleName",
@@ -44,4 +45,5 @@ __all__ = [
     "TimebackResourceSubType",
     "TimebackResourceType",
     "TimebackSubject",
+    "TimebackGrade",
 ]
