@@ -198,6 +198,7 @@ from .timeback_reset_user_placement_request import TimebackResetUserPlacementReq
 from .timeback_create_lesson_plan_request import TimebackCreateLessonPlanRequest
 from .timeback_start_test_out_request import TimebackStartTestOutRequest
 from .timeback_get_tree_request import TimebackGetTreeRequest
+from .timeback_store_operation_request import TimebackStoreOperationRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -377,4 +378,5 @@ __all__ = [
     "TimebackCreateLessonPlanRequest",
     "TimebackStartTestOutRequest",
     "TimebackGetTreeRequest",
+    "TimebackStoreOperationRequest",
 ]

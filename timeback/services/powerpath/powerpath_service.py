@@ -32,6 +32,7 @@ from timeback.models.request import (
     TimebackCreateLessonPlanRequest,
     TimebackStartTestOutRequest,
     TimebackGetTreeRequest,
+    TimebackStoreOperationRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -47,6 +48,10 @@ from timeback.models.response import (
     TimebackResetUserPlacementResponse,
     TimebackCreateLessonPlanResponse,
     TimebackStartTestOutResponse,
+    TimebackGetOperationsResponse,
+    TimebackStoreOperationResponse,
+    TimebackSyncOperationsResponse,
+    TimebackSyncCourseLessonPlansResponse,
 )
 from timeback.models import TimebackScreeningSession, LessonPlan
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
@@ -106,6 +111,24 @@ from timeback.services.powerpath.endpoints.start_test_out import (
 )
 from timeback.services.powerpath.endpoints.get_tree import (
     get_tree as get_tree_endpoint,
+)
+from timeback.services.powerpath.endpoints.delete_lesson_plans_by_course_id import (
+    delete_lesson_plans_by_course_id as delete_lesson_plans_by_course_id_endpoint,
+)
+from timeback.services.powerpath.endpoints.store_operation import (
+    store_operation as store_operation_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_operations import (
+    get_operations as get_operations_endpoint,
+)
+from timeback.services.powerpath.endpoints.sync_operations import (
+    sync_operations as sync_operations_endpoint,
+)
+from timeback.services.powerpath.endpoints.recreate_lesson_plan import (
+    recreate_lesson_plan as recreate_lesson_plan_endpoint,
+)
+from timeback.services.powerpath.endpoints.sync_course_lesson_plans import (
+    sync_course_lesson_plans as sync_course_lesson_plans_endpoint,
 )
 
 
@@ -518,13 +541,100 @@ class PowerPathService:
         """
         return get_tree_endpoint(self._http, request)
 
+    def delete_lesson_plans_by_course_id(self, course_id: str) -> None:
+        """Delete all lesson plans for a course.
+
+        This is a destructive operation that removes all lesson plans
+        associated with the specified course.
+
+        Args:
+            course_id: The sourcedId of the course
+
+        Returns:
+            None (HTTP 204 - no content)
+        """
+        return delete_lesson_plans_by_course_id_endpoint(self._http, course_id)
+
+    def store_operation(
+        self, request: TimebackStoreOperationRequest
+    ) -> TimebackStoreOperationResponse:
+        """Store an operation on a lesson plan.
+
+        Available operation types:
+        - set-skipped: Show/hide content for the student
+        - move-item-before/after: Reorder content
+        - move-item-to-start/end: Move to beginning/end
+        - add-custom-resource: Add additional resources
+        - change-item-parent: Move to different sections
+
+        Args:
+            request: Request containing lessonPlanId, operation, and optional reason
+
+        Returns:
+            TimebackStoreOperationResponse with success status and operationId
+        """
+        return store_operation_endpoint(self._http, request)
+
+    def get_operations(self, lesson_plan_id: str) -> TimebackGetOperationsResponse:
+        """Get all operations for a lesson plan.
+
+        Returns operations in chronological order for audit trails,
+        history tracking, and debugging.
+
+        Args:
+            lesson_plan_id: The ID of the lesson plan
+
+        Returns:
+            TimebackGetOperationsResponse containing list of operations
+        """
+        return get_operations_endpoint(self._http, lesson_plan_id)
+
+    def sync_operations(self, lesson_plan_id: str) -> TimebackSyncOperationsResponse:
+        """Sync pending operations for a lesson plan.
+
+        Applies operations that haven't been applied yet to update
+        the lesson plan structure.
+
+        Args:
+            lesson_plan_id: The ID of the lesson plan
+
+        Returns:
+            TimebackSyncOperationsResponse with success status and operation results
+        """
+        return sync_operations_endpoint(self._http, lesson_plan_id)
+
+    def recreate_lesson_plan(self, lesson_plan_id: str) -> TimebackSyncOperationsResponse:
+        """Recreate a lesson plan from scratch.
+
+        Use when a lesson plan becomes corrupted or out of sync.
+        Deletes all items, rebuilds from course structure, and applies
+        all operations from the log.
+
+        Args:
+            lesson_plan_id: The ID of the lesson plan
+
+        Returns:
+            TimebackSyncOperationsResponse with success status and operation results
+        """
+        return recreate_lesson_plan_endpoint(self._http, lesson_plan_id)
+
+    def sync_course_lesson_plans(
+        self, course_id: str
+    ) -> TimebackSyncCourseLessonPlansResponse:
+        """Sync all lesson plans for a course.
+
+        Use after making structural changes to a base course to ensure
+        all students have the latest content. Maintains personalizations.
+
+        Args:
+            course_id: The sourcedId of the course
+
+        Returns:
+            TimebackSyncCourseLessonPlansResponse with list of affected lesson plan IDs
+        """
+        return sync_course_lesson_plans_endpoint(self._http, course_id)
+
     # TODO: Implement the following endpoints:
-    # - delete_lesson_plans_by_course_id: DELETE /powerpath/lessonPlans/{courseId}/deleteAll
-    # - store_operation: POST /powerpath/lessonPlans/{lessonPlanId}/operations
-    # - get_operations: GET /powerpath/lessonPlans/{lessonPlanId}/operations
-    # - sync_operations: POST /powerpath/lessonPlans/{lessonPlanId}/operations/sync
-    # - recreate_lesson_plan: POST /powerpath/lessonPlans/{lessonPlanId}/recreate
-    # - sync_course_lesson_plans: POST /powerpath/lessonPlans/course/{courseId}/sync
     # - get_course_progress: GET /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}
     # - get_lesson_plan: GET /powerpath/lessonPlans/tree/{lessonPlanId}
     # - get_lesson_plan_structure: GET /powerpath/lessonPlans/tree/{lessonPlanId}/structure

@@ -29,6 +29,12 @@ from .reset_screening_session import reset_screening_session
 from .create_lesson_plan import create_lesson_plan
 from .start_test_out import start_test_out
 from .get_tree import get_tree
+from .delete_lesson_plans_by_course_id import delete_lesson_plans_by_course_id
+from .store_operation import store_operation
+from .get_operations import get_operations
+from .sync_operations import sync_operations
+from .recreate_lesson_plan import recreate_lesson_plan
+from .sync_course_lesson_plans import sync_course_lesson_plans
 
 __all__ = [
     "get_all_placement_tests",
@@ -50,5 +56,11 @@ __all__ = [
     "create_lesson_plan",
     "start_test_out",
     "get_tree",
+    "delete_lesson_plans_by_course_id",
+    "store_operation",
+    "get_operations",
+    "sync_operations",
+    "recreate_lesson_plan",
+    "sync_course_lesson_plans",
 ]
 

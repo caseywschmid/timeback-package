@@ -104,6 +104,17 @@ from .timeback_get_test_out_response import TimebackGetTestOutResponse
 from .timeback_reset_user_placement_response import TimebackResetUserPlacementResponse
 from .timeback_create_lesson_plan_response import TimebackCreateLessonPlanResponse
 from .timeback_start_test_out_response import TimebackStartTestOutResponse
+from .timeback_get_operations_response import (
+    TimebackGetOperationsResponse,
+    TimebackLessonPlanOperation,
+)
+from .timeback_store_operation_response import TimebackStoreOperationResponse
+from .timeback_sync_operations_response import (
+    TimebackSyncOperationsResponse,
+    TimebackOperationResult,
+    TimebackOperationError,
+)
+from .timeback_sync_course_lesson_plans_response import TimebackSyncCourseLessonPlansResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -206,4 +217,11 @@ __all__ = [
     "TimebackResetUserPlacementResponse",
     "TimebackCreateLessonPlanResponse",
     "TimebackStartTestOutResponse",
+    "TimebackGetOperationsResponse",
+    "TimebackLessonPlanOperation",
+    "TimebackStoreOperationResponse",
+    "TimebackSyncOperationsResponse",
+    "TimebackOperationResult",
+    "TimebackOperationError",
+    "TimebackSyncCourseLessonPlansResponse",
 ]

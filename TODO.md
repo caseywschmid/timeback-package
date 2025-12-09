@@ -468,24 +468,24 @@
 
 ### /powerpath/lessonPlans/{courseId}/deleteAll:
 
-- [ ] `delete_lesson_plans_by_course_id`
+- [x] `delete_lesson_plans_by_course_id`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/operations:
 
-- [ ] `store_operation`
-- [ ] `get_operations`
+- [x] `store_operation`
+- [x] `get_operations`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/operations/sync:
 
-- [ ] `sync_operations`
+- [x] `sync_operations`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/recreate:
 
-- [ ] `recreate_lesson_plan`
+- [x] `recreate_lesson_plan`
 
 ### /powerpath/lessonPlans/course/{courseId}/sync:
 
-- [ ] `sync_course_lesson_plans`
+- [x] `sync_course_lesson_plans`
 
 ### /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}:
 
