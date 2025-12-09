@@ -392,35 +392,35 @@
 
 ### /powerpath/placement/getAllPlacementTests:
 
-- [ ] `get_all_placement_tests`
+- [x] `get_all_placement_tests`
 
 ### /powerpath/placement/getCurrentLevel:
 
-- [ ] `get_current_level`
+- [x] `get_current_level`
 
 ### /powerpath/placement/getNextPlacementTest:
 
-- [ ] `get_next_placement_test`
+- [x] `get_next_placement_test`
 
 ### /powerpath/placement/getSubjectProgress:
 
-- [ ] `get_subject_progress`
+- [x] `get_subject_progress`
 
 ### /powerpath/screening/results/{userId}:
 
-- [ ] `get_results`
+- [x] `get_screening_results`
 
 ### /powerpath/screening/session/{userId}:
 
-- [ ] `get_session`
+- [x] `get_screening_session`
 
 ### /powerpath/screening/tests/assign:
 
-- [ ] `assign_test`
+- [x] `assign_screening_test`
 
 ### /powerpath/createExternalPlacementTest:
 
-- [ ] `create_external_placement_test`
+- [x] `create_external_placement_test`
 
 ### /powerpath/createExternalTestOut:
 
