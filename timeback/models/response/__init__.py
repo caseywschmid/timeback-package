@@ -85,6 +85,13 @@ from .timeback_get_all_academic_sessions_response import TimebackGetAllAcademicS
 from .timeback_create_academic_session_response import TimebackCreateAcademicSessionResponse
 from .timeback_get_academic_session_response import TimebackGetAcademicSessionResponse
 from .timeback_update_academic_session_response import TimebackUpdateAcademicSessionResponse
+# PowerPath responses
+from .timeback_get_all_placement_tests_response import TimebackGetAllPlacementTestsResponse
+from .timeback_get_current_level_response import TimebackGetCurrentLevelResponse
+from .timeback_get_next_placement_test_response import TimebackGetNextPlacementTestResponse
+from .timeback_get_subject_progress_response import TimebackGetSubjectProgressResponse
+from .timeback_get_screening_results_response import TimebackGetScreeningResultsResponse
+from .timeback_create_external_test_response import TimebackCreateExternalTestResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -172,4 +179,11 @@ __all__ = [
     "TimebackCreateAcademicSessionResponse",
     "TimebackGetAcademicSessionResponse",
     "TimebackUpdateAcademicSessionResponse",
+    # PowerPath responses
+    "TimebackGetAllPlacementTestsResponse",
+    "TimebackGetCurrentLevelResponse",
+    "TimebackGetNextPlacementTestResponse",
+    "TimebackGetSubjectProgressResponse",
+    "TimebackGetScreeningResultsResponse",
+    "TimebackCreateExternalTestResponse",
 ]

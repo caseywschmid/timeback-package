@@ -62,6 +62,16 @@ from .timeback_enrollment import TimebackEnrollment
 from .timeback_sourced_id_pairs import TimebackSourcedIdPairs
 from .timeback_result import TimebackResult
 from .timeback_category import TimebackCategory
+from .timeback_placement_test import TimebackPlacementTest
+from .timeback_subject_progress import (
+    TimebackSubjectProgressCourse,
+    TimebackSubjectProgressItem,
+)
+from .timeback_screening_result import TimebackScreeningResult
+from .timeback_screening_session import (
+    TimebackScreeningSession,
+    TimebackScreeningSessionAssignment,
+)
 from .request import TimebackUpdateUserRequest
 from .response import TimebackUpdateUserResponse
 
@@ -129,4 +139,10 @@ __all__ = [
     "TimebackSourcedIdPairs",
     "TimebackResult",
     "TimebackCategory",
+    "TimebackPlacementTest",
+    "TimebackSubjectProgressCourse",
+    "TimebackSubjectProgressItem",
+    "TimebackScreeningResult",
+    "TimebackScreeningSession",
+    "TimebackScreeningSessionAssignment",
 ]
