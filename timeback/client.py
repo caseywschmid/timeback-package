@@ -4,6 +4,7 @@ from timeback.http import HttpClient
 from timeback.services.oneroster import OneRosterService
 from timeback.services.powerpath import PowerPathService
 from timeback.services.qti import QTIService
+from timeback.services.caliper import CaliperService
 
 
 class Timeback:
@@ -50,7 +51,4 @@ class Timeback:
         self.oneroster = OneRosterService(self._http_oneroster)
         self.powerpath = PowerPathService(self._http_oneroster)
         self.qti = QTIService(self._http_qti)
-
-        # Expose raw HTTP clients for backwards compatibility and Caliper (not yet scaffolded)
-        self.qti_http = self._http_qti
-        self.caliper_http = self._http_caliper
+        self.caliper = CaliperService(self._http_caliper)

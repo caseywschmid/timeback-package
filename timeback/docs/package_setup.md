@@ -12,6 +12,7 @@ This document explains how the client initializes configuration, authentication,
   - `OneRosterService` in `timeback/services/oneroster/oneroster.py` with `RosteringService`, `GradebookService`, and `ResourcesService`
   - `PowerPathService` in `timeback/services/powerpath/powerpath_service.py` for placement, screening, lesson plans, and assessments
   - `QTIService` in `timeback/services/qti/qti_service.py` for stimuli, assessment items, assessment tests, and validation
+  - `CaliperService` in `timeback/services/caliper/caliper_service.py` for learning analytics events
 
 The client constructs separate `HttpClient` instances for each service family that may use different base URLs:
 - OneRoster (uses the primary API base URL)
@@ -77,8 +78,7 @@ Exposed properties:
 - `self.oneroster` → `OneRosterService(self._http_oneroster)`
 - `self.powerpath` → `PowerPathService(self._http_oneroster)` (shares HTTP client with OneRoster)
 - `self.qti` → `QTIService(self._http_qti)` (uses dedicated QTI base URL)
-- `self.qti_http` → raw `HttpClient` for QTI base URL (for backwards compatibility)
-- `self.caliper_http` → raw `HttpClient` for Caliper base URL
+- `self.caliper` → `CaliperService(self._http_caliper)` (uses dedicated Caliper base URL)
 
 `HttpClient` performs bearer auth header injection and basic retry handling for GET requests, and raises typed errors for common failure cases.
 
@@ -135,12 +135,23 @@ Available endpoints (examples - to be implemented):
 - `client.qti.get_assessment_test(request)`
 - `client.qti.validate_xml(request)`
 
-### Caliper Access Point
+### Caliper Service Exposure
 
-Caliper is not yet scaffolded as a service. For now, the client exposes the configured HTTP client:
-- `client.caliper_http` (use for calls to the Caliper API base)
+File: `timeback/services/caliper/caliper_service.py`
 
-This lets you start integrating quickly while keeping the codebase modular for future service classes.
+The Caliper service provides methods for managing learning analytics events following the IMS Caliper Analytics specification:
+- **Events**: `create_caliper_event`, `validate_caliper_event`, `list_caliper_events`
+
+Caliper events capture learning activities such as assessment events, navigation events, session events, media events, and more.
+
+Caliper uses a dedicated base URL separate from OneRoster:
+- Production: `https://caliper.alpha-1edtech.ai`
+- Staging: `https://caliper-staging.alpha-1edtech.ai`
+
+Available endpoints (examples - to be implemented):
+- `client.caliper.create_caliper_event(request)`
+- `client.caliper.validate_caliper_event(request)`
+- `client.caliper.list_caliper_events(request)`
 
 ### Usage Examples
 
@@ -161,6 +172,10 @@ user = client.oneroster.rostering.get_user(request)
 # QTI endpoints (when implemented)
 # items = client.qti.search_assessment_items(request)
 # test = client.qti.get_assessment_test(request)
+
+# Caliper endpoints (when implemented)
+# event = client.caliper.create_caliper_event(request)
+# events = client.caliper.list_caliper_events(request)
 ```
 
 Override QTI and Caliper base URLs explicitly via constructor:
@@ -180,8 +195,8 @@ user = client.oneroster.rostering.get_user("sourced-id")
 # QTI service (when endpoints are implemented)
 # items = client.qti.search_assessment_items(request)
 
-# Raw HTTP client for Caliper (service class can be added later)
-caliper_status = client.caliper_http.get("/status")
+# Caliper service (when endpoints are implemented)
+# event = client.caliper.create_caliper_event(request)
 ```
 
 Override via environment variables:
@@ -199,8 +214,8 @@ export TIMEBACK_CALIPER_API_BASE_URL=https://caliper.custom.example.com
 
 - Implement remaining PowerPath endpoints (placement, screening, lesson plans, assessments).
 - Implement QTI endpoints (stimuli, assessment items, assessment tests, validation).
+- Implement Caliper endpoints (create, validate, list events).
 - Introduce separate token providers if QTI/Caliper require distinct IDPs.
-- Add dedicated service class for Caliper.
 - Add dedicated service classes for CASE API.
 - Extend `HttpClient` with additional HTTP verbs as new write endpoints are added.
 
