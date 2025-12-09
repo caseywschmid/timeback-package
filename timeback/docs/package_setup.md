@@ -8,10 +8,13 @@ This document explains how the client initializes configuration, authentication,
 - **Configuration**: `Settings` in `timeback/config.py`
 - **Auth**: OAuth2 Client Credentials via `OAuth2ClientCredentials` in `timeback/auth.py`
 - **HTTP**: `HttpClient` in `timeback/http/http.py`
-- **Services**: `OneRosterService` in `timeback/services/oneroster/oneroster.py` with `RosteringService` and the `get_user` endpoint available today
+- **Services**: 
+  - `OneRosterService` in `timeback/services/oneroster/oneroster.py` with `RosteringService`, `GradebookService`, and `ResourcesService`
+  - `PowerPathService` in `timeback/services/powerpath/powerpath_service.py` for placement, screening, lesson plans, and assessments
 
 The client constructs separate `HttpClient` instances for each service family that may use different base URLs:
 - OneRoster (uses the primary API base URL)
+- PowerPath (shares the primary API base URL with OneRoster)
 - QTI (dedicated base URL)
 - Caliper (dedicated base URL)
 
@@ -71,6 +74,7 @@ On initialization, the client creates one token provider and three HTTP clients:
 
 Exposed properties:
 - `self.oneroster` → `OneRosterService(self._http_oneroster)`
+- `self.powerpath` → `PowerPathService(self._http_oneroster)` (shares HTTP client with OneRoster)
 - `self.qti_http` → raw `HttpClient` for QTI base URL
 - `self.caliper_http` → raw `HttpClient` for Caliper base URL
 
@@ -82,9 +86,30 @@ File: `timeback/services/oneroster/oneroster.py`
 
 The OneRoster container currently exposes:
 - `self.rostering` → `RosteringService`
+- `self.gradebook` → `GradebookService`
+- `self.resources` → `ResourcesService`
 
-Available endpoint today (example):
-- `client.oneroster.rostering.get_user(sourced_id)`
+Available endpoints (examples):
+- `client.oneroster.rostering.get_user(request)`
+- `client.oneroster.gradebook.get_all_categories(request)`
+- `client.oneroster.resources.get_resource(request)`
+
+### PowerPath Service Exposure
+
+File: `timeback/services/powerpath/powerpath_service.py`
+
+The PowerPath service provides methods for:
+- **Placement**: `get_all_placement_tests`, `get_current_level`, `get_next_placement_test`, `get_subject_progress`
+- **Screening**: `get_results`, `get_session`, `assign_test`
+- **Lesson Plans**: `create_lesson_plan`, `get_tree`, `get_operations`, `sync_operations`, `get_course_progress`, etc.
+- **Assessments**: `create_new_attempt`, `get_next_question`, `update_student_question_response`, etc.
+
+PowerPath uses the same base URL as OneRoster (`/powerpath/...` on `api.alpha-1edtech.ai`).
+
+Available endpoints (examples - to be implemented):
+- `client.powerpath.get_all_placement_tests(request)`
+- `client.powerpath.get_lesson_plan(request)`
+- `client.powerpath.create_new_attempt(request)`
 
 ### QTI and Caliper Access Points
 
@@ -102,7 +127,13 @@ Basic initialization using environment variables only:
 from timeback import Timeback
 
 client = Timeback()
-user = client.oneroster.rostering.get_user("sourced-id")
+
+# OneRoster endpoints
+user = client.oneroster.rostering.get_user(request)
+
+# PowerPath endpoints (when implemented)
+# placement_tests = client.powerpath.get_all_placement_tests(request)
+# lesson_plan = client.powerpath.get_lesson_plan(request)
 ```
 
 Override QTI and Caliper base URLs explicitly via constructor:
@@ -137,8 +168,10 @@ export TIMEBACK_CALIPER_API_BASE_URL=https://caliper.custom.example.com
 
 ### Future Extensions
 
+- Implement remaining PowerPath endpoints (placement, screening, lesson plans, assessments).
 - Introduce separate token providers if QTI/Caliper require distinct IDPs.
 - Add dedicated service classes and endpoint modules for QTI and Caliper.
+- Add dedicated service classes for CASE API.
 - Extend `HttpClient` with additional HTTP verbs as new write endpoints are added.
 
 
