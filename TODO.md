@@ -349,14 +349,14 @@
 
 ### /ims/oneroster/rostering/v1p2/courses/component-resources
 
-- [ ] `get_all_component_resources`
-- [ ] `create_component_resource`
+- [x] `get_all_component_resources`
+- [x] `create_component_resource`
 
 ### /ims/oneroster/rostering/v1p2/courses/component-resources/{sourcedId}
 
-- [ ] `get_component_resource`
-- [ ] `put_component_resource`
-- [ ] `delete_component_resource`
+- [x] `get_component_resource`
+- [x] `put_component_resource`
+- [x] `delete_component_resource`
 
 ### /ims/oneroster/rostering/v1p2/courses/components
 

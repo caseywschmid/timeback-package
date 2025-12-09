@@ -154,6 +154,10 @@ from .timeback_create_course_request import TimebackCreateCourseRequest, Timebac
 from .timeback_get_course_request import TimebackGetCourseRequest
 from .timeback_update_course_request import TimebackUpdateCourseRequest, TimebackUpdateCourseBody
 from .timeback_get_classes_for_course_request import TimebackGetClassesForCourseRequest
+from .timeback_get_all_component_resources_request import TimebackGetAllComponentResourcesRequest
+from .timeback_create_component_resource_request import TimebackCreateComponentResourceRequest, TimebackCreateComponentResourceBody
+from .timeback_get_component_resource_request import TimebackGetComponentResourceRequest
+from .timeback_update_component_resource_request import TimebackUpdateComponentResourceRequest, TimebackUpdateComponentResourceBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -293,4 +297,10 @@ __all__ = [
     "TimebackUpdateCourseRequest",
     "TimebackUpdateCourseBody",
     "TimebackGetClassesForCourseRequest",
+    "TimebackGetAllComponentResourcesRequest",
+    "TimebackCreateComponentResourceRequest",
+    "TimebackCreateComponentResourceBody",
+    "TimebackGetComponentResourceRequest",
+    "TimebackUpdateComponentResourceRequest",
+    "TimebackUpdateComponentResourceBody",
 ]

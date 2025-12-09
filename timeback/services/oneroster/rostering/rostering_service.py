@@ -78,6 +78,10 @@ from timeback.models.request import (
     TimebackGetCourseRequest,
     TimebackUpdateCourseRequest,
     TimebackGetClassesForCourseRequest,
+    TimebackGetAllComponentResourcesRequest,
+    TimebackCreateComponentResourceRequest,
+    TimebackGetComponentResourceRequest,
+    TimebackUpdateComponentResourceRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -299,7 +303,26 @@ from timeback.services.oneroster.rostering.endpoints.delete_course import (
 from timeback.services.oneroster.rostering.endpoints.get_classes_for_course import (
     get_classes_for_course as get_classes_for_course_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_all_component_resources import (
+    get_all_component_resources as get_all_component_resources_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_component_resource import (
+    create_component_resource as create_component_resource_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_component_resource import (
+    get_component_resource as get_component_resource_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_component_resource import (
+    update_component_resource as update_component_resource_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_component_resource import (
+    delete_component_resource as delete_component_resource_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAllComponentResourcesResponse
+from timeback.models.response import TimebackCreateComponentResourceResponse
+from timeback.models.response import TimebackGetComponentResourceResponse
+from timeback.models.response import TimebackUpdateComponentResourceResponse
 from timeback.models.response import TimebackGetAllCoursesResponse
 from timeback.models.response import TimebackCreateCourseResponse
 from timeback.models.response import TimebackGetCourseResponse
@@ -751,5 +774,37 @@ class RosteringService:
     ) -> TimebackGetAllClassesResponse:
         """Fetch classes for a specific course."""
         return get_classes_for_course_endpoint(self._http, request)
+
+    # -------------------------------------------------------------------------
+    # Component Resource Endpoints
+    # -------------------------------------------------------------------------
+
+    def get_all_component_resources(
+        self, request: TimebackGetAllComponentResourcesRequest
+    ) -> TimebackGetAllComponentResourcesResponse:
+        """Fetch all component resources (paginated list)."""
+        return get_all_component_resources_endpoint(self._http, request)
+
+    def create_component_resource(
+        self, request: TimebackCreateComponentResourceRequest
+    ) -> TimebackCreateComponentResourceResponse:
+        """Create a new component resource."""
+        return create_component_resource_endpoint(self._http, request)
+
+    def get_component_resource(
+        self, request: TimebackGetComponentResourceRequest
+    ) -> TimebackGetComponentResourceResponse:
+        """Fetch a single component resource by sourcedId."""
+        return get_component_resource_endpoint(self._http, request)
+
+    def update_component_resource(
+        self, request: TimebackUpdateComponentResourceRequest
+    ) -> TimebackUpdateComponentResourceResponse:
+        """Update an existing component resource."""
+        return update_component_resource_endpoint(self._http, request)
+
+    def delete_component_resource(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) a component resource by sourcedId."""
+        return delete_component_resource_endpoint(self._http, sourced_id)
 
 
