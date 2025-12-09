@@ -406,6 +406,14 @@
 
 - [x] `get_subject_progress`
 
+### /powerpath/placement/resetUserPlacement:
+
+- [ ] `reset_user_placement`
+
+### /powerpath/placement/{studentId}:
+
+- [ ] `get_student_placement_data`
+
 ### /powerpath/screening/results/{userId}:
 
 - [x] `get_screening_results`
@@ -418,33 +426,41 @@
 
 - [x] `assign_screening_test`
 
+### /powerpath/screening/session/reset:
+
+- [ ] `reset_screening_session`
+
 ### /powerpath/createExternalPlacementTest:
 
 - [x] `create_external_placement_test`
 
 ### /powerpath/createExternalTestOut:
 
-- [ ] `create_external_test_out`
+- [x] `create_external_test_out` (DEPRECATED - use startTestOut)
 
 ### /powerpath/createInternalTest:
 
-- [ ] `create_internal_test`
+- [x] `create_internal_test`
 
 ### /powerpath/importExternalTestAssignmentResults:
 
-- [ ] `import_external_test_assignment_results`
+- [x] `import_external_test_assignment_results`
 
 ### /powerpath/makeExternalTestAssignment:
 
-- [ ] `make_external_test_assignment`
+- [x] `make_external_test_assignment`
 
 ### /powerpath/testOut:
 
-- [ ] `test_out`
+- [x] `get_test_out` (DEPRECATED - use getCourseProgress)
 
 ### /powerpath/lessonPlans/:
 
 - [ ] `create_lesson_plan`
+
+### /powerpath/lessonPlans/startTestOut:
+
+- [ ] `start_test_out`
 
 ### /powerpath/lessonPlans/{courseId}/{userId}:
 
@@ -518,6 +534,28 @@
 ### /powerpath/updateStudentQuestionResponse:
 
 - [ ] `update_student_question_response`
+
+### /powerpath/test-assignments:
+
+- [ ] `create_test_assignment`
+
+### /powerpath/test-assignments/admin:
+
+- [ ] `list_all_test_assignments`
+
+### /powerpath/test-assignments/bulk:
+
+- [ ] `create_bulk_test_assignments`
+
+### /powerpath/test-assignments/import:
+
+- [ ] `import_test_assignments`
+
+### /powerpath/test-assignments/{id}:
+
+- [ ] `get_test_assignment`
+- [ ] `update_test_assignment`
+- [ ] `delete_test_assignment`
 
 ## QTI API - All Endpoints
 
