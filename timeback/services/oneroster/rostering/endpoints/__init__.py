@@ -72,6 +72,11 @@ from timeback.services.oneroster.rostering.endpoints.create_component_resource i
 from timeback.services.oneroster.rostering.endpoints.get_component_resource import get_component_resource
 from timeback.services.oneroster.rostering.endpoints.update_component_resource import update_component_resource
 from timeback.services.oneroster.rostering.endpoints.delete_component_resource import delete_component_resource
+from timeback.services.oneroster.rostering.endpoints.get_all_course_components import get_all_course_components
+from timeback.services.oneroster.rostering.endpoints.create_course_component import create_course_component
+from timeback.services.oneroster.rostering.endpoints.get_course_component import get_course_component
+from timeback.services.oneroster.rostering.endpoints.update_course_component import update_course_component
+from timeback.services.oneroster.rostering.endpoints.delete_course_component import delete_course_component
 
 __all__ = [
     "get_user", 
@@ -148,4 +153,9 @@ __all__ = [
     "get_component_resource",
     "update_component_resource",
     "delete_component_resource",
+    "get_all_course_components",
+    "create_course_component",
+    "get_course_component",
+    "update_course_component",
+    "delete_course_component",
 ]

@@ -360,14 +360,14 @@
 
 ### /ims/oneroster/rostering/v1p2/courses/components
 
-- [ ] `get_all_course_components`
-- [ ] `create_course_component`
+- [x] `get_all_course_components`
+- [x] `create_course_component`
 
 ### /ims/oneroster/rostering/v1p2/courses/components/{sourcedId}
 
-- [ ] `get_course_component`
-- [ ] `put_course_component`
-- [ ] `delete_course_component`
+- [x] `get_course_component`
+- [x] `put_course_component`
+- [x] `delete_course_component`
 
 ### /ims/oneroster/rostering/v1p2/courses/structure
 
