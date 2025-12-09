@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "timeback"
-version = "0.1.5"
+version = "0.2.0"
 description = "A Python client for the TimeBack API (OneRoster 1.2 implementation)"
 authors = ["Casey Schmid <casey.schmid@2hourlearning.com>"]
 readme = "README.md"
