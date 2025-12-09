@@ -11,6 +11,7 @@ This document explains how the client initializes configuration, authentication,
 - **Services**: 
   - `OneRosterService` in `timeback/services/oneroster/oneroster.py` with `RosteringService`, `GradebookService`, and `ResourcesService`
   - `PowerPathService` in `timeback/services/powerpath/powerpath_service.py` for placement, screening, lesson plans, and assessments
+  - `QTIService` in `timeback/services/qti/qti_service.py` for stimuli, assessment items, assessment tests, and validation
 
 The client constructs separate `HttpClient` instances for each service family that may use different base URLs:
 - OneRoster (uses the primary API base URL)
@@ -75,7 +76,8 @@ On initialization, the client creates one token provider and three HTTP clients:
 Exposed properties:
 - `self.oneroster` → `OneRosterService(self._http_oneroster)`
 - `self.powerpath` → `PowerPathService(self._http_oneroster)` (shares HTTP client with OneRoster)
-- `self.qti_http` → raw `HttpClient` for QTI base URL
+- `self.qti` → `QTIService(self._http_qti)` (uses dedicated QTI base URL)
+- `self.qti_http` → raw `HttpClient` for QTI base URL (for backwards compatibility)
 - `self.caliper_http` → raw `HttpClient` for Caliper base URL
 
 `HttpClient` performs bearer auth header injection and basic retry handling for GET requests, and raises typed errors for common failure cases.
@@ -111,10 +113,31 @@ Available endpoints (examples - to be implemented):
 - `client.powerpath.get_lesson_plan(request)`
 - `client.powerpath.create_new_attempt(request)`
 
-### QTI and Caliper Access Points
+### QTI Service Exposure
 
-We intentionally do not scaffold QTI/Caliper services yet. For now, the client exposes the configured HTTP clients:
-- `client.qti_http` (use for calls to the QTI API base)
+File: `timeback/services/qti/qti_service.py`
+
+The QTI service provides methods for managing Question and Test Interoperability content:
+- **Stimuli**: `search_stimuli`, `create_stimulus`, `get_stimulus`, `update_stimulus`, `delete_stimulus`
+- **Assessment Items**: `search_assessment_items`, `create_assessment_item`, `get_assessment_item`, `process_response`, etc.
+- **Assessment Tests**: `search_assessment_tests`, `create_assessment_test`, `get_assessment_test`, `get_all_questions`, etc.
+- **Test Parts**: `search_test_parts`, `create_test_part`, `get_test_part`, etc.
+- **Sections**: `search_sections`, `create_section`, `add_assessment_item`, `update_assessment_item_order`, etc.
+- **Feedback**: `create_question_feedback`, `create_lesson_feedback`, `get_feedback_by_lesson_id`, `delete_feedback`
+- **Validation**: `validate_xml`, `validate_batch`
+
+QTI uses a dedicated base URL separate from OneRoster:
+- Production: `https://qti.alpha-1edtech.ai/api`
+- Staging: `https://qti-staging.alpha-1edtech.ai/api`
+
+Available endpoints (examples - to be implemented):
+- `client.qti.search_assessment_items(request)`
+- `client.qti.get_assessment_test(request)`
+- `client.qti.validate_xml(request)`
+
+### Caliper Access Point
+
+Caliper is not yet scaffolded as a service. For now, the client exposes the configured HTTP client:
 - `client.caliper_http` (use for calls to the Caliper API base)
 
 This lets you start integrating quickly while keeping the codebase modular for future service classes.
@@ -134,6 +157,10 @@ user = client.oneroster.rostering.get_user(request)
 # PowerPath endpoints (when implemented)
 # placement_tests = client.powerpath.get_all_placement_tests(request)
 # lesson_plan = client.powerpath.get_lesson_plan(request)
+
+# QTI endpoints (when implemented)
+# items = client.qti.search_assessment_items(request)
+# test = client.qti.get_assessment_test(request)
 ```
 
 Override QTI and Caliper base URLs explicitly via constructor:
@@ -150,8 +177,10 @@ client = Timeback(
 # Existing OneRoster endpoint
 user = client.oneroster.rostering.get_user("sourced-id")
 
-# Raw HTTP clients for QTI / Caliper (service classes can be added later)
-qti_health = client.qti_http.get("/health")
+# QTI service (when endpoints are implemented)
+# items = client.qti.search_assessment_items(request)
+
+# Raw HTTP client for Caliper (service class can be added later)
 caliper_status = client.caliper_http.get("/status")
 ```
 
@@ -169,8 +198,9 @@ export TIMEBACK_CALIPER_API_BASE_URL=https://caliper.custom.example.com
 ### Future Extensions
 
 - Implement remaining PowerPath endpoints (placement, screening, lesson plans, assessments).
+- Implement QTI endpoints (stimuli, assessment items, assessment tests, validation).
 - Introduce separate token providers if QTI/Caliper require distinct IDPs.
-- Add dedicated service classes and endpoint modules for QTI and Caliper.
+- Add dedicated service class for Caliper.
 - Add dedicated service classes for CASE API.
 - Extend `HttpClient` with additional HTTP verbs as new write endpoints are added.
 

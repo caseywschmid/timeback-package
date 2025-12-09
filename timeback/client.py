@@ -3,6 +3,7 @@ from timeback.auth import OAuth2ClientCredentials
 from timeback.http import HttpClient
 from timeback.services.oneroster import OneRosterService
 from timeback.services.powerpath import PowerPathService
+from timeback.services.qti import QTIService
 
 
 class Timeback:
@@ -48,7 +49,8 @@ class Timeback:
         # Expose services
         self.oneroster = OneRosterService(self._http_oneroster)
         self.powerpath = PowerPathService(self._http_oneroster)
+        self.qti = QTIService(self._http_qti)
 
-        # Expose raw HTTP clients for future QTI/Caliper services without scaffolding now
+        # Expose raw HTTP clients for backwards compatibility and Caliper (not yet scaffolded)
         self.qti_http = self._http_qti
         self.caliper_http = self._http_caliper
