@@ -408,11 +408,11 @@
 
 ### /powerpath/placement/resetUserPlacement:
 
-- [ ] `reset_user_placement`
+- [x] `reset_user_placement`
 
 ### /powerpath/placement/{studentId}:
 
-- [ ] `get_student_placement_data`
+- [x] `get_student_placement_data`
 
 ### /powerpath/screening/results/{userId}:
 
@@ -428,7 +428,7 @@
 
 ### /powerpath/screening/session/reset:
 
-- [ ] `reset_screening_session`
+- [x] `reset_screening_session`
 
 ### /powerpath/createExternalPlacementTest:
 
