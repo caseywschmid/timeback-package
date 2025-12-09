@@ -456,15 +456,15 @@
 
 ### /powerpath/lessonPlans/:
 
-- [ ] `create_lesson_plan`
+- [x] `create_lesson_plan`
 
 ### /powerpath/lessonPlans/startTestOut:
 
-- [ ] `start_test_out`
+- [x] `start_test_out`
 
 ### /powerpath/lessonPlans/{courseId}/{userId}:
 
-- [ ] `get_tree`
+- [x] `get_tree`
 
 ### /powerpath/lessonPlans/{courseId}/deleteAll:
 
