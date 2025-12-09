@@ -92,6 +92,15 @@ from .timeback_get_next_placement_test_response import TimebackGetNextPlacementT
 from .timeback_get_subject_progress_response import TimebackGetSubjectProgressResponse
 from .timeback_get_screening_results_response import TimebackGetScreeningResultsResponse
 from .timeback_create_external_test_response import TimebackCreateExternalTestResponse
+from .timeback_create_internal_test_response import TimebackCreateInternalTestResponse
+from .timeback_import_external_test_assignment_results_response import (
+    TimebackImportExternalTestAssignmentResultsResponse,
+    TimebackExternalTestCredentials,
+)
+from .timeback_make_external_test_assignment_response import (
+    TimebackMakeExternalTestAssignmentResponse,
+)
+from .timeback_get_test_out_response import TimebackGetTestOutResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -186,4 +195,9 @@ __all__ = [
     "TimebackGetSubjectProgressResponse",
     "TimebackGetScreeningResultsResponse",
     "TimebackCreateExternalTestResponse",
+    "TimebackCreateInternalTestResponse",
+    "TimebackImportExternalTestAssignmentResultsResponse",
+    "TimebackExternalTestCredentials",
+    "TimebackMakeExternalTestAssignmentResponse",
+    "TimebackGetTestOutResponse",
 ]

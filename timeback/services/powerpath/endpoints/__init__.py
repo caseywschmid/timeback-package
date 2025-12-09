@@ -18,6 +18,11 @@ from .get_screening_results import get_screening_results
 from .get_screening_session import get_screening_session
 from .assign_screening_test import assign_screening_test
 from .create_external_placement_test import create_external_placement_test
+from .create_external_test_out import create_external_test_out
+from .create_internal_test import create_internal_test
+from .import_external_test_assignment_results import import_external_test_assignment_results
+from .make_external_test_assignment import make_external_test_assignment
+from .get_test_out import get_test_out
 
 __all__ = [
     "get_all_placement_tests",
@@ -28,5 +33,10 @@ __all__ = [
     "get_screening_session",
     "assign_screening_test",
     "create_external_placement_test",
+    "create_external_test_out",
+    "create_internal_test",
+    "import_external_test_assignment_results",
+    "make_external_test_assignment",
+    "get_test_out",
 ]
 

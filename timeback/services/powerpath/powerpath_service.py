@@ -14,6 +14,7 @@ Used by:
 """
 
 from timeback.http import HttpClient
+from typing import Union
 from timeback.models.request import (
     TimebackGetAllPlacementTestsRequest,
     TimebackGetCurrentLevelRequest,
@@ -21,6 +22,12 @@ from timeback.models.request import (
     TimebackGetSubjectProgressRequest,
     TimebackAssignScreeningTestRequest,
     TimebackCreateExternalPlacementTestRequest,
+    TimebackCreateExternalTestOutRequest,
+    TimebackCreateInternalQtiTestRequest,
+    TimebackCreateInternalAssessmentBankTestRequest,
+    TimebackImportExternalTestAssignmentResultsRequest,
+    TimebackMakeExternalTestAssignmentRequest,
+    TimebackGetTestOutRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -29,6 +36,10 @@ from timeback.models.response import (
     TimebackGetSubjectProgressResponse,
     TimebackGetScreeningResultsResponse,
     TimebackCreateExternalTestResponse,
+    TimebackCreateInternalTestResponse,
+    TimebackImportExternalTestAssignmentResultsResponse,
+    TimebackMakeExternalTestAssignmentResponse,
+    TimebackGetTestOutResponse,
 )
 from timeback.models import TimebackScreeningSession
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
@@ -54,6 +65,21 @@ from timeback.services.powerpath.endpoints.assign_screening_test import (
 )
 from timeback.services.powerpath.endpoints.create_external_placement_test import (
     create_external_placement_test as create_external_placement_test_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_external_test_out import (
+    create_external_test_out as create_external_test_out_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_internal_test import (
+    create_internal_test as create_internal_test_endpoint,
+)
+from timeback.services.powerpath.endpoints.import_external_test_assignment_results import (
+    import_external_test_assignment_results as import_external_test_assignment_results_endpoint,
+)
+from timeback.services.powerpath.endpoints.make_external_test_assignment import (
+    make_external_test_assignment as make_external_test_assignment_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_test_out import (
+    get_test_out as get_test_out_endpoint,
 )
 
 
@@ -231,13 +257,6 @@ class PowerPathService:
     # ==========================================================================
     # Endpoints for managing external tests and test assignments.
     # Base path: /powerpath/...
-    #
-    # TODO: Implement the following endpoints:
-    # - create_external_test_out: POST /powerpath/createExternalTestOut
-    # - create_internal_test: POST /powerpath/createInternalTest
-    # - import_external_test_assignment_results: POST /powerpath/importExternalTestAssignmentResults
-    # - make_external_test_assignment: POST /powerpath/makeExternalTestAssignment
-    # - test_out: POST /powerpath/testOut
     # ==========================================================================
 
     def create_external_placement_test(
@@ -260,6 +279,109 @@ class PowerPathService:
             TimebackCreateExternalTestResponse containing lessonId, courseComponentId, resourceId
         """
         return create_external_placement_test_endpoint(self._http, request)
+
+    def create_external_test_out(
+        self, request: TimebackCreateExternalTestOutRequest
+    ) -> TimebackCreateExternalTestResponse:
+        """Create an external test-out lesson for a course.
+
+        **DEPRECATED**: This endpoint is deprecated. Use start_test_out() instead.
+        
+        Migration flow:
+        1. Check availability: get_course_progress(courseId, studentId)
+        2. Start test-out: start_test_out(courseId, studentId)
+        3. Launch test: make_external_test_assignment(...)
+
+        Creates or updates a ComponentResource to act as a TestOut lesson.
+
+        Args:
+            request: Request containing courseId, toolProvider, grades, xp, and optional metadata
+
+        Returns:
+            TimebackCreateExternalTestResponse containing lessonId, courseComponentId, resourceId
+        """
+        return create_external_test_out_endpoint(self._http, request)
+
+    def create_internal_test(
+        self,
+        request: Union[TimebackCreateInternalQtiTestRequest, TimebackCreateInternalAssessmentBankTestRequest],
+    ) -> TimebackCreateInternalTestResponse:
+        """Create an internal test lesson for a course.
+
+        Supports two test types:
+        - QTI (testType="qti"): Creates a single QTI resource
+        - Assessment Bank (testType="assessment-bank"): Creates multiple QTI resources in a bank
+
+        For test-out and placement lessons, this updates existing tests of the same type.
+        For other lesson types (quiz, unit-test, pp-100), it creates new lessons.
+
+        Args:
+            request: Request containing courseId, lessonType, testType, and QTI/assessment-bank config
+
+        Returns:
+            TimebackCreateInternalTestResponse containing lessonId, courseComponentId, resourceId
+        """
+        return create_internal_test_endpoint(self._http, request)
+
+    def import_external_test_assignment_results(
+        self, request: TimebackImportExternalTestAssignmentResultsRequest
+    ) -> TimebackImportExternalTestAssignmentResultsResponse:
+        """Import results from an external test assignment.
+
+        Retrieves and stores the results of an external test assignment.
+        Applies to 'test-out', 'placement', and 'unit-test' lessons.
+
+        The behavior varies by tool provider:
+        - For "edulastic": Imports results when all questions answered and grade is "GRADED"
+        - For "mastery-track": Imports results when scoreStatus is "fully graded"
+
+        May trigger automatic course enrollment if the lesson is a placement test or test-out.
+
+        Args:
+            request: Request containing student sourcedId, lesson sourcedId, and optional applicationName
+
+        Returns:
+            TimebackImportExternalTestAssignmentResultsResponse with finalized status, credentials, etc.
+        """
+        return import_external_test_assignment_results_endpoint(self._http, request)
+
+    def make_external_test_assignment(
+        self, request: TimebackMakeExternalTestAssignmentRequest
+    ) -> TimebackMakeExternalTestAssignmentResponse:
+        """Make an external test assignment for a student.
+
+        Assigns an external test to a student and returns credentials and URLs
+        needed to take the test. Applies to 'test-out', 'placement', and 'unit-test' lessons.
+
+        The behavior varies by tool provider:
+        - For "edulastic": Authenticates student, assigns test, returns credentials and IDs
+        - For "mastery-track": Authenticates student, assigns test, waits for result write-back
+
+        Args:
+            request: Request containing student, lesson, and optional test configuration
+
+        Returns:
+            TimebackMakeExternalTestAssignmentResponse with credentials, test URL, and IDs
+        """
+        return make_external_test_assignment_endpoint(self._http, request)
+
+    def get_test_out(
+        self, request: TimebackGetTestOutRequest
+    ) -> TimebackGetTestOutResponse:
+        """Get test-out information for a student and course.
+
+        **DEPRECATED**: This endpoint is deprecated. Use get_course_progress() instead.
+        The response includes a `testOut` field with comprehensive status information.
+
+        Returns the testOut lesson reference and status for a student and course.
+
+        Args:
+            request: Request containing student and course sourcedIds
+
+        Returns:
+            TimebackGetTestOutResponse with lesson info, finalized status, and credentials
+        """
+        return get_test_out_endpoint(self._http, request)
 
     # ==========================================================================
     # LESSON PLAN ENDPOINTS

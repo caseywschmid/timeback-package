@@ -176,6 +176,24 @@ from .timeback_assign_screening_test_request import TimebackAssignScreeningTestR
 from .timeback_create_external_placement_test_request import (
     TimebackCreateExternalPlacementTestRequest,
 )
+from .timeback_create_external_test_out_request import (
+    TimebackCreateExternalTestOutRequest,
+)
+from .timeback_create_internal_test_request import (
+    TimebackCreateInternalQtiTestRequest,
+    TimebackCreateInternalAssessmentBankTestRequest,
+    TimebackCreateInternalTestRequest,
+    TimebackQtiTestConfig,
+    TimebackAssessmentBankConfig,
+    TimebackAssessmentBankResource,
+)
+from .timeback_import_external_test_assignment_results_request import (
+    TimebackImportExternalTestAssignmentResultsRequest,
+)
+from .timeback_make_external_test_assignment_request import (
+    TimebackMakeExternalTestAssignmentRequest,
+)
+from .timeback_get_test_out_request import TimebackGetTestOutRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -341,4 +359,14 @@ __all__ = [
     "TimebackGetSubjectProgressRequest",
     "TimebackAssignScreeningTestRequest",
     "TimebackCreateExternalPlacementTestRequest",
+    "TimebackCreateExternalTestOutRequest",
+    "TimebackCreateInternalQtiTestRequest",
+    "TimebackCreateInternalAssessmentBankTestRequest",
+    "TimebackCreateInternalTestRequest",
+    "TimebackQtiTestConfig",
+    "TimebackAssessmentBankConfig",
+    "TimebackAssessmentBankResource",
+    "TimebackImportExternalTestAssignmentResultsRequest",
+    "TimebackMakeExternalTestAssignmentRequest",
+    "TimebackGetTestOutRequest",
 ]
