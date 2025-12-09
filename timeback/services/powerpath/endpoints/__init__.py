@@ -35,6 +35,14 @@ from .get_operations import get_operations
 from .sync_operations import sync_operations
 from .recreate_lesson_plan import recreate_lesson_plan
 from .sync_course_lesson_plans import sync_course_lesson_plans
+from .get_course_progress import get_course_progress
+from .get_lesson_plan import get_lesson_plan
+from .get_lesson_plan_structure import get_lesson_plan_structure
+from .update_student_item_response import update_student_item_response
+from .get_course_syllabus import get_course_syllabus
+from .create_new_attempt import create_new_attempt
+from .final_student_assessment_response import final_student_assessment_response
+from .get_assessment_progress import get_assessment_progress
 
 __all__ = [
     "get_all_placement_tests",
@@ -62,5 +70,13 @@ __all__ = [
     "sync_operations",
     "recreate_lesson_plan",
     "sync_course_lesson_plans",
+    "get_course_progress",
+    "get_lesson_plan",
+    "get_lesson_plan_structure",
+    "update_student_item_response",
+    "get_course_syllabus",
+    "create_new_attempt",
+    "final_student_assessment_response",
+    "get_assessment_progress",
 ]
 

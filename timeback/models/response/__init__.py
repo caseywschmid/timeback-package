@@ -115,6 +115,28 @@ from .timeback_sync_operations_response import (
     TimebackOperationError,
 )
 from .timeback_sync_course_lesson_plans_response import TimebackSyncCourseLessonPlansResponse
+from .timeback_lesson_plan_structure_response import (
+    TimebackLessonPlanStructureResponse,
+    TimebackLessonPlanStructureNode,
+    TimebackLessonPlanStructureData,
+    TimebackLessonPlanStructureWrapper,
+)
+from .timeback_course_progress_response import TimebackCourseProgressResponse
+from .timeback_update_student_item_response_response import (
+    TimebackUpdateStudentItemResponseResponse,
+)
+from .timeback_syllabus_response import TimebackSyllabusResponse
+from .timeback_create_new_attempt_response import (
+    TimebackCreateNewAttemptResponse,
+    TimebackAttemptData,
+)
+from .timeback_final_student_assessment_response import (
+    TimebackFinalStudentAssessmentResponse,
+)
+from .timeback_assessment_progress_response import (
+    TimebackAssessmentProgressResponse,
+    TimebackTestQuestion,
+)
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -224,4 +246,16 @@ __all__ = [
     "TimebackOperationResult",
     "TimebackOperationError",
     "TimebackSyncCourseLessonPlansResponse",
+    "TimebackLessonPlanStructureResponse",
+    "TimebackLessonPlanStructureNode",
+    "TimebackLessonPlanStructureData",
+    "TimebackLessonPlanStructureWrapper",
+    "TimebackCourseProgressResponse",
+    "TimebackUpdateStudentItemResponseResponse",
+    "TimebackSyllabusResponse",
+    "TimebackCreateNewAttemptResponse",
+    "TimebackAttemptData",
+    "TimebackFinalStudentAssessmentResponse",
+    "TimebackAssessmentProgressResponse",
+    "TimebackTestQuestion",
 ]

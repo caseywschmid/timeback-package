@@ -14,7 +14,7 @@ Used by:
 """
 
 from timeback.http import HttpClient
-from typing import Union
+from typing import Optional, Union
 from timeback.models.request import (
     TimebackGetAllPlacementTestsRequest,
     TimebackGetCurrentLevelRequest,
@@ -33,6 +33,9 @@ from timeback.models.request import (
     TimebackStartTestOutRequest,
     TimebackGetTreeRequest,
     TimebackStoreOperationRequest,
+    TimebackUpdateStudentItemResponseRequest,
+    TimebackCreateNewAttemptRequest,
+    TimebackFinalStudentAssessmentRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -52,6 +55,13 @@ from timeback.models.response import (
     TimebackStoreOperationResponse,
     TimebackSyncOperationsResponse,
     TimebackSyncCourseLessonPlansResponse,
+    TimebackCourseProgressResponse,
+    TimebackLessonPlanStructureResponse,
+    TimebackUpdateStudentItemResponseResponse,
+    TimebackSyllabusResponse,
+    TimebackCreateNewAttemptResponse,
+    TimebackFinalStudentAssessmentResponse,
+    TimebackAssessmentProgressResponse,
 )
 from timeback.models import TimebackScreeningSession, LessonPlan
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
@@ -129,6 +139,30 @@ from timeback.services.powerpath.endpoints.recreate_lesson_plan import (
 )
 from timeback.services.powerpath.endpoints.sync_course_lesson_plans import (
     sync_course_lesson_plans as sync_course_lesson_plans_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_course_progress import (
+    get_course_progress as get_course_progress_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_lesson_plan import (
+    get_lesson_plan as get_lesson_plan_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_lesson_plan_structure import (
+    get_lesson_plan_structure as get_lesson_plan_structure_endpoint,
+)
+from timeback.services.powerpath.endpoints.update_student_item_response import (
+    update_student_item_response as update_student_item_response_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_course_syllabus import (
+    get_course_syllabus as get_course_syllabus_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_new_attempt import (
+    create_new_attempt as create_new_attempt_endpoint,
+)
+from timeback.services.powerpath.endpoints.final_student_assessment_response import (
+    final_student_assessment_response as final_student_assessment_response_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_assessment_progress import (
+    get_assessment_progress as get_assessment_progress_endpoint,
 )
 
 
@@ -634,35 +668,158 @@ class PowerPathService:
         """
         return sync_course_lesson_plans_endpoint(self._http, course_id)
 
-    # TODO: Implement the following endpoints:
-    # - get_course_progress: GET /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}
-    # - get_lesson_plan: GET /powerpath/lessonPlans/tree/{lessonPlanId}
-    # - get_lesson_plan_structure: GET /powerpath/lessonPlans/tree/{lessonPlanId}/structure
-    # - update_student_item_response: POST /powerpath/lessonPlans/updateStudentItemResponse
+    def get_course_progress(
+        self,
+        course_id: str,
+        student_id: str,
+        lesson_id: Optional[str] = None,
+    ) -> TimebackCourseProgressResponse:
+        """Get course progress for a student.
+
+        Returns assessment line items for the course and student,
+        including test-out status.
+
+        Args:
+            course_id: The sourcedId of the course
+            student_id: The sourcedId of the student
+            lesson_id: Optional component resource ID to filter by lesson
+
+        Returns:
+            TimebackCourseProgressResponse with lineItems and testOut status
+        """
+        return get_course_progress_endpoint(
+            self._http, course_id, student_id, lesson_id
+        )
+
+    def get_lesson_plan(self, lesson_plan_id: str) -> LessonPlan:
+        """Get complete lesson plan tree by ID.
+
+        Returns the lesson plan in syllabus-like format with only
+        non-skipped items (visible content) and all metadata.
+
+        Args:
+            lesson_plan_id: The ID of the lesson plan
+
+        Returns:
+            LessonPlan object with complete tree structure
+        """
+        return get_lesson_plan_endpoint(self._http, lesson_plan_id)
+
+    def get_lesson_plan_structure(
+        self, lesson_plan_id: str
+    ) -> TimebackLessonPlanStructureResponse:
+        """Get simplified lesson plan structure for debugging.
+
+        Returns a lightweight view showing both skipped and non-skipped
+        items with order information and IDs.
+
+        Args:
+            lesson_plan_id: The ID of the lesson plan
+
+        Returns:
+            TimebackLessonPlanStructureResponse with structure tree
+        """
+        return get_lesson_plan_structure_endpoint(self._http, lesson_plan_id)
+
+    def update_student_item_response(
+        self, request: TimebackUpdateStudentItemResponseRequest
+    ) -> TimebackUpdateStudentItemResponseResponse:
+        """Update student item response for a component or resource.
+
+        Updates the student's response with score information, status,
+        and optional learning objective results.
+
+        Args:
+            request: Request with studentId, componentResourceId, and result
+
+        Returns:
+            TimebackUpdateStudentItemResponseResponse with line item and result
+        """
+        return update_student_item_response_endpoint(self._http, request)
 
     # ==========================================================================
     # SYLLABUS ENDPOINTS
     # ==========================================================================
     # Endpoints for retrieving course syllabus information.
     # Base path: /powerpath/syllabus/...
-    #
-    # TODO: Implement the following endpoints:
-    # - get_course_syllabus: GET /powerpath/syllabus/{courseSourcedId}
     # ==========================================================================
+
+    def get_course_syllabus(
+        self, course_sourced_id: str
+    ) -> TimebackSyllabusResponse:
+        """Get the syllabus for a course.
+
+        Args:
+            course_sourced_id: The sourcedId of the course
+
+        Returns:
+            TimebackSyllabusResponse with syllabus content
+        """
+        return get_course_syllabus_endpoint(self._http, course_sourced_id)
 
     # ==========================================================================
     # ASSESSMENT ENDPOINTS
     # ==========================================================================
     # Endpoints for adaptive assessment flow (attempts, questions, responses).
     # Base path: /powerpath/...
-    #
+    # ==========================================================================
+
+    def create_new_attempt(
+        self, request: TimebackCreateNewAttemptRequest
+    ) -> TimebackCreateNewAttemptResponse:
+        """Create a new attempt for a student in a lesson.
+
+        Creates a new attempt if the current attempt is completed.
+        For Assessment Bank lessons, this updates the state to serve
+        a different sub-test using round-robin logic.
+
+        Args:
+            request: Request with student and lesson IDs
+
+        Returns:
+            TimebackCreateNewAttemptResponse with attempt data
+        """
+        return create_new_attempt_endpoint(self._http, request)
+
+    def final_student_assessment_response(
+        self, request: TimebackFinalStudentAssessmentRequest
+    ) -> TimebackFinalStudentAssessmentResponse:
+        """Finalize a test assessment.
+
+        Finalizes a lesson of type quiz, test-out, or placement.
+        Evaluates responses and creates/updates assessment records.
+
+        Args:
+            request: Request with student and lesson IDs
+
+        Returns:
+            TimebackFinalStudentAssessmentResponse with finalization status
+        """
+        return final_student_assessment_response_endpoint(self._http, request)
+
+    def get_assessment_progress(
+        self,
+        student: str,
+        lesson: str,
+        attempt: Optional[int] = None,
+    ) -> TimebackAssessmentProgressResponse:
+        """Get assessment progress for a student in a lesson.
+
+        Returns progress including scores, questions, and metrics.
+
+        Args:
+            student: The sourcedId of the student
+            lesson: The sourcedId of the lesson (ComponentResource)
+            attempt: Optional attempt number
+
+        Returns:
+            TimebackAssessmentProgressResponse with progress data
+        """
+        return get_assessment_progress_endpoint(self._http, student, lesson, attempt)
+
     # TODO: Implement the following endpoints:
-    # - create_new_attempt: POST /powerpath/createNewAttempt
-    # - final_student_assessment_response: POST /powerpath/finalStudentAssessmentResponse
-    # - get_assessment_progress: GET /powerpath/getAssessmentProgress
     # - get_attempts: GET /powerpath/getAttempts
     # - get_next_question: GET /powerpath/getNextQuestion
     # - reset_attempt: POST /powerpath/resetAttempt
     # - update_student_question_response: POST /powerpath/updateStudentQuestionResponse
-    # ==========================================================================
 

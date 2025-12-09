@@ -199,6 +199,12 @@ from .timeback_create_lesson_plan_request import TimebackCreateLessonPlanRequest
 from .timeback_start_test_out_request import TimebackStartTestOutRequest
 from .timeback_get_tree_request import TimebackGetTreeRequest
 from .timeback_store_operation_request import TimebackStoreOperationRequest
+from .timeback_update_student_item_response_request import (
+    TimebackUpdateStudentItemResponseRequest,
+    TimebackStudentItemResult,
+)
+from .timeback_create_new_attempt_request import TimebackCreateNewAttemptRequest
+from .timeback_final_student_assessment_request import TimebackFinalStudentAssessmentRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -379,4 +385,8 @@ __all__ = [
     "TimebackStartTestOutRequest",
     "TimebackGetTreeRequest",
     "TimebackStoreOperationRequest",
+    "TimebackUpdateStudentItemResponseRequest",
+    "TimebackStudentItemResult",
+    "TimebackCreateNewAttemptRequest",
+    "TimebackFinalStudentAssessmentRequest",
 ]

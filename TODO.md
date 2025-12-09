@@ -489,35 +489,35 @@
 
 ### /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}:
 
-- [ ] `get_course_progress`
+- [x] `get_course_progress`
 
 ### /powerpath/lessonPlans/tree/{lessonPlanId}:
 
-- [ ] `get_lesson_plan`
+- [x] `get_lesson_plan`
 
 ### /powerpath/lessonPlans/tree/{lessonPlanId}/structure:
 
-- [ ] `get_lesson_plan_structure`
+- [x] `get_lesson_plan_structure`
 
 ### /powerpath/lessonPlans/updateStudentItemResponse:
 
-- [ ] `update_student_item_response`
+- [x] `update_student_item_response`
 
 ### /powerpath/syllabus/{courseSourcedId}:
 
-- [ ] `get_course_syllabus`
+- [x] `get_course_syllabus`
 
 ### /powerpath/createNewAttempt:
 
-- [ ] `create_new_attempt`
+- [x] `create_new_attempt`
 
 ### /powerpath/finalStudentAssessmentResponse:
 
-- [ ] `final_student_assessment_response`
+- [x] `final_student_assessment_response`
 
 ### /powerpath/getAssessmentProgress:
 
-- [ ] `get_assessment_progress`
+- [x] `get_assessment_progress`
 
 ### /powerpath/getAttempts:
 
