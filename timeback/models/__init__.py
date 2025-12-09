@@ -72,6 +72,14 @@ from .timeback_screening_session import (
     TimebackScreeningSession,
     TimebackScreeningSessionAssignment,
 )
+from .timeback_student_placement_data import (
+    TimebackPlacementTestStatus,
+    TimebackPlacementTestSource,
+    TimebackRitScoreData,
+    TimebackRitScores,
+    TimebackPlacementTestResult,
+    TimebackSubjectPlacementData,
+)
 from .request import TimebackUpdateUserRequest
 from .response import TimebackUpdateUserResponse
 
@@ -145,4 +153,11 @@ __all__ = [
     "TimebackScreeningResult",
     "TimebackScreeningSession",
     "TimebackScreeningSessionAssignment",
+    # Student Placement Data Models
+    "TimebackPlacementTestStatus",
+    "TimebackPlacementTestSource",
+    "TimebackRitScoreData",
+    "TimebackRitScores",
+    "TimebackPlacementTestResult",
+    "TimebackSubjectPlacementData",
 ]

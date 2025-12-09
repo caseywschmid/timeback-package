@@ -28,6 +28,7 @@ from timeback.models.request import (
     TimebackImportExternalTestAssignmentResultsRequest,
     TimebackMakeExternalTestAssignmentRequest,
     TimebackGetTestOutRequest,
+    TimebackResetUserPlacementRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -40,6 +41,7 @@ from timeback.models.response import (
     TimebackImportExternalTestAssignmentResultsResponse,
     TimebackMakeExternalTestAssignmentResponse,
     TimebackGetTestOutResponse,
+    TimebackResetUserPlacementResponse,
 )
 from timeback.models import TimebackScreeningSession
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
@@ -80,6 +82,16 @@ from timeback.services.powerpath.endpoints.make_external_test_assignment import 
 )
 from timeback.services.powerpath.endpoints.get_test_out import (
     get_test_out as get_test_out_endpoint,
+)
+from timeback.services.powerpath.endpoints.reset_user_placement import (
+    reset_user_placement as reset_user_placement_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_student_placement_data import (
+    get_student_placement_data as get_student_placement_data_endpoint,
+    StudentPlacementDataResponse,
+)
+from timeback.services.powerpath.endpoints.reset_screening_session import (
+    reset_screening_session as reset_screening_session_endpoint,
 )
 
 
@@ -199,6 +211,44 @@ class PowerPathService:
         """
         return get_subject_progress_endpoint(self._http, request)
 
+    def reset_user_placement(
+        self, request: TimebackResetUserPlacementRequest
+    ) -> TimebackResetUserPlacementResponse:
+        """Reset user placement progress for a subject.
+
+        Resets a user's placement progress for a specific subject by:
+        - Soft deleting all placement assessment results for that subject
+        - Resetting user onboarding state to "in_progress"
+
+        This operation is restricted to administrators only and cannot be undone.
+
+        Args:
+            request: Request containing student sourcedId and subject
+
+        Returns:
+            TimebackResetUserPlacementResponse with success status, deleted count, and reset flag
+        """
+        return reset_user_placement_endpoint(self._http, request)
+
+    def get_student_placement_data(self, student_id: str) -> StudentPlacementDataResponse:
+        """Get comprehensive placement data for a student.
+
+        Returns placement data for all subjects including:
+        - Starting and current grade levels
+        - RIT scores (GROWTH and SCREENING)
+        - Test results with status and scores
+        - Next test ID for each subject
+
+        Args:
+            student_id: The sourcedId of the student
+
+        Returns:
+            Dictionary with subject names as keys and TimebackSubjectPlacementData as values.
+            Subjects include: Reading, Language, Vocabulary, Social Studies, Writing, 
+            Science, FastMath, Math
+        """
+        return get_student_placement_data_endpoint(self._http, student_id)
+
     # ==========================================================================
     # SCREENING ENDPOINTS
     # ==========================================================================
@@ -251,6 +301,19 @@ class PowerPathService:
             TimebackScreeningSession containing updated session with assignment info
         """
         return assign_screening_test_endpoint(self._http, request)
+
+    def reset_screening_session(self, user_id: str) -> None:
+        """Reset screening session for a user.
+
+        Resets the screening session allowing the user to restart screening tests.
+
+        Args:
+            user_id: The sourcedId of the user whose session to reset
+
+        Returns:
+            None (HTTP 204 - no content)
+        """
+        return reset_screening_session_endpoint(self._http, user_id)
 
     # ==========================================================================
     # EXTERNAL TEST ENDPOINTS

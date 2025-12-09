@@ -101,6 +101,7 @@ from .timeback_make_external_test_assignment_response import (
     TimebackMakeExternalTestAssignmentResponse,
 )
 from .timeback_get_test_out_response import TimebackGetTestOutResponse
+from .timeback_reset_user_placement_response import TimebackResetUserPlacementResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -200,4 +201,5 @@ __all__ = [
     "TimebackExternalTestCredentials",
     "TimebackMakeExternalTestAssignmentResponse",
     "TimebackGetTestOutResponse",
+    "TimebackResetUserPlacementResponse",
 ]

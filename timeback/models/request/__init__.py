@@ -194,6 +194,7 @@ from .timeback_make_external_test_assignment_request import (
     TimebackMakeExternalTestAssignmentRequest,
 )
 from .timeback_get_test_out_request import TimebackGetTestOutRequest
+from .timeback_reset_user_placement_request import TimebackResetUserPlacementRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -369,4 +370,5 @@ __all__ = [
     "TimebackImportExternalTestAssignmentResultsRequest",
     "TimebackMakeExternalTestAssignmentRequest",
     "TimebackGetTestOutRequest",
+    "TimebackResetUserPlacementRequest",
 ]

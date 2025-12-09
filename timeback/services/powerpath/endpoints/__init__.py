@@ -23,6 +23,9 @@ from .create_internal_test import create_internal_test
 from .import_external_test_assignment_results import import_external_test_assignment_results
 from .make_external_test_assignment import make_external_test_assignment
 from .get_test_out import get_test_out
+from .reset_user_placement import reset_user_placement
+from .get_student_placement_data import get_student_placement_data
+from .reset_screening_session import reset_screening_session
 
 __all__ = [
     "get_all_placement_tests",
@@ -38,5 +41,8 @@ __all__ = [
     "import_external_test_assignment_results",
     "make_external_test_assignment",
     "get_test_out",
+    "reset_user_placement",
+    "get_student_placement_data",
+    "reset_screening_session",
 ]
 
