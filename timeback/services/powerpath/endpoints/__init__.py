@@ -26,6 +26,9 @@ from .get_test_out import get_test_out
 from .reset_user_placement import reset_user_placement
 from .get_student_placement_data import get_student_placement_data
 from .reset_screening_session import reset_screening_session
+from .create_lesson_plan import create_lesson_plan
+from .start_test_out import start_test_out
+from .get_tree import get_tree
 
 __all__ = [
     "get_all_placement_tests",
@@ -44,5 +47,8 @@ __all__ = [
     "reset_user_placement",
     "get_student_placement_data",
     "reset_screening_session",
+    "create_lesson_plan",
+    "start_test_out",
+    "get_tree",
 ]
 

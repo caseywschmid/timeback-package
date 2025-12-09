@@ -195,6 +195,9 @@ from .timeback_make_external_test_assignment_request import (
 )
 from .timeback_get_test_out_request import TimebackGetTestOutRequest
 from .timeback_reset_user_placement_request import TimebackResetUserPlacementRequest
+from .timeback_create_lesson_plan_request import TimebackCreateLessonPlanRequest
+from .timeback_start_test_out_request import TimebackStartTestOutRequest
+from .timeback_get_tree_request import TimebackGetTreeRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -371,4 +374,7 @@ __all__ = [
     "TimebackMakeExternalTestAssignmentRequest",
     "TimebackGetTestOutRequest",
     "TimebackResetUserPlacementRequest",
+    "TimebackCreateLessonPlanRequest",
+    "TimebackStartTestOutRequest",
+    "TimebackGetTreeRequest",
 ]

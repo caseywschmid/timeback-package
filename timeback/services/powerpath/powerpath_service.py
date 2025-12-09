@@ -29,6 +29,9 @@ from timeback.models.request import (
     TimebackMakeExternalTestAssignmentRequest,
     TimebackGetTestOutRequest,
     TimebackResetUserPlacementRequest,
+    TimebackCreateLessonPlanRequest,
+    TimebackStartTestOutRequest,
+    TimebackGetTreeRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -42,8 +45,10 @@ from timeback.models.response import (
     TimebackMakeExternalTestAssignmentResponse,
     TimebackGetTestOutResponse,
     TimebackResetUserPlacementResponse,
+    TimebackCreateLessonPlanResponse,
+    TimebackStartTestOutResponse,
 )
-from timeback.models import TimebackScreeningSession
+from timeback.models import TimebackScreeningSession, LessonPlan
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
     get_all_placement_tests as get_all_placement_tests_endpoint,
 )
@@ -92,6 +97,15 @@ from timeback.services.powerpath.endpoints.get_student_placement_data import (
 )
 from timeback.services.powerpath.endpoints.reset_screening_session import (
     reset_screening_session as reset_screening_session_endpoint,
+)
+from timeback.services.powerpath.endpoints.create_lesson_plan import (
+    create_lesson_plan as create_lesson_plan_endpoint,
+)
+from timeback.services.powerpath.endpoints.start_test_out import (
+    start_test_out as start_test_out_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_tree import (
+    get_tree as get_tree_endpoint,
 )
 
 
@@ -451,10 +465,60 @@ class PowerPathService:
     # ==========================================================================
     # Endpoints for managing lesson plans, operations, and course progress.
     # Base path: /powerpath/lessonPlans/...
-    #
+    # ==========================================================================
+
+    def create_lesson_plan(
+        self, request: TimebackCreateLessonPlanRequest
+    ) -> TimebackCreateLessonPlanResponse:
+        """Create a new lesson plan for a course and student.
+
+        If a lesson plan already exists for the course/student, returns the
+        existing lesson plan ID.
+
+        Args:
+            request: Request containing courseId, userId, and optional classId
+
+        Returns:
+            TimebackCreateLessonPlanResponse containing the lesson plan ID
+        """
+        return create_lesson_plan_endpoint(self._http, request)
+
+    def start_test_out(
+        self, request: TimebackStartTestOutRequest
+    ) -> TimebackStartTestOutResponse:
+        """Start a test-out assignment for a student.
+
+        Creates an on-demand test-out assignment. After calling this, use
+        make_external_test_assignment to start the test with the provider.
+
+        Eligibility requirements:
+        - Course must have a supported subject+grade combination
+        - Student must be actively enrolled in a course with that subject+grade
+        - Student must not have a completed or failed test-out
+
+        Args:
+            request: Request containing courseId and studentId
+
+        Returns:
+            TimebackStartTestOutResponse with assignmentId, lessonId, resourceId, status
+        """
+        return start_test_out_endpoint(self._http, request)
+
+    def get_tree(self, request: TimebackGetTreeRequest) -> LessonPlan:
+        """Get the lesson plan tree for a course and student.
+
+        Returns the complete lesson plan tree including all components,
+        resources, and nested structure.
+
+        Args:
+            request: Request containing courseId and userId
+
+        Returns:
+            LessonPlan object with the complete tree structure
+        """
+        return get_tree_endpoint(self._http, request)
+
     # TODO: Implement the following endpoints:
-    # - create_lesson_plan: POST /powerpath/lessonPlans/
-    # - get_tree: GET /powerpath/lessonPlans/{courseId}/{userId}
     # - delete_lesson_plans_by_course_id: DELETE /powerpath/lessonPlans/{courseId}/deleteAll
     # - store_operation: POST /powerpath/lessonPlans/{lessonPlanId}/operations
     # - get_operations: GET /powerpath/lessonPlans/{lessonPlanId}/operations
@@ -465,7 +529,6 @@ class PowerPathService:
     # - get_lesson_plan: GET /powerpath/lessonPlans/tree/{lessonPlanId}
     # - get_lesson_plan_structure: GET /powerpath/lessonPlans/tree/{lessonPlanId}/structure
     # - update_student_item_response: POST /powerpath/lessonPlans/updateStudentItemResponse
-    # ==========================================================================
 
     # ==========================================================================
     # SYLLABUS ENDPOINTS
