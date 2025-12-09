@@ -521,19 +521,19 @@
 
 ### /powerpath/getAttempts:
 
-- [ ] `get_attempts`
+- [x] `get_attempts`
 
 ### /powerpath/getNextQuestion:
 
-- [ ] `get_next_question`
+- [x] `get_next_question`
 
 ### /powerpath/resetAttempt:
 
-- [ ] `reset_attempt`
+- [x] `reset_attempt`
 
 ### /powerpath/updateStudentQuestionResponse:
 
-- [ ] `update_student_question_response`
+- [x] `update_student_question_response`
 
 ### /powerpath/test-assignments:
 

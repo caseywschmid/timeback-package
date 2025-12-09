@@ -36,6 +36,8 @@ from timeback.models.request import (
     TimebackUpdateStudentItemResponseRequest,
     TimebackCreateNewAttemptRequest,
     TimebackFinalStudentAssessmentRequest,
+    TimebackResetAttemptRequest,
+    TimebackUpdateStudentQuestionResponseRequest,
 )
 from timeback.models.response import (
     TimebackGetAllPlacementTestsResponse,
@@ -62,6 +64,10 @@ from timeback.models.response import (
     TimebackCreateNewAttemptResponse,
     TimebackFinalStudentAssessmentResponse,
     TimebackAssessmentProgressResponse,
+    TimebackGetAttemptsResponse,
+    TimebackNextQuestionResponse,
+    TimebackResetAttemptResponse,
+    TimebackUpdateStudentQuestionResponseResponse,
 )
 from timeback.models import TimebackScreeningSession, LessonPlan
 from timeback.services.powerpath.endpoints.get_all_placement_tests import (
@@ -163,6 +169,18 @@ from timeback.services.powerpath.endpoints.final_student_assessment_response imp
 )
 from timeback.services.powerpath.endpoints.get_assessment_progress import (
     get_assessment_progress as get_assessment_progress_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_attempts import (
+    get_attempts as get_attempts_endpoint,
+)
+from timeback.services.powerpath.endpoints.get_next_question import (
+    get_next_question as get_next_question_endpoint,
+)
+from timeback.services.powerpath.endpoints.reset_attempt import (
+    reset_attempt as reset_attempt_endpoint,
+)
+from timeback.services.powerpath.endpoints.update_student_question_response import (
+    update_student_question_response as update_student_question_response_endpoint,
 )
 
 
@@ -817,9 +835,74 @@ class PowerPathService:
         """
         return get_assessment_progress_endpoint(self._http, student, lesson, attempt)
 
-    # TODO: Implement the following endpoints:
-    # - get_attempts: GET /powerpath/getAttempts
-    # - get_next_question: GET /powerpath/getNextQuestion
-    # - reset_attempt: POST /powerpath/resetAttempt
-    # - update_student_question_response: POST /powerpath/updateStudentQuestionResponse
+    def get_attempts(self, student: str, lesson: str) -> TimebackGetAttemptsResponse:
+        """Get all attempts for a student in a lesson.
+
+        For Assessment Bank lessons, each attempt may represent a different
+        sub-test of the bank.
+
+        Args:
+            student: The sourcedId of the student
+            lesson: The sourcedId of the lesson (ComponentResource)
+
+        Returns:
+            TimebackGetAttemptsResponse with list of all attempts
+        """
+        return get_attempts_endpoint(self._http, student, lesson)
+
+    def get_next_question(
+        self, student: str, lesson: str
+    ) -> TimebackNextQuestionResponse:
+        """Get the next question for a student in a PowerPath-100 lesson.
+
+        Note: This endpoint only works with lessons of type 'powerpath-100'.
+
+        Args:
+            student: The sourcedId of the student
+            lesson: The sourcedId of the lesson (ComponentResource)
+
+        Returns:
+            TimebackNextQuestionResponse with score and next question
+        """
+        return get_next_question_endpoint(self._http, student, lesson)
+
+    def reset_attempt(
+        self, request: TimebackResetAttemptRequest
+    ) -> TimebackResetAttemptResponse:
+        """Reset a student's attempt for a lesson.
+
+        Resets the attempt by:
+        - Soft-deleting previous question responses
+        - Resetting test score to 0
+        - Updating scoreStatus to "not submitted"
+
+        For external tests, only resets the score to 0.
+        For Assessment Bank lessons, keeps user in same bank test.
+
+        Args:
+            request: Request with student and lesson IDs
+
+        Returns:
+            TimebackResetAttemptResponse with success status and score
+        """
+        return reset_attempt_endpoint(self._http, request)
+
+    def update_student_question_response(
+        self, request: TimebackUpdateStudentQuestionResponseRequest
+    ) -> TimebackUpdateStudentQuestionResponseResponse:
+        """Update a student's response to a question.
+
+        Checks correctness using QTI response declarations and updates
+        the score accordingly. Creates/updates AssessmentLineItem and
+        AssessmentResult objects.
+
+        Args:
+            request: Request with student, question, lesson, and response(s)
+
+        Returns:
+            TimebackUpdateStudentQuestionResponseResponse with updated scores
+        """
+        return update_student_question_response_endpoint(self._http, request)
+
+    # TODO: Implement test-assignments endpoints
 

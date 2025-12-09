@@ -43,6 +43,10 @@ from .get_course_syllabus import get_course_syllabus
 from .create_new_attempt import create_new_attempt
 from .final_student_assessment_response import final_student_assessment_response
 from .get_assessment_progress import get_assessment_progress
+from .get_attempts import get_attempts
+from .get_next_question import get_next_question
+from .reset_attempt import reset_attempt
+from .update_student_question_response import update_student_question_response
 
 __all__ = [
     "get_all_placement_tests",
@@ -78,5 +82,9 @@ __all__ = [
     "create_new_attempt",
     "final_student_assessment_response",
     "get_assessment_progress",
+    "get_attempts",
+    "get_next_question",
+    "reset_attempt",
+    "update_student_question_response",
 ]
 

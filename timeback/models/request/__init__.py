@@ -205,6 +205,10 @@ from .timeback_update_student_item_response_request import (
 )
 from .timeback_create_new_attempt_request import TimebackCreateNewAttemptRequest
 from .timeback_final_student_assessment_request import TimebackFinalStudentAssessmentRequest
+from .timeback_reset_attempt_request import TimebackResetAttemptRequest
+from .timeback_update_student_question_response_request import (
+    TimebackUpdateStudentQuestionResponseRequest,
+)
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -389,4 +393,6 @@ __all__ = [
     "TimebackStudentItemResult",
     "TimebackCreateNewAttemptRequest",
     "TimebackFinalStudentAssessmentRequest",
+    "TimebackResetAttemptRequest",
+    "TimebackUpdateStudentQuestionResponseRequest",
 ]

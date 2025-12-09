@@ -137,6 +137,13 @@ from .timeback_assessment_progress_response import (
     TimebackAssessmentProgressResponse,
     TimebackTestQuestion,
 )
+from .timeback_get_attempts_response import TimebackGetAttemptsResponse
+from .timeback_next_question_response import TimebackNextQuestionResponse
+from .timeback_reset_attempt_response import TimebackResetAttemptResponse
+from .timeback_update_student_question_response_response import (
+    TimebackUpdateStudentQuestionResponseResponse,
+    TimebackResponseResult,
+)
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -258,4 +265,9 @@ __all__ = [
     "TimebackFinalStudentAssessmentResponse",
     "TimebackAssessmentProgressResponse",
     "TimebackTestQuestion",
+    "TimebackGetAttemptsResponse",
+    "TimebackNextQuestionResponse",
+    "TimebackResetAttemptResponse",
+    "TimebackUpdateStudentQuestionResponseResponse",
+    "TimebackResponseResult",
 ]
