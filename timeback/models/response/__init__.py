@@ -81,6 +81,10 @@ from .timeback_get_all_course_components_response import TimebackGetAllCourseCom
 from .timeback_create_course_component_response import TimebackCreateCourseComponentResponse
 from .timeback_get_course_component_response import TimebackGetCourseComponentResponse
 from .timeback_update_course_component_response import TimebackUpdateCourseComponentResponse
+from .timeback_get_all_academic_sessions_response import TimebackGetAllAcademicSessionsResponse
+from .timeback_create_academic_session_response import TimebackCreateAcademicSessionResponse
+from .timeback_get_academic_session_response import TimebackGetAcademicSessionResponse
+from .timeback_update_academic_session_response import TimebackUpdateAcademicSessionResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -164,4 +168,8 @@ __all__ = [
     "TimebackCreateCourseComponentResponse",
     "TimebackGetCourseComponentResponse",
     "TimebackUpdateCourseComponentResponse",
+    "TimebackGetAllAcademicSessionsResponse",
+    "TimebackCreateAcademicSessionResponse",
+    "TimebackGetAcademicSessionResponse",
+    "TimebackUpdateAcademicSessionResponse",
 ]

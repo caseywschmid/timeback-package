@@ -86,6 +86,11 @@ from timeback.models.request import (
     TimebackCreateCourseComponentRequest,
     TimebackGetCourseComponentRequest,
     TimebackUpdateCourseComponentRequest,
+    TimebackGetCoursesForSchoolRequest,
+    TimebackGetAllAcademicSessionsRequest,
+    TimebackCreateAcademicSessionRequest,
+    TimebackGetAcademicSessionRequest,
+    TimebackUpdateAcademicSessionRequest,
 )
 from timeback.models.response import TimebackCreateUserResponse
 from timeback.services.oneroster.rostering.endpoints.get_user import (
@@ -337,7 +342,29 @@ from timeback.services.oneroster.rostering.endpoints.update_course_component imp
 from timeback.services.oneroster.rostering.endpoints.delete_course_component import (
     delete_course_component as delete_course_component_endpoint,
 )
+from timeback.services.oneroster.rostering.endpoints.get_courses_for_school import (
+    get_courses_for_school as get_courses_for_school_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_all_academic_sessions import (
+    get_all_academic_sessions as get_all_academic_sessions_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.create_academic_session import (
+    create_academic_session as create_academic_session_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.get_academic_session import (
+    get_academic_session as get_academic_session_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.update_academic_session import (
+    update_academic_session as update_academic_session_endpoint,
+)
+from timeback.services.oneroster.rostering.endpoints.delete_academic_session import (
+    delete_academic_session as delete_academic_session_endpoint,
+)
 from timeback.models.response import TimebackGetAgentForResponse
+from timeback.models.response import TimebackGetAllAcademicSessionsResponse
+from timeback.models.response import TimebackCreateAcademicSessionResponse
+from timeback.models.response import TimebackGetAcademicSessionResponse
+from timeback.models.response import TimebackUpdateAcademicSessionResponse
 from timeback.models.response import TimebackGetAllCourseComponentsResponse
 from timeback.models.response import TimebackCreateCourseComponentResponse
 from timeback.models.response import TimebackGetCourseComponentResponse
@@ -861,5 +888,43 @@ class RosteringService:
     def delete_course_component(self, sourced_id: str) -> Optional[Dict[str, Any]]:
         """Delete (tombstone) a course component by sourcedId."""
         return delete_course_component_endpoint(self._http, sourced_id)
+
+    def get_courses_for_school(
+        self, request: TimebackGetCoursesForSchoolRequest
+    ) -> TimebackGetAllCoursesResponse:
+        """Fetch all courses for a specific school (paginated list)."""
+        return get_courses_for_school_endpoint(self._http, request)
+
+    # -------------------------------------------------------------------------
+    # Academic Session Endpoints
+    # -------------------------------------------------------------------------
+
+    def get_all_academic_sessions(
+        self, request: TimebackGetAllAcademicSessionsRequest
+    ) -> TimebackGetAllAcademicSessionsResponse:
+        """Fetch all academic sessions (paginated list)."""
+        return get_all_academic_sessions_endpoint(self._http, request)
+
+    def create_academic_session(
+        self, request: TimebackCreateAcademicSessionRequest
+    ) -> TimebackCreateAcademicSessionResponse:
+        """Create a new academic session."""
+        return create_academic_session_endpoint(self._http, request)
+
+    def get_academic_session(
+        self, request: TimebackGetAcademicSessionRequest
+    ) -> TimebackGetAcademicSessionResponse:
+        """Fetch a single academic session by sourcedId."""
+        return get_academic_session_endpoint(self._http, request)
+
+    def update_academic_session(
+        self, request: TimebackUpdateAcademicSessionRequest
+    ) -> TimebackUpdateAcademicSessionResponse:
+        """Update an existing academic session."""
+        return update_academic_session_endpoint(self._http, request)
+
+    def delete_academic_session(self, sourced_id: str) -> Optional[Dict[str, Any]]:
+        """Delete (tombstone) an academic session by sourcedId."""
+        return delete_academic_session_endpoint(self._http, sourced_id)
 
 

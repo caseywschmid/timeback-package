@@ -375,18 +375,18 @@
 
 ### /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/courses
 
-- [ ] `get_courses_for_school`
+- [x] `get_courses_for_school`
 
 ### /ims/oneroster/rostering/v1p2/academicSessions/
 
-- [ ] `get_all_academic_sessions`
-- [ ] `post_academic_session`
+- [x] `get_all_academic_sessions`
+- [x] `post_academic_session`
 
 ### /ims/oneroster/rostering/v1p2/academicSessions/{sourcedId}
 
-- [ ] `get_academic_session`
-- [ ] `put_academic_session`
-- [ ] `delete_academic_session`
+- [x] `get_academic_session`
+- [x] `put_academic_session`
+- [x] `delete_academic_session`
 
 ## PowerPath
 

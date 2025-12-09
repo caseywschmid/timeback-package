@@ -162,6 +162,11 @@ from .timeback_get_all_course_components_request import TimebackGetAllCourseComp
 from .timeback_create_course_component_request import TimebackCreateCourseComponentRequest, TimebackCreateCourseComponentBody
 from .timeback_get_course_component_request import TimebackGetCourseComponentRequest
 from .timeback_update_course_component_request import TimebackUpdateCourseComponentRequest, TimebackUpdateCourseComponentBody
+from .timeback_get_courses_for_school_request import TimebackGetCoursesForSchoolRequest
+from .timeback_get_all_academic_sessions_request import TimebackGetAllAcademicSessionsRequest
+from .timeback_create_academic_session_request import TimebackCreateAcademicSessionRequest, TimebackCreateAcademicSessionBody
+from .timeback_get_academic_session_request import TimebackGetAcademicSessionRequest
+from .timeback_update_academic_session_request import TimebackUpdateAcademicSessionRequest, TimebackUpdateAcademicSessionBody
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -313,4 +318,11 @@ __all__ = [
     "TimebackGetCourseComponentRequest",
     "TimebackUpdateCourseComponentRequest",
     "TimebackUpdateCourseComponentBody",
+    "TimebackGetCoursesForSchoolRequest",
+    "TimebackGetAllAcademicSessionsRequest",
+    "TimebackCreateAcademicSessionRequest",
+    "TimebackCreateAcademicSessionBody",
+    "TimebackGetAcademicSessionRequest",
+    "TimebackUpdateAcademicSessionRequest",
+    "TimebackUpdateAcademicSessionBody",
 ]
