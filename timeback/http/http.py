@@ -98,7 +98,7 @@ class HttpClient:
                     continue
                 raise
 
-    def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def put(self, path: str, json: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
         url = f"{self._base_url}{path}"
         attempt = 0
         max_attempts = 3
@@ -112,6 +112,8 @@ class HttpClient:
                     "x-amzn-requestid"
                 )
                 if 200 <= resp.status_code < 300:
+                    if not resp.text:
+                        return None
                     return resp.json()
                 self._raise_for_status(resp, request_id, duration)
             except RateLimitError:
@@ -125,9 +127,14 @@ class HttpClient:
         resp: httpx.Response, request_id: Optional[str], duration_ms: float
     ) -> None:
         status = resp.status_code
-        msg_ctx = f"status={status} path={resp.request.url.path} duration_ms={duration_ms:.1f}"
+        method = resp.request.method
+        path = resp.request.url.path
+        
+        # Build request context message
+        request_ctx = f"{method} {path}"
         if request_id:
-            msg_ctx += f" request_id={request_id}"
+            request_ctx += f"\nRequest ID: {request_id}"
+        
         body_excerpt = resp.text[:500]
         parsed = None
         try:
@@ -154,27 +161,17 @@ class HttpClient:
         except Exception:
             parsed = None
 
+        # Build base message with request context
+        base_msg = request_ctx
+        if not parsed:  # Fallback if parsing failed
+            base_msg += f"\nResponse: {body_excerpt}"
+
         if status == 404:
-            raise NotFoundError(
-                f"Resource not found ({msg_ctx}). Body: {body_excerpt}",
-                error_details=parsed,
-            )
+            raise NotFoundError(base_msg, error_details=parsed)
         if status == 429:
-            raise RateLimitError(
-                f"Rate limited ({msg_ctx}). Body: {body_excerpt}",
-                error_details=parsed,
-            )
+            raise RateLimitError(base_msg, error_details=parsed)
         if status == 401:
-            raise AuthError(
-                f"Unauthorized ({msg_ctx}). Body: {body_excerpt}",
-                error_details=parsed,
-            )
+            raise AuthError(base_msg, error_details=parsed)
         if 500 <= status < 600:
-            raise ServerError(
-                f"Server error ({msg_ctx}). Body: {body_excerpt}",
-                error_details=parsed,
-            )
-        raise RequestError(
-            f"Request failed ({msg_ctx}). Body: {body_excerpt}",
-            error_details=parsed,
-        )
+            raise ServerError(base_msg, error_details=parsed)
+        raise RequestError(base_msg, error_details=parsed)

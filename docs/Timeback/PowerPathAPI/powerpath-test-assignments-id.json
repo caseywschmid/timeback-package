@@ -1,0 +1,355 @@
+{
+  "delete": {
+    "operationId": "deleteTestAssignment",
+    "summary": "Delete a test assignment",
+    "description": "Soft deletes a test assignment by ID.",
+    "tags": ["PowerPath - Test Assignments"],
+    "parameters": [
+      {
+        "name": "id",
+        "description": "Test assignment sourcedId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Deleted",
+        "content": {}
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "put": {
+    "operationId": "updateTestAssignment",
+    "summary": "Update a test assignment",
+    "description": "Updates the title of a test assignment.",
+    "tags": ["PowerPath - Test Assignments"],
+    "parameters": [
+      {
+        "name": "id",
+        "description": "Test assignment sourcedId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "testName": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["testName"],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "Updated",
+        "content": {}
+      },
+      "400": {
+        "description": "Invalid payload",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "get": {
+    "operationId": "getTestAssignment",
+    "summary": "Get a test assignment",
+    "description": "Returns a single test assignment by its ID.",
+    "tags": ["PowerPath - Test Assignments"],
+    "parameters": [
+      {
+        "name": "id",
+        "description": "Test assignment sourcedId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourcedId": {
+                  "type": "string"
+                },
+                "studentSourcedId": {
+                  "type": "string"
+                },
+                "studentEmail": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "assignedByUserSourcedId": {
+                  "type": ["string", "null"]
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "grade": {
+                  "type": "string"
+                },
+                "assignmentStatus": {
+                  "type": "string"
+                },
+                "testName": {
+                  "type": ["string", "null"]
+                },
+                "assignedAt": {
+                  "type": ["string", "null"]
+                },
+                "expiresAt": {
+                  "type": ["string", "null"]
+                },
+                "completedAt": {
+                  "type": ["string", "null"]
+                },
+                "resourceSourcedId": {
+                  "type": ["string", "null"]
+                },
+                "componentResourceSourcedId": {
+                  "type": ["string", "null"]
+                }
+              },
+              "required": [
+                "sourcedId",
+                "studentSourcedId",
+                "studentEmail",
+                "assignedByUserSourcedId",
+                "subject",
+                "grade",
+                "assignmentStatus"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

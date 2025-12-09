@@ -1,0 +1,159 @@
+{
+  "post": {
+    "operationId": "createNewAttempt",
+    "summary": "Create new attempt",
+    "description": "\nCreates a new attempt for a student in a lesson if the current attempt is completed.\n\nFor Assessment Bank lessons:\n- This will also update the state for the student, creating a new entry to associate the new attempt number with a different sub-resource of the test bank.\n- If the lesson is taken again by the student, a different test may be served, considering the new resource it points to configures a different test.\n- The sub-test is determined using round-robin logic over the sub-resources of the lesson's Assessment Bank Resource object.\n  - So for example, if a lesson configures 2 sub-tests, the first attempt serves test 1, the second attempt serves test 2, the third attempt serves test 1 again, and so on.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object associated with it.\n",
+    "tags": ["PowerPath - Lesson Mastery"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "student": {
+                "type": "string",
+                "description": "The sourcedId of the student"
+              },
+              "lesson": {
+                "type": "string",
+                "description": "The sourcedId of the lesson (ComponentResource)"
+              }
+            },
+            "required": ["student", "lesson"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "attempt": {
+                  "type": "object",
+                  "properties": {
+                    "attempt": {
+                      "type": ["number", "null"],
+                      "description": "The attempt number"
+                    },
+                    "score": {
+                      "type": "number",
+                      "description": "The current score for this attempt"
+                    },
+                    "scoreStatus": {
+                      "type": "string",
+                      "enum": [
+                        "exempt",
+                        "fully graded",
+                        "not submitted",
+                        "partially graded",
+                        "submitted"
+                      ],
+                      "description": "The status of this attempt"
+                    },
+                    "xp": {
+                      "type": ["number", "null"],
+                      "description": "The XP earned in this attempt"
+                    },
+                    "startedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time",
+                      "description": "When this attempt was started"
+                    },
+                    "completedAt": {
+                      "type": ["string", "null"],
+                      "format": "date-time",
+                      "description": "When this attempt was completed"
+                    }
+                  },
+                  "required": [
+                    "attempt",
+                    "score",
+                    "scoreStatus",
+                    "xp",
+                    "startedAt",
+                    "completedAt"
+                  ]
+                }
+              },
+              "required": ["attempt"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

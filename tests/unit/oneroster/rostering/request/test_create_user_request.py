@@ -21,6 +21,6 @@ def test_enabled_user_string_normalizes_on_create():
         ],
     )
     req = TimebackCreateUserRequest(user=body)
-    data = req.to_dict()
+    data = req.model_dump()
     assert data["user"]["enabledUser"] is True
 

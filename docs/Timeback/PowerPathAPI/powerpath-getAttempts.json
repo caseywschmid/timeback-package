@@ -1,0 +1,164 @@
+{
+  "get": {
+    "operationId": "getAttempts",
+    "summary": "Get all attempts",
+    "description": "\nReturns a list of all attempts for a student in a lesson\n\nFor Assessment Bank lessons, each attempt may represent a different sub test of the bank. Review results with care.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object associated with it.\n",
+    "tags": ["PowerPath - Lesson Mastery"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "lesson",
+        "description": "The sourcedId of the lesson (ComponentResource)",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the lesson (ComponentResource)"
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "attempts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attempt": {
+                        "type": ["number", "null"],
+                        "description": "The attempt number"
+                      },
+                      "score": {
+                        "type": "number",
+                        "description": "The current score for this attempt"
+                      },
+                      "scoreStatus": {
+                        "type": "string",
+                        "enum": [
+                          "exempt",
+                          "fully graded",
+                          "not submitted",
+                          "partially graded",
+                          "submitted"
+                        ],
+                        "description": "The status of this attempt"
+                      },
+                      "xp": {
+                        "type": ["number", "null"],
+                        "description": "The XP earned in this attempt"
+                      },
+                      "startedAt": {
+                        "type": ["string", "null"],
+                        "format": "date-time",
+                        "description": "When this attempt was started"
+                      },
+                      "completedAt": {
+                        "type": ["string", "null"],
+                        "format": "date-time",
+                        "description": "When this attempt was completed"
+                      }
+                    },
+                    "required": [
+                      "attempt",
+                      "score",
+                      "scoreStatus",
+                      "xp",
+                      "startedAt",
+                      "completedAt"
+                    ]
+                  }
+                }
+              },
+              "required": ["attempts"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

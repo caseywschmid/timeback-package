@@ -1,0 +1,301 @@
+{
+  "get": {
+    "operationId": "getScoreScale",
+    "summary": "Get a Score Scale",
+    "description": "Get a specific scoreScale on the service provider.",
+    "tags": ["Score Scales Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the score scale",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      {
+        "in": "query",
+        "name": "fields",
+        "description": "Comma-separated list of fields to include in the response",
+        "schema": {
+          "type": "string",
+          "description": "Comma-separated list of fields to include in the response",
+          "example": "sourcedId,name"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response with the score scale",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "scoreScale": { "$ref": "#/components/schemas/ScoreScale" }
+              },
+              "required": ["scoreScale"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "put": {
+    "operationId": "putScoreScale",
+    "summary": "Update or Create a Score Scale",
+    "description": "To update an existing scoreScale or create a new one if it doesn't exist. The sourcedId for the record is supplied by the requesting system.",
+    "tags": ["Score Scales Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the score scale",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "scoreScale": { "$ref": "#/components/schemas/ScoreScale" }
+            },
+            "required": ["scoreScale"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Score scale successfully created or updated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "scoreScale": { "$ref": "#/components/schemas/ScoreScale" }
+              },
+              "required": ["scoreScale"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "delete": {
+    "operationId": "deleteScoreScale",
+    "summary": "Delete a Score Scale",
+    "description": "Perform a soft delete on a specific Score Scale on the service provider. This operation changes the status of the Score Scale to 'tobedeleted'.",
+    "tags": ["Score Scales Management"],
+    "parameters": [
+      {
+        "name": "sourcedId",
+        "description": "The sourcedId of the score scale to delete",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "responses": {
+      "204": {
+        "description": "Score scale successfully deleted",
+        "content": {}
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

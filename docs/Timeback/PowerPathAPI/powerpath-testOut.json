@@ -1,0 +1,171 @@
+{
+  "get": {
+    "operationId": "testOut",
+    "summary": "Test out",
+    "deprecated": true,
+    "description": "\n**⚠️ DEPRECATED:** This endpoint is deprecated and will be removed in a future version.\n\n**Migration:** Use `GET /powerpath/lessonPlans/getCourseProgress/:courseId/student/:studentId` instead. The response now includes a `testOut` field with comprehensive status information.\n\n---\n\n**Legacy Behavior:**\n\nReturns the testOut lesson reference for the given student and course.\n\n- TestOut is a lesson that represents the end-of-course test, covering the entire course content.\n- The testOut should be specified by a Resource with metadata.lessonType = \"test-out\".\n\nDetails:\n- Returns a null lessonId in case no Resource with metadata.lessonType = \"test-out\" is found in the course.\n- In case student has already taken the TestOut, this will return the \"finalized\" flag set to true.\n- In case this is an external TestOut, also return external access credentials, if available (i.e. test was previously assigned to student).\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object with metadata.lessonType = \"test-out\" associated with it.\n",
+    "tags": ["PowerPath - Course Mastery"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student to retrieve the testOut for",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student to retrieve the testOut for"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "course",
+        "description": "The sourcedId of the Course to retrieve the testOut from",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the Course to retrieve the testOut from"
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TestOutResult"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "TestOutResult": {
+      "type": "object",
+      "properties": {
+        "lessonType": {
+          "type": "string",
+          "const": "test-out"
+        },
+        "lessonId": {
+          "type": ["string", "null"],
+          "description": "The id of the testOut lesson"
+        },
+        "finalized": {
+          "type": "boolean",
+          "description": "Whether the Test Out has been finalized in the current attempt"
+        },
+        "toolProvider": {
+          "type": ["string", "null"],
+          "description": "The tool provider for the testOut lesson"
+        },
+        "attempt": {
+          "type": "number",
+          "description": "The attempt number"
+        },
+        "credentials": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "required": ["email", "password"],
+          "description": "The credentials for accessing the assigned test on external tool"
+        },
+        "assignmentId": {
+          "type": "string",
+          "description": "The id of the assignment on external tool for results retrieval"
+        },
+        "classId": {
+          "type": "string",
+          "description": "The id of the class on external tool for results retrieval (may be empty for some tools)"
+        },
+        "testUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the test on external tool"
+        },
+        "testId": {
+          "type": "string",
+          "description": "The id of the test on external tool (may be assignment ID for some tools)"
+        }
+      },
+      "required": ["lessonType", "lessonId", "finalized", "toolProvider"],
+      "description": "Holds the id of the TestOut lesson (ComponentResource), or its results in case it was previously attempted"
+    }
+  }
+}

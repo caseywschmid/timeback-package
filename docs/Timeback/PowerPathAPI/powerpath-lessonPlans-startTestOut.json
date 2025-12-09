@@ -1,0 +1,116 @@
+{
+  "post": {
+    "operationId": "startTestOut",
+    "summary": "Start a test-out assignment for a student",
+    "description": "\nCreates an on-demand test-out assignment for a student in a course.\n\n---\n\nThis endpoint:\n- Validates that the student is eligible for test-out (enrolled in matching subject+grade, no prior completed/failed attempts)\n- Creates an unlisted test assignment (or reuses existing active assignment if one exists)\n- Returns the assignment info so the frontend can proceed to launch the external test\n\n**Does NOT start the external test.** After calling this endpoint, the frontend should call `POST /powerpath/makeExternalTestAssignment` to start the test with the provider (Edulastic or MasteryTrack).\n\n**Eligibility Requirements:**\n- Course must have a supported subject+grade combination\n- Student must be actively enrolled in a course with that subject+grade\n- Student must not have a completed or failed test-out for this subject+grade\n\n**Returns:**\n- `status: \"created\"` - A new test assignment was created\n- `status: \"existing\"` - An existing active assignment was reused (idempotent behavior)\n\nIn both cases, returns `assignmentId`, `lessonId`, and `resourceId` for use in subsequent API calls.\n    ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "courseId": {
+                "type": "string",
+                "minLength": 1
+              },
+              "studentId": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["courseId", "studentId"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Test-out assignment started",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "assignmentId": {
+                  "type": "string",
+                  "description": "The test assignment ID"
+                },
+                "lessonId": {
+                  "type": "string",
+                  "description": "The component resource ID (lesson)"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The resource ID"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["created", "existing"],
+                  "description": "Whether a new assignment was created or an existing active assignment was reused"
+                }
+              },
+              "required": ["assignmentId", "lessonId", "resourceId", "status"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Student is not eligible for test-out (missing enrollment, already completed, etc.)"
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Course or student not found"
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "get": {
+    "operationId": "getSubjectProgress",
+    "summary": "Get subject progress",
+    "description": "\nReturns the progress the student has made in the given subject\n",
+    "tags": ["PowerPath - Placement"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "subject",
+        "description": "The subject name",
+        "schema": {
+          "type": "string",
+          "description": "The subject name",
+          "enum": [
+            "Reading",
+            "Language",
+            "Vocabulary",
+            "Social Studies",
+            "Writing",
+            "Science",
+            "FastMath",
+            "Math"
+          ]
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "progress": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "course": {
+                        "type": "object",
+                        "properties": {
+                          "courseCode": {
+                            "type": ["string", "null"]
+                          },
+                          "dateLastModified": {
+                            "type": "string"
+                          },
+                          "grades": {
+                            "type": ["array", "null"],
+                            "items": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/GradeEnum"
+                                }
+                              ],
+                              "description": "The grades of the course",
+                              "enum": [
+                                "-1",
+                                "0",
+                                "1",
+                                "2",
+                                "3",
+                                "4",
+                                "5",
+                                "6",
+                                "7",
+                                "8",
+                                "9",
+                                "10",
+                                "11",
+                                "12",
+                                "13"
+                              ]
+                            }
+                          },
+                          "level": {
+                            "type": ["string", "null"]
+                          },
+                          "orgSourcedId": {
+                            "type": "string"
+                          },
+                          "sourcedId": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "subjects": {
+                            "type": ["array", "null"],
+                            "items": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/SubjectEnum"
+                                }
+                              ],
+                              "description": "The subjects of the course",
+                              "enum": [
+                                "Reading",
+                                "Language",
+                                "Vocabulary",
+                                "Social Studies",
+                                "Writing",
+                                "Science",
+                                "FastMath",
+                                "Math"
+                              ]
+                            }
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "courseCode",
+                          "dateLastModified",
+                          "grades",
+                          "level",
+                          "orgSourcedId",
+                          "sourcedId",
+                          "status",
+                          "subjects",
+                          "title"
+                        ]
+                      },
+                      "inEnrolled": {
+                        "type": "boolean"
+                      },
+                      "hasUsedTestOut": {
+                        "type": "boolean",
+                        "description": "Whether the student has a fully graded assessment result for a test-out lesson in the course"
+                      },
+                      "testOutLessonId": {
+                        "type": ["string", "null"],
+                        "description": "The sourcedId of the test-out lesson (ComponentResource) in the course"
+                      },
+                      "completedLessons": {
+                        "type": "number",
+                        "description": "The number of lessons that contain an assessment result with a score status of 'fully graded'"
+                      },
+                      "totalLessons": {
+                        "type": "number",
+                        "description": "The total number of lessons in the course"
+                      },
+                      "totalAttainableXp": {
+                        "type": "number",
+                        "description": "The total XP that can be earned by the student in the course, not considering potential multipliers"
+                      },
+                      "totalXpEarned": {
+                        "type": "number",
+                        "description": "The total XP earned by the student considering calculated multipliers"
+                      }
+                    },
+                    "required": [
+                      "course",
+                      "inEnrolled",
+                      "hasUsedTestOut",
+                      "testOutLessonId",
+                      "completedLessons",
+                      "totalLessons",
+                      "totalAttainableXp",
+                      "totalXpEarned"
+                    ],
+                    "description": "The overview of the course's progress"
+                  },
+                  "description": "The progress of the student in each of the subject's courses"
+                }
+              },
+              "required": ["progress"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

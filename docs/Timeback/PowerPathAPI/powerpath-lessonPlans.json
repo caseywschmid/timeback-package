@@ -1,0 +1,89 @@
+{
+  "post": {
+    "operationId": "createLessonPlan",
+    "summary": "Create a lesson plan",
+    "description": "Purpose: Create a new lesson plan for a course and student\n\nWhen to use:\n- When a new student is enrolled in a course\n- For initial setup of a student's learning path\n- When you need to create a lesson plan from scratch\n\nWhat it does:\n- Creates a new lesson plan\n- Associates it with the course and student\n- Optionally, associates it with a class\n- Returns the lesson plan ID\n- If the lesson plan already exists, returns the existing lesson plan ID\n- If the course, user or class is not found, returns a 404 error\n    ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "courseId": {
+                "type": "string",
+                "description": "The Sourced ID of the course"
+              },
+              "userId": {
+                "type": "string",
+                "description": "The Sourced ID of the student"
+              },
+              "classId": {
+                "type": "string",
+                "description": "(optional) The Sourced ID of the class. Defaults to current year's class for the student"
+              }
+            },
+            "required": ["courseId", "userId"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Lesson plan already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonPlanId": {
+                  "type": "string"
+                }
+              },
+              "required": ["lessonPlanId"]
+            }
+          }
+        }
+      },
+      "201": {
+        "description": "Lesson plan created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonPlanId": {
+                  "type": "string"
+                }
+              },
+              "required": ["lessonPlanId"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Course, User or Class not found"
+      }
+    }
+  }
+}

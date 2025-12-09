@@ -1,0 +1,300 @@
+{
+  "put": {
+    "operationId": "updateStudentQuestionResponse",
+    "summary": "Update student question response",
+    "description": "\nUpdates the student's response to a question and returns the updated PowerPath score:\n- Checks the correctness of the response using the QTI question `<qti-response-declaration>` element and update the score accordingly.\n- Creates/updates the AssessmentLineItem and AssessmentResult objects for the student/question pair if it doesn't exist yet.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object associated with it.\n",
+    "tags": ["PowerPath - Lesson Mastery", "PowerPath - Course Mastery"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/UpdateStudentQuestionResponseInput"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/PowerPath100UpdateStudentQuestionResponseResult"
+                },
+                {
+                  "$ref": "#/components/schemas/QuizUpdateStudentQuestionResponseResult"
+                },
+                {
+                  "$ref": "#/components/schemas/TestOutUpdateStudentQuestionResponseResult"
+                },
+                {
+                  "$ref": "#/components/schemas/PlacementUpdateStudentQuestionResponseResult"
+                },
+                {
+                  "$ref": "#/components/schemas/UnitTestUpdateStudentQuestionResponseResult"
+                }
+              ],
+              "discriminator": {
+                "propertyName": "lessonType",
+                "mapping": {
+                  "powerpath-100": "#/components/schemas/PowerPath100UpdateStudentQuestionResponseResult",
+                  "quiz": "#/components/schemas/QuizUpdateStudentQuestionResponseResult",
+                  "test-out": "#/components/schemas/TestOutUpdateStudentQuestionResponseResult",
+                  "placement": "#/components/schemas/PlacementUpdateStudentQuestionResponseResult",
+                  "unit-test": "#/components/schemas/UnitTestUpdateStudentQuestionResponseResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "UpdateStudentQuestionResponseInput": {
+      "type": "object",
+      "properties": {
+        "student": {
+          "type": "string",
+          "description": "The sourcedId of the student who is answering the question"
+        },
+        "question": {
+          "type": "string",
+          "description": "The QTI question identifier from the lesson's question bank. This identifier corresponds to a specific question fetched from the QTI test URL stored in the lesson's Resource metadata."
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "deprecated": true,
+          "description": "DEPRECATED: Use 'responses' instead. / The student's response to the question. Might be the reference to the choice specified in the QTI structure."
+        },
+        "responses": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "description": "Object containing response identifiers as keys and their corresponding values as strings or arrays of strings"
+        },
+        "lesson": {
+          "type": "string",
+          "description": "The sourcedId of the lesson (ComponentResource)"
+        }
+      },
+      "required": ["student", "question", "lesson"],
+      "description": "The input for the updateStudentQuestionResponse endpoint"
+    },
+    "PowerPath100UpdateStudentQuestionResponseResult": {
+      "type": "object",
+      "properties": {
+        "lessonType": {
+          "type": "string",
+          "const": "powerpath-100"
+        },
+        "powerpathScore": {
+          "type": "number",
+          "description": "The updated PowerPath score of the student in this lesson"
+        },
+        "responseResult": {
+          "type": "object",
+          "properties": {
+            "isCorrect": {
+              "type": "boolean",
+              "description": "Whether the student's response is correct"
+            },
+            "score": {
+              "type": "number",
+              "description": "The score for this specific response (0 or 1)"
+            },
+            "feedback": {
+              "description": "Optional feedback for the student's response"
+            }
+          },
+          "required": ["isCorrect", "score"],
+          "description": "The result of processing the student's response"
+        },
+        "questionResult": {
+          "description": "The assessment result object for the question (for debugging)"
+        },
+        "testResult": {
+          "description": "The assessment result object for the test (for debugging)"
+        },
+        "accuracy": {
+          "type": "number",
+          "description": "The accuracy of the student's attempted questions"
+        },
+        "correctQuestions": {
+          "type": "number",
+          "description": "The number of correct questions the student has answered in the lesson"
+        },
+        "totalQuestions": {
+          "type": "number",
+          "description": "The total number of questions in the lesson"
+        },
+        "xp": {
+          "type": ["number", "null"],
+          "description": "The XP the student has earned in the lesson"
+        },
+        "multiplier": {
+          "type": ["number", "null"],
+          "description": "The multiplier for the student's XP"
+        }
+      },
+      "required": [
+        "lessonType",
+        "powerpathScore",
+        "responseResult",
+        "accuracy",
+        "correctQuestions",
+        "totalQuestions",
+        "xp",
+        "multiplier"
+      ],
+      "description": "Represents the result of updating the student's response to the question in the PowerPath100 lesson (ComponentResource)"
+    },
+    "QuizUpdateStudentQuestionResponseResult": {
+      "type": "object",
+      "properties": {
+        "questionResult": {
+          "description": "The assessment result object for the question (for debugging)"
+        },
+        "lessonType": {
+          "type": "string",
+          "const": "quiz"
+        }
+      },
+      "required": ["lessonType"],
+      "description": "Represents the result of updating the student's response to the question in the PowerPath Quiz lesson"
+    },
+    "TestOutUpdateStudentQuestionResponseResult": {
+      "type": "object",
+      "properties": {
+        "questionResult": {
+          "description": "The assessment result object for the question (for debugging)"
+        },
+        "lessonType": {
+          "type": "string",
+          "const": "test-out"
+        }
+      },
+      "required": ["lessonType"],
+      "description": "Represents the result of updating the student's response to the question in the PowerPath Test Out lesson"
+    },
+    "PlacementUpdateStudentQuestionResponseResult": {
+      "type": "object",
+      "properties": {
+        "questionResult": {
+          "description": "The assessment result object for the question (for debugging)"
+        },
+        "lessonType": {
+          "type": "string",
+          "const": "placement"
+        }
+      },
+      "required": ["lessonType"],
+      "description": "Represents the result of updating the student's response to the question in the PowerPath Placement test"
+    },
+    "UnitTestUpdateStudentQuestionResponseResult": {
+      "type": "object",
+      "properties": {
+        "questionResult": {
+          "description": "The assessment result object for the question (for debugging)"
+        },
+        "lessonType": {
+          "type": "string",
+          "const": "unit-test"
+        }
+      },
+      "required": ["lessonType"],
+      "description": "Represents the result of updating the student's response to the question in the PowerPath Unit Test lesson"
+    }
+  }
+}

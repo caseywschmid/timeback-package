@@ -1,0 +1,181 @@
+{
+  "get": {
+    "operationId": "importExternalTestAssignmentResults",
+    "summary": "Import external test assignment results",
+    "description": "\nRetrieves and stores the results of the external test assignment:\n- Applies to 'test-out', 'placement', and 'unit-test' lessons.\n\nThis logic changes depending on the stored \"toolProvider\" of the lesson:\n- For \"edulastic\":\n  - If the lesson is already finalized, no data import is performed.\n  - If the lesson is not finalized, this will start populating the test and question results with available data, including question scores and feedback. The test will then be deemed finalized when all questions have been answered and the test grade is \"GRADED\".\n- For \"mastery-track\":\n  - If the lesson is already finalized, no data import is performed.\n  - If the lesson is not finalized and powerpath detects the write-back of results was done, this will process the available test and question results data, including question scores and feedback. The test will then be deemed finalized when the scoreStatus is \"fully graded\" and the masteryTrackProcessed flag is set to 'true'.\n\nWill fail if:\n- The lesson is not an external \"test-out\", \"placement\", or \"unit-test\", or the student does not exist\n- Credentials for data consumption are not available in the test result of this student (meaning a previous test assignment was not made)\n- Any other problem on the Edulastic or MasteryTrack API being used that may happen\n\nThe actual test results can be retrieved by using the \"getAssessmentProgress\" endpoint.\n\nNotice this may perform a course enrollment for the student if the lesson is a placement test or test-out, and the respective subject and grade are mapped to the Subject Track with a valid course set. The enrollemnt can be skipped by setting the \"skipCourseEnrollment\" flag in the makeExternalTestAssignment request.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object with lessonType = \"test-out\", \"placement\", or \"unit-test\" associated with it.\n",
+    "tags": ["PowerPath - Course Mastery"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "lesson",
+        "description": "The sourcedId of the lesson (ComponentResource)",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the lesson (ComponentResource)"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "applicationName",
+        "description": "The name of the application",
+        "schema": {
+          "type": "string",
+          "description": "The name of the application"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonType": {
+                  "type": "string",
+                  "enum": ["test-out", "placement", "unit-test"]
+                },
+                "lessonId": {
+                  "type": ["string", "null"],
+                  "description": "The sourcedId of the lesson (ComponentResource)"
+                },
+                "toolProvider": {
+                  "type": ["string", "null"],
+                  "description": "The tool provider for the lesson (ComponentResource)"
+                },
+                "finalized": {
+                  "type": "boolean",
+                  "description": "Whether the Test has been finalized in the current attempt"
+                },
+                "attempt": {
+                  "type": "number",
+                  "description": "The attempt number"
+                },
+                "credentials": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["email", "password"],
+                  "description": "The credentials for accessing the assigned test on external tool"
+                },
+                "assignmentId": {
+                  "type": "string",
+                  "description": "The id of the assignment on external tool for results retrieval"
+                },
+                "classId": {
+                  "type": "string",
+                  "description": "The id of the class on external tool for results retrieval (may be empty for some tools)"
+                },
+                "testUrl": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The URL of the test on external tool"
+                },
+                "testId": {
+                  "type": "string",
+                  "description": "The id of the test on external tool (may be assignment ID for some tools)"
+                }
+              },
+              "required": [
+                "lessonType",
+                "lessonId",
+                "toolProvider",
+                "finalized",
+                "attempt"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

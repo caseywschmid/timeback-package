@@ -1,0 +1,60 @@
+{
+  "post": {
+    "operationId": "SyncCourseLessonPlans",
+    "summary": "Sync Lesson Plans for a Course",
+    "description": "Purpose: Bulk synchronization of all lesson plans for a course.\n\nWhen to use:\n- After making significant structural changes to a base course\n- When you need to ensure all students have the latest course content\n\nWhat it does:\n\n- Finds all lesson plans associated with the course\n- Recreates each lesson plan from the base course structure\n- Applies all historical operations to maintain personalizations\n- Return a list of affected lesson plan ID's \n\n  ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "courseId",
+        "description": "Course ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Course synced",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonPlansAffected": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": ["lessonPlansAffected"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

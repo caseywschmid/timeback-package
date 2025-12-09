@@ -1,0 +1,97 @@
+{
+  "post": {
+    "operationId": "recreateLessonPlan",
+    "summary": "Recreate a lesson plan from a course and apply all operations",
+    "description": "Purpose: Recreate a lesson plan from scratch using it's operation log\n\nWhen to use:\n- When a lesson plan becomes corrupted or out of sync\n- For testing or debugging purposes\n- After detecting and correcting inconsistencies\n\nWhat it does:\n- Deletes all current lesson plan items\n- Rebuilds from the base course structure\n- Applies all operations from the operation log in sequence\n- Returns the operation results for monitoring and inspection\n",
+    "tags": [
+      "PowerPath - Lesson Plans"
+    ],
+    "parameters": [
+      {
+        "name": "lessonPlanId",
+        "description": "Lesson plan ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Lesson plan recreated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "operationCount": {
+                  "type": "number"
+                },
+                "operationResults": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "success": {
+                        "type": "boolean"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "message"
+                          ]
+                        }
+                      }
+                    },
+                    "required": [
+                      "success"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "success",
+                "operationCount",
+                "operationResults"
+              ]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

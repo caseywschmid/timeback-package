@@ -1,0 +1,295 @@
+{
+  "post": {
+    "operationId": "createCourseStructure",
+    "summary": "Create Course Structure from QTI Tests",
+    "description": "Create a course structure from QTI tests",
+    "tags": ["Courses Management"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "courseStructure": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "url": { "type": "string" },
+                    "skillCode": { "type": "string" },
+                    "lessonCode": { "type": "string" },
+                    "title": { "type": "string" },
+                    "unit-title": { "type": "string" },
+                    "status": { "type": "string" },
+                    "xp": { "type": "number" },
+                    "stimulus": {
+                      "type": "object",
+                      "properties": {
+                        "title": { "type": "string" },
+                        "identifier": { "type": "string" }
+                      },
+                      "required": ["title", "identifier"]
+                    },
+                    "video": {
+                      "type": "object",
+                      "properties": {
+                        "url": { "type": "string" },
+                        "title": { "type": "string" }
+                      },
+                      "required": ["url", "title"]
+                    }
+                  },
+                  "required": [
+                    "url",
+                    "skillCode",
+                    "lessonCode",
+                    "title",
+                    "unit-title",
+                    "status",
+                    "xp"
+                  ]
+                }
+              },
+              "course": {
+                "type": "object",
+                "properties": {
+                  "sourcedId": { "type": "string", "minLength": 1 },
+                  "status": {
+                    "type": "string",
+                    "enum": ["active", "tobedeleted"]
+                  },
+                  "dateLastModified": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "nullable": true,
+                    "description": "Additional metadata for the object"
+                  },
+                  "title": { "type": "string" },
+                  "academicSession": {
+                    "type": ["object", "null"],
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "schoolYear": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "href": { "type": "string", "format": "uri" },
+                      "sourcedId": { "type": "string" },
+                      "type": {
+                        "type": "string",
+                        "enum": [
+                          "academicSession",
+                          "assessmentLineItem",
+                          "category",
+                          "class",
+                          "course",
+                          "demographics",
+                          "enrollment",
+                          "gradingPeriod",
+                          "lineItem",
+                          "org",
+                          "resource",
+                          "result",
+                          "scoreScale",
+                          "student",
+                          "teacher",
+                          "term",
+                          "user",
+                          "componentResource",
+                          "courseComponent"
+                        ]
+                      }
+                    },
+                    "required": ["href", "sourcedId", "type"]
+                  },
+                  "courseCode": { "type": ["string", "null"] },
+                  "grades": {
+                    "type": ["array", "null"],
+                    "items": {
+                      "type": "string",
+                      "description": "The grades of the course",
+                      "enum": [
+                        "-1",
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13"
+                      ]
+                    }
+                  },
+                  "subjects": {
+                    "type": ["array", "null"],
+                    "items": {
+                      "type": "string",
+                      "description": "The subjects of the course",
+                      "enum": [
+                        "Reading",
+                        "Language",
+                        "Vocabulary",
+                        "Social Studies",
+                        "Writing",
+                        "Science",
+                        "FastMath",
+                        "Math"
+                      ]
+                    }
+                  },
+                  "subjectCodes": {
+                    "type": ["array", "null"],
+                    "items": { "type": "string" }
+                  },
+                  "org": {
+                    "type": "object",
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "level": { "type": ["string", "null"] },
+                  "gradingScheme": { "type": ["string", "null"] },
+                  "resources": {
+                    "type": ["array", "null"],
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "href": { "type": "string", "format": "uri" },
+                        "sourcedId": { "type": "string" },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "academicSession",
+                            "assessmentLineItem",
+                            "category",
+                            "class",
+                            "course",
+                            "demographics",
+                            "enrollment",
+                            "gradingPeriod",
+                            "lineItem",
+                            "org",
+                            "resource",
+                            "result",
+                            "scoreScale",
+                            "student",
+                            "teacher",
+                            "term",
+                            "user",
+                            "componentResource",
+                            "courseComponent"
+                          ]
+                        }
+                      },
+                      "required": ["href", "sourcedId", "type"]
+                    }
+                  }
+                },
+                "required": ["status", "title", "org"],
+                "description": "Represents a course."
+              }
+            },
+            "required": ["courseStructure", "course"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Created Course Structure Successfully",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourcedIdPairs": {
+                  "type": "object",
+                  "properties": {
+                    "suppliedSourcedId": { "type": "string" },
+                    "allocatedSourcedId": { "type": "string" }
+                  },
+                  "required": ["suppliedSourcedId", "allocatedSourcedId"]
+                }
+              },
+              "required": ["sourcedIdPairs"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

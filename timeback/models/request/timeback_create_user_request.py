@@ -89,6 +89,3 @@ class TimebackCreateUserRequest(BaseModel):
     """
     
     user: TimebackCreateUserBody
-
-    def to_dict(self) -> Dict[str, Any]:
-        return {"user": self.user.model_dump(exclude_none=True)}

@@ -1,0 +1,3786 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CASE API",
+    "version": "1.0.0",
+    "description": "Timeback Platform's implementation of the 1EdTech CASE API (Competencies and Academic Standards Exchange) - https://www.1edtech.org/standards/case\n\n# Authentication\n\nAll endpoints require authentication using the `Authorization: Bearer <token>` header.\n\nThe token can be obtained with:\n\n```\ncurl -X POST https://alpha-auth-production-idp.auth.us-west-2.amazoncognito.com/oauth2/token \\\n-H \"Content-Type: application/x-www-form-urlencoded\" \\\n-d \"grant_type=client_credentials&client_id=<your-client-id>&client_secret=<your-client-secret>\"\n```\n\nUse the correct IDP server depending on the environment you're using:\n\n- Production Server:\n  https://alpha-auth-production-idp.auth.us-west-2.amazoncognito.com\n- Staging Server:\n  https://alpha-auth-development-idp.auth.us-west-2.amazoncognito.com\n\nReach out to the platform team to get a client/secret pair for your application.\n\n# Pagination\n\nOur API uses offset pagination for list endpoints. Paginated responses include the following fields:\n\n- `offset`: Offset for the next page of results\n- `limit`: Number of items per page (default: 100, maximum: 3000)\n\n**Note:** While the OneRoster specification does not define a maximum limit, this implementation enforces a maximum of 3000 items per page to prevent abuse and ensure optimal performance.\n\nExample request:\n\n```\nGET /ims/oneroster/rostering/v1p2/users?offset=20&limit=20\n```\n\nAll listing endpoints support offset pagination.\n\n# Filtering\n\nAll listing endpoints support filtering using the `filter` query parameter, following 1EdTech's filtering specification.\n\nThe filter should be a string with the following format:\n\n```\n?filter=[field][operator][value]\n```\n\nExample request:\n\n```\nGET /ims/oneroster/rostering/v1p2/users?filter=status='active'\n```\n\nExample request with multiple filters:\n\n```\nGET /ims/oneroster/rostering/v1p2/users?filter=status='active' AND name='John'\n```\n\n**Filtering by nested relations is not supported**.\n\n# Sorting\n\nAll listing endpoints support sorting using the `sort` and `orderBy` query parameters, following 1EdTech's sorting specification\n\nExample request:\n\n```\nGET /ims/oneroster/rostering/v1p2/users?sort=lastName&orderBy=asc\n```\n\n# Proprietary Extensions\n\nThis implementation includes proprietary extensions that extend beyond the official OneRoster 1.2 specification to provide additional functionality.\n\n## Search Parameter\n\nIn addition to the standard `filter` parameter, this implementation provides a `search` query parameter for simplified free-text searching:\n\n```\nGET /ims/oneroster/rostering/v1p2/users?search=john\n```\n\n**Purpose**: The `search` parameter enables convenient text-based queries across multiple fields simultaneously, whereas the standard `filter` parameter requires specifying exact field names and operators:\n\n```\n# Search parameter - searches across multiple fields automatically\nGET /ims/oneroster/rostering/v1p2/users?search=john\n\n# Equivalent using standard filter parameter\nGET /ims/oneroster/rostering/v1p2/users?filter=givenName~'john' OR familyName~'john'\n```\n\nThe `search` parameter performs case-insensitive partial matching across predefined fields for each endpoint, providing a more user-friendly querying experience.\n\n## OneRoster 1.2 Standard Parameters\n\nThe official OneRoster 1.2 specification defines these standard parameters:\n\n- `limit` - pagination limit\n- `offset` - pagination offset\n- `sort` - field to sort by\n- `orderBy` - sort direction (asc/desc)\n- `filter` - filtering expression\n- `fields` - field selection\n\n## Affected Endpoints\n\nThe proprietary `search` parameter is available on the following endpoints:\n\n**Rostering API**:\n\n- `GET /ims/oneroster/rostering/v1p2/academicSessions/`\n- `GET /ims/oneroster/rostering/v1p2/classes/`\n- `GET /ims/oneroster/rostering/v1p2/classes/{classSourcedId}/students`\n- `GET /ims/oneroster/rostering/v1p2/classes/{classSourcedId}/teachers`\n- `GET /ims/oneroster/rostering/v1p2/courses/`\n- `GET /ims/oneroster/rostering/v1p2/courses/{courseSourcedId}/classes`\n- `GET /ims/oneroster/rostering/v1p2/demographics/`\n- `GET /ims/oneroster/rostering/v1p2/enrollments/`\n- `GET /ims/oneroster/rostering/v1p2/schools/{schoolSourcedId}/classes/{classSourcedId}/students`\n- `GET /ims/oneroster/rostering/v1p2/users/`\n\n**Gradebook API**:\n\n- `GET /ims/oneroster/gradebook/v1p2/assessmentLineItems/`\n- `GET /ims/oneroster/gradebook/v1p2/assessmentResults/`\n- `GET /ims/oneroster/gradebook/v1p2/classes/{classSourcedId}/students/{studentSourcedId}/results`\n- `GET /ims/oneroster/gradebook/v1p2/results/`\n\n**Resources API**:\n\n- `GET /ims/oneroster/resources/v1p2/resources/`\n\n## Parameter Usage Guide\n\n### Filter Parameter\n\nThe standard `filter` parameter provides precise control over queries using these operators:\n\n- `=` - Exact match\n- `!=` - Not equal\n- `~` - Contains (case-insensitive)\n- `>`, `>=`, `<`, `<=` - Comparison operators\n- `@` - In list (comma-separated values)\n\n### Logical Operators\n\nCombine multiple conditions in filter expressions:\n\n- `AND` - Both conditions must be true\n- `OR` - Either condition must be true\n\n### Usage Examples\n\n```bash\n# Simple text search across multiple fields\nGET /users?search=john\n\n# Equivalent precise filtering\nGET /users?filter=givenName~'john' OR familyName~'john'\n\n# Complex filtering with multiple conditions\nGET /users?filter=status='active' AND givenName~'john'\n\n# Advanced filtering with different operators\nGET /users?filter=dateLastModified>'2023-01-01' AND status='active'\n```\n\n## Search Fields by Endpoint\n\nDifferent endpoints search across these predefined fields:\n\n- **Users**: `givenName`, `familyName`, `email`\n- **Courses**: `title`, `courseCode`\n- **Classes**: `title`\n- **Organizations**: `name`\n\n## Interoperability Notes\n\nThe `search` parameter is a proprietary extension specific to this implementation. Other OneRoster-compliant systems may only support the standard `filter` parameter. When building applications that need to work with multiple OneRoster providers, consider using the standard filtering approach.\n\n## Additional Schema Fields\n\n### AssessmentLineItem Extensions\n\nThe AssessmentLineItem schema includes two proprietary fields that extend curriculum mapping capabilities:\n\n#### Component Field\n\n- **Field**: `component`\n- **Type**: Object reference (`{ sourcedId: string }`)\n- **Purpose**: Direct association between assessment line items and course components, enabling enhanced curriculum mapping and learning pathway tracking.\n\n#### ComponentResource Field\n\n- **Field**: `componentResource`\n- **Type**: Object reference (`{ sourcedId: string }`)\n- **Purpose**: Direct association between assessment line items and specific learning resources, supporting detailed content-to-assessment relationships and adaptive learning features.\n\n**Example Usage**:\n\n```json\n{\n  \"sourcedId\": \"assessment-123\",\n  \"title\": \"Chapter 5 Quiz\",\n  \"component\": { \"sourcedId\": \"component-456\" },\n  \"componentResource\": { \"sourcedId\": \"resource-789\" }\n}\n```\n\n## Affected Endpoints\n\n### Schema Extensions Availability\n\nThe proprietary schema fields are available in:\n\n**Gradebook API**:\n\n- `GET /ims/oneroster/gradebook/v1p2/assessmentLineItems/` - Returns assessmentLineItems with `component` and `componentResource` fields\n- `GET /ims/oneroster/gradebook/v1p2/assessmentLineItems/{sourcedId}` - Returns individual assessmentLineItem with extended fields\n- `POST /ims/oneroster/gradebook/v1p2/assessmentLineItems/` - Accepts `component` and `componentResource` in request body\n- `PUT /ims/oneroster/gradebook/v1p2/assessmentLineItems/{sourcedId}` - Accepts extended fields for updates\n"
+  },
+  "servers": [
+    {
+      "url": "https://api.alpha-1edtech.com",
+      "description": "CASE API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "CASE - Learning Standards",
+      "description": "Manage learning standards and competency frameworks"
+    }
+  ],
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ],
+  "paths": {
+    "/ims/case/v1p1/CFAssociations/{sourcedId}": {
+      "get": {
+        "operationId": "getCFAssociation",
+        "summary": "Get CASE Association by ID",
+        "description": "Returns a specific CASE Association identified by its sourcedId",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "parameters": [
+          {
+            "name": "sourcedId",
+            "description": "The sourcedId of the CASE Association",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CASE Association",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFAssociation": {
+                      "type": "object",
+                      "properties": {
+                        "sourcedId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "associationType": {
+                          "type": "string"
+                        },
+                        "sequenceNumber": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "uri": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "originNodeURI": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "destinationNodeURI": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "CFAssociationGroupingURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "lastChangeDateTime": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "notes": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "extensions": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": {}
+                        },
+                        "CFDocumentURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "sourcedId",
+                        "associationType",
+                        "uri",
+                        "originNodeURI",
+                        "destinationNodeURI",
+                        "lastChangeDateTime"
+                      ],
+                      "description": "Represents a relationship between framework items."
+                    }
+                  },
+                  "required": [
+                    "CFAssociation"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFDocuments": {
+      "get": {
+        "operationId": "getAllCFDocuments",
+        "summary": "Get All CASE Documents",
+        "description": "Returns a collection of all CASE documents in the system",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of CASE Documents",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFDocuments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sourcedId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "uri": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "frameworkType": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "caseVersion": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "enum": [
+                              "1.1",
+                              null
+                            ]
+                          },
+                          "creator": {
+                            "type": "string"
+                          },
+                          "lastChangeDateTime": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "officialSourceURL": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "uri"
+                          },
+                          "publisher": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "description": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "subject": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "subjectURI": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            }
+                          },
+                          "language": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "version": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "adoptionStatus": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "statusStartDate": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date"
+                          },
+                          "statusEndDate": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date"
+                          },
+                          "licenseURI": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          },
+                          "notes": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "extensions": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "additionalProperties": {}
+                          },
+                          "CFPackageURI": {
+                            "type": "object",
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "sourcedId",
+                          "title",
+                          "uri",
+                          "creator",
+                          "lastChangeDateTime",
+                          "CFPackageURI"
+                        ],
+                        "description": "Represents a Competency Framework Document."
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "CFDocuments"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFDocuments/{sourcedId}": {
+      "get": {
+        "operationId": "getCFDocument",
+        "summary": "Get CASE Document by ID",
+        "description": "Returns a specific CASE Document identified by its sourcedId",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "parameters": [
+          {
+            "name": "sourcedId",
+            "description": "The sourcedId of the CASE Document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "Comma-separated list of fields to include in the response",
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated list of fields to include in the response",
+              "example": "sourcedId,name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CASE Document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFDocument": {
+                      "type": "object",
+                      "properties": {
+                        "sourcedId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "uri": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "frameworkType": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "caseVersion": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "1.1",
+                            null
+                          ]
+                        },
+                        "creator": {
+                          "type": "string"
+                        },
+                        "lastChangeDateTime": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "officialSourceURL": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "uri"
+                        },
+                        "publisher": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "description": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "subject": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "subjectURI": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          }
+                        },
+                        "language": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "version": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "adoptionStatus": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "statusStartDate": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date"
+                        },
+                        "statusEndDate": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date"
+                        },
+                        "licenseURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "notes": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "extensions": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": {}
+                        },
+                        "CFPackageURI": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "sourcedId",
+                        "title",
+                        "uri",
+                        "creator",
+                        "lastChangeDateTime",
+                        "CFPackageURI"
+                      ],
+                      "description": "Represents a Competency Framework Document."
+                    }
+                  },
+                  "required": [
+                    "CFDocument"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFItems": {
+      "get": {
+        "operationId": "getAllCFItems",
+        "summary": "Get All CASE Items",
+        "description": "Returns a collection of all CASE Items",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection of CASE Items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFItems": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "sourcedId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "fullStatement": {
+                            "type": "string"
+                          },
+                          "alternativeLabel": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "CFItemType": {
+                            "type": "string"
+                          },
+                          "uri": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "humanCodingScheme": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "listEnumeration": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "abbreviatedStatement": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "conceptKeywords": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "conceptKeywordsURI": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          },
+                          "notes": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "subject": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "subjectURI": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            }
+                          },
+                          "language": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "educationLevel": {
+                            "type": [
+                              "array",
+                              "null"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "CFItemTypeURI": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          },
+                          "licenseURI": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          },
+                          "statusStartDate": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date"
+                          },
+                          "statusEndDate": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date"
+                          },
+                          "lastChangeDateTime": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "extensions": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "additionalProperties": {}
+                          },
+                          "CFDocumentURI": {
+                            "type": [
+                              "object",
+                              "null"
+                            ],
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "sourcedId",
+                          "fullStatement",
+                          "CFItemType",
+                          "uri",
+                          "lastChangeDateTime"
+                        ],
+                        "description": "Represents an item in a competency framework."
+                      }
+                    }
+                  },
+                  "required": [
+                    "CFItems"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFItems/{sourcedId}": {
+      "get": {
+        "operationId": "getCFItem",
+        "summary": "Get CASE Item by ID",
+        "description": "Returns a specific CASE Item identified by its sourcedId",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "parameters": [
+          {
+            "name": "sourcedId",
+            "description": "The sourcedId of the CASE Item",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "Comma-separated list of fields to include in the response",
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated list of fields to include in the response",
+              "example": "sourcedId,name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CASE Item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFItem": {
+                      "type": "object",
+                      "properties": {
+                        "sourcedId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "fullStatement": {
+                          "type": "string"
+                        },
+                        "alternativeLabel": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "CFItemType": {
+                          "type": "string"
+                        },
+                        "uri": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "humanCodingScheme": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "listEnumeration": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "abbreviatedStatement": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "conceptKeywords": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "conceptKeywordsURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "notes": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "subject": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "subjectURI": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "title",
+                              "uri"
+                            ]
+                          }
+                        },
+                        "language": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "educationLevel": {
+                          "type": [
+                            "array",
+                            "null"
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "CFItemTypeURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "licenseURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        },
+                        "statusStartDate": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date"
+                        },
+                        "statusEndDate": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date"
+                        },
+                        "lastChangeDateTime": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "extensions": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "additionalProperties": {}
+                        },
+                        "CFDocumentURI": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "sourcedId",
+                        "fullStatement",
+                        "CFItemType",
+                        "uri",
+                        "lastChangeDateTime"
+                      ],
+                      "description": "Represents an item in a competency framework."
+                    }
+                  },
+                  "required": [
+                    "CFItem"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFPackages": {
+      "post": {
+        "operationId": "uploadCFPackage",
+        "summary": "Upload CASE Package",
+        "description": "Upload a complete CASE package with document, items, and associations",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "CFDocument": {
+                    "type": "object",
+                    "properties": {
+                      "identifier": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "uri": {
+                        "type": "string"
+                      },
+                      "lastChangeDateTime": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "creator": {
+                        "type": "string"
+                      },
+                      "officialSourceURL": {
+                        "type": "string"
+                      },
+                      "publisher": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "language": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "caseVersion": {
+                        "type": "string"
+                      },
+                      "adoptionStatus": {
+                        "type": "string"
+                      },
+                      "statusStartDate": {
+                        "type": "string"
+                      },
+                      "statusEndDate": {
+                        "type": "string"
+                      },
+                      "licenseUri": {
+                        "type": "string"
+                      },
+                      "notes": {
+                        "type": "string"
+                      },
+                      "subject": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "identifier",
+                      "uri",
+                      "lastChangeDateTime",
+                      "title",
+                      "creator"
+                    ]
+                  },
+                  "CFItems": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "uri": {
+                          "type": "string"
+                        },
+                        "lastChangeDateTime": {
+                          "type": "string"
+                        },
+                        "fullStatement": {
+                          "type": "string"
+                        },
+                        "alternativeLabel": {
+                          "type": "string"
+                        },
+                        "CFItemType": {
+                          "type": "string"
+                        },
+                        "cfItemType": {
+                          "type": "string"
+                        },
+                        "humanCodingScheme": {
+                          "type": "string"
+                        },
+                        "listEnumeration": {
+                          "type": "string"
+                        },
+                        "abbreviatedStatement": {
+                          "type": "string"
+                        },
+                        "conceptKeywords": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "notes": {
+                          "type": "string"
+                        },
+                        "subject": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "language": {
+                          "type": "string"
+                        },
+                        "educationLevel": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "CFItemTypeURI": {},
+                        "licenseURI": {},
+                        "statusStartDate": {
+                          "type": "string"
+                        },
+                        "statusEndDate": {
+                          "type": "string"
+                        },
+                        "extensions": {}
+                      },
+                      "required": [
+                        "identifier",
+                        "uri",
+                        "lastChangeDateTime",
+                        "fullStatement"
+                      ]
+                    }
+                  },
+                  "CFAssociations": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "uri": {
+                          "type": "string"
+                        },
+                        "lastChangeDateTime": {
+                          "type": "string"
+                        },
+                        "associationType": {
+                          "type": "string"
+                        },
+                        "originNodeURI": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            },
+                            "identifier": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "uri": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "identifier",
+                            "uri"
+                          ]
+                        },
+                        "destinationNodeURI": {
+                          "type": "object",
+                          "properties": {
+                            "title": {
+                              "type": "string"
+                            },
+                            "identifier": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "uri": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "title",
+                            "identifier",
+                            "uri"
+                          ]
+                        },
+                        "sequenceNumber": {
+                          "type": "number"
+                        },
+                        "extensions": {}
+                      },
+                      "required": [
+                        "identifier",
+                        "uri",
+                        "lastChangeDateTime",
+                        "associationType",
+                        "originNodeURI",
+                        "destinationNodeURI"
+                      ]
+                    }
+                  },
+                  "CFDefinitions": {
+                    "type": "object",
+                    "properties": {
+                      "CFItemTypes": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "CFSubjects": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "CFConcepts": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "CFLicenses": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "CFAssociationGroupings": {
+                        "type": "array",
+                        "items": {}
+                      },
+                      "extensions": {}
+                    }
+                  },
+                  "extensions": {}
+                },
+                "required": [
+                  "CFDocument",
+                  "CFItems",
+                  "CFAssociations"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CASE Package Upload Result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "documentId": {
+                          "type": "string"
+                        },
+                        "stats": {
+                          "type": "object",
+                          "properties": {
+                            "documents": {
+                              "type": "number"
+                            },
+                            "items": {
+                              "type": "number"
+                            },
+                            "associations": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "documents",
+                            "items",
+                            "associations"
+                          ]
+                        },
+                        "success": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "documentId",
+                        "stats",
+                        "success"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFPackages/{sourcedId}": {
+      "get": {
+        "operationId": "getCFPackage",
+        "summary": "Get CASE Package by ID",
+        "description": "Returns a complete CASE package for the specified sourcedId",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "parameters": [
+          {
+            "name": "sourcedId",
+            "description": "The sourcedId of the CASE Document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "Comma-separated list of fields to include in the response",
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated list of fields to include in the response",
+              "example": "sourcedId,name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CASE Package",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFPackage": {
+                      "type": "object",
+                      "properties": {
+                        "sourcedId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "CFDocument": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "frameworkType": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "caseVersion": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "enum": [
+                                "1.1",
+                                null
+                              ]
+                            },
+                            "creator": {
+                              "type": "string"
+                            },
+                            "lastChangeDateTime": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "officialSourceURL": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "uri"
+                            },
+                            "publisher": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "subject": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "subjectURI": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              }
+                            },
+                            "language": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "version": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "adoptionStatus": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "statusStartDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "date"
+                            },
+                            "statusEndDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "date"
+                            },
+                            "licenseURI": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            },
+                            "notes": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "extensions": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "additionalProperties": {}
+                            },
+                            "CFPackageURI": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri",
+                            "creator",
+                            "lastChangeDateTime",
+                            "CFPackageURI"
+                          ],
+                          "description": "Represents a Competency Framework Document."
+                        },
+                        "CFItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "fullStatement": {
+                                "type": "string"
+                              },
+                              "alternativeLabel": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "CFItemType": {
+                                "type": "string"
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "humanCodingScheme": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "listEnumeration": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "abbreviatedStatement": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "conceptKeywords": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "conceptKeywordsURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "notes": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "subject": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "subjectURI": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "sourcedId": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "uri": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    }
+                                  },
+                                  "required": [
+                                    "sourcedId",
+                                    "title",
+                                    "uri"
+                                  ]
+                                }
+                              },
+                              "language": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "educationLevel": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "CFItemTypeURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "licenseURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "statusStartDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "format": "date"
+                              },
+                              "statusEndDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "format": "date"
+                              },
+                              "lastChangeDateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "extensions": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "additionalProperties": {}
+                              },
+                              "CFDocumentURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "fullStatement",
+                              "CFItemType",
+                              "uri",
+                              "lastChangeDateTime"
+                            ],
+                            "description": "Represents an item in a competency framework."
+                          }
+                        },
+                        "CFAssociations": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "sourcedId": {
+                                "type": "string",
+                                "format": "uuid"
+                              },
+                              "associationType": {
+                                "type": "string"
+                              },
+                              "sequenceNumber": {
+                                "type": [
+                                  "integer",
+                                  "null"
+                                ]
+                              },
+                              "uri": {
+                                "type": "string",
+                                "format": "uri"
+                              },
+                              "originNodeURI": {
+                                "type": "object",
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "destinationNodeURI": {
+                                "type": "object",
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "CFAssociationGroupingURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              },
+                              "lastChangeDateTime": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "notes": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "extensions": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "additionalProperties": {}
+                              },
+                              "CFDocumentURI": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "sourcedId",
+                              "associationType",
+                              "uri",
+                              "originNodeURI",
+                              "destinationNodeURI",
+                              "lastChangeDateTime"
+                            ],
+                            "description": "Represents a relationship between framework items."
+                          }
+                        }
+                      },
+                      "required": [
+                        "sourcedId",
+                        "CFDocument"
+                      ],
+                      "description": "Represents a complete competency framework package."
+                    }
+                  },
+                  "required": [
+                    "CFPackage"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ims/case/v1p1/CFPackages/{sourcedId}/groups": {
+      "get": {
+        "operationId": "getCFPackageWithGroups",
+        "summary": "Get CASE Package with Groups by ID",
+        "description": "Returns a complete CASE package with groups for the specified sourcedId",
+        "tags": [
+          "CASE - Learning Standards"
+        ],
+        "parameters": [
+          {
+            "name": "sourcedId",
+            "description": "The sourcedId of the CASE Document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "fields",
+            "description": "Comma-separated list of fields to include in the response",
+            "schema": {
+              "type": "string",
+              "description": "Comma-separated list of fields to include in the response",
+              "example": "sourcedId,name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CASE Package with Groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "CFPackageWithGroups": {
+                      "type": "object",
+                      "properties": {
+                        "sourcedId": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "CFDocument": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "uri": {
+                              "type": "string",
+                              "format": "uri"
+                            },
+                            "frameworkType": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "caseVersion": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "enum": [
+                                "1.1",
+                                null
+                              ]
+                            },
+                            "creator": {
+                              "type": "string"
+                            },
+                            "lastChangeDateTime": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "officialSourceURL": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "uri"
+                            },
+                            "publisher": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "description": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "subject": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "subjectURI": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "sourcedId": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "uri": {
+                                    "type": "string",
+                                    "format": "uri"
+                                  }
+                                },
+                                "required": [
+                                  "sourcedId",
+                                  "title",
+                                  "uri"
+                                ]
+                              }
+                            },
+                            "language": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "version": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "adoptionStatus": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "statusStartDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "date"
+                            },
+                            "statusEndDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "format": "date"
+                            },
+                            "licenseURI": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            },
+                            "notes": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "extensions": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "additionalProperties": {}
+                            },
+                            "CFPackageURI": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "title": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "title",
+                                "uri"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "sourcedId",
+                            "title",
+                            "uri",
+                            "creator",
+                            "lastChangeDateTime",
+                            "CFPackageURI"
+                          ],
+                          "description": "Represents a Competency Framework Document."
+                        },
+                        "structuredContent": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": {
+                                  "type": "string",
+                                  "format": "uuid"
+                                },
+                                "fullStatement": {
+                                  "type": "string"
+                                },
+                                "alternativeLabel": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "CFItemType": {
+                                  "type": "string"
+                                },
+                                "uri": {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                "humanCodingScheme": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "listEnumeration": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "abbreviatedStatement": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "conceptKeywords": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "conceptKeywordsURI": {
+                                  "type": [
+                                    "object",
+                                    "null"
+                                  ],
+                                  "properties": {
+                                    "sourcedId": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "uri": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    }
+                                  },
+                                  "required": [
+                                    "sourcedId",
+                                    "title",
+                                    "uri"
+                                  ]
+                                },
+                                "notes": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "subject": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "subjectURI": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "sourcedId": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                      },
+                                      "title": {
+                                        "type": "string"
+                                      },
+                                      "uri": {
+                                        "type": "string",
+                                        "format": "uri"
+                                      }
+                                    },
+                                    "required": [
+                                      "sourcedId",
+                                      "title",
+                                      "uri"
+                                    ]
+                                  }
+                                },
+                                "language": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "educationLevel": {
+                                  "type": [
+                                    "array",
+                                    "null"
+                                  ],
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                },
+                                "CFItemTypeURI": {
+                                  "type": [
+                                    "object",
+                                    "null"
+                                  ],
+                                  "properties": {
+                                    "sourcedId": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "uri": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    }
+                                  },
+                                  "required": [
+                                    "sourcedId",
+                                    "title",
+                                    "uri"
+                                  ]
+                                },
+                                "licenseURI": {
+                                  "type": [
+                                    "object",
+                                    "null"
+                                  ],
+                                  "properties": {
+                                    "sourcedId": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "uri": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    }
+                                  },
+                                  "required": [
+                                    "sourcedId",
+                                    "title",
+                                    "uri"
+                                  ]
+                                },
+                                "statusStartDate": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "format": "date"
+                                },
+                                "statusEndDate": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "format": "date"
+                                },
+                                "lastChangeDateTime": {
+                                  "type": "string",
+                                  "format": "date-time"
+                                },
+                                "extensions": {
+                                  "type": [
+                                    "object",
+                                    "null"
+                                  ],
+                                  "additionalProperties": {}
+                                },
+                                "CFDocumentURI": {
+                                  "type": [
+                                    "object",
+                                    "null"
+                                  ],
+                                  "properties": {
+                                    "sourcedId": {
+                                      "type": "string",
+                                      "format": "uuid"
+                                    },
+                                    "title": {
+                                      "type": "string"
+                                    },
+                                    "uri": {
+                                      "type": "string",
+                                      "format": "uri"
+                                    }
+                                  },
+                                  "required": [
+                                    "sourcedId",
+                                    "title",
+                                    "uri"
+                                  ]
+                                },
+                                "childGroups": {
+                                  "type": "object",
+                                  "additionalProperties": {
+                                    "type": "array",
+                                    "items": {}
+                                  }
+                                }
+                              },
+                              "required": [
+                                "sourcedId",
+                                "fullStatement",
+                                "CFItemType",
+                                "uri",
+                                "lastChangeDateTime"
+                              ],
+                              "description": "Represents an item in a competency framework."
+                            }
+                          }
+                        }
+                      },
+                      "required": [
+                        "sourcedId",
+                        "CFDocument",
+                        "structuredContent"
+                      ],
+                      "description": "Represents a complete competency framework package with hierarchical groups organized by CFItemType. Each item contains childGroups organized by the CFItemType of children."
+                    }
+                  },
+                  "required": [
+                    "CFPackageWithGroups"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity / Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnprocessableEntityResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TooManyRequestsResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "MCP": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://alpha-auth-production-idp.auth.us-west-2.amazoncognito.com/oauth2/authorize",
+            "tokenUrl": "https://alpha-auth-production-idp.auth.us-west-2.amazoncognito.com/oauth2/token",
+            "scopes": {
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly": "Read access to roster core",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster.readonly": "Read access to roster",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-demographics.readonly": "Read access to roster demographics",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/resource.readonly": "Read access to resource",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/gradebook.readonly": "Read access to gradebook",
+              "https://purl.imsglobal.org/spec/powerpath/v1p1/scope/powerpath.readonly": "Read access to powerpath",
+              "https://purl.imsglobal.org/spec/ob/v3p0/scope/credential.readonly": "Read your issued badges",
+              "https://purl.imsglobal.org/spec/clr/v2p0/scope/credential.readonly": "Read access to CLR"
+            }
+          }
+        }
+      },
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "scopes": {
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/admin": "Admin access to the API",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-core.readonly": "Read access to roster core",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster.readonly": "Read access to roster",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster.createput": "Create and update access to roster",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster.delete": "Delete access to roster",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-demographics.readonly": "Read access to roster demographics",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-demographics.createput": "Create and update access to roster demographics",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/roster-demographics.delete": "Delete access to roster demographics",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/resource.readonly": "Read access to resource",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/resource.createput": "Create and update access to resource",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/resource.delete": "Delete access to resource",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/gradebook.readonly": "Read access to gradebook",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/gradebook.createput": "Create and update access to gradebook",
+              "https://purl.imsglobal.org/spec/or/v1p1/scope/gradebook.delete": "Delete access to gradebook",
+              "https://purl.imsglobal.org/spec/powerpath/v1p1/scope/powerpath.readonly": "Read access to powerpath",
+              "https://purl.imsglobal.org/spec/powerpath/v1p1/scope/powerpath.createput": "Create and update access to powerpath",
+              "https://purl.imsglobal.org/spec/powerpath/v1p1/scope/powerpath.delete": "Delete access to powerpath",
+              "https://purl.imsglobal.org/spec/powerpath/v1p1/scope/powerpath.admin": "Admin access to powerpath",
+              "https://purl.imsglobal.org/spec/ob/v3p0/scope/credential.readonly": "Read your issued badges",
+              "https://purl.imsglobal.org/spec/ob/v3p0/scope/credential.upsert": "Store new badges in your account",
+              "https://purl.imsglobal.org/spec/ob/v3p0/scope/credential.delete": "Delete access to open badges",
+              "https://purl.imsglobal.org/spec/ob/v3p0/scope/credential.admin": "Administrative access to open badges",
+              "https://purl.imsglobal.org/spec/clr/v2p0/scope/credential.readonly": "Read access to CLR",
+              "https://purl.imsglobal.org/spec/clr/v2p0/scope/credential.upsert": "Create and update access to CLR",
+              "https://purl.imsglobal.org/spec/clr/v2p0/scope/credential.admin": "Administrative access to CLR"
+            },
+            "tokenUrl": "https://alpha-auth-production-idp.auth.us-west-2.amazoncognito.com/oauth2/token"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "BadRequestResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "invaliddata",
+                      "description": "The field value for the minor code",
+                      "example": "invaliddata"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "UnauthorizedRequestResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "unauthorisedrequest",
+                      "description": "The field value for the minor code",
+                      "example": "unauthorisedrequest"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "ForbiddenResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "forbidden",
+                      "description": "The field value for the minor code",
+                      "example": "forbidden"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "NotFoundResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "unknownobject",
+                      "description": "The field value for the minor code",
+                      "example": "unknownobject"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "UnprocessableEntityResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "invaliddata",
+                      "description": "The field value for the minor code",
+                      "example": "invaliddata"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "TooManyRequestsResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "server_busy",
+                      "description": "The field value for the minor code",
+                      "example": "server_busy"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      },
+      "InternalServerErrorResponse": {
+        "type": "object",
+        "properties": {
+          "imsx_codeMajor": {
+            "type": "string",
+            "default": "failure",
+            "description": "The major response code",
+            "example": "failure"
+          },
+          "imsx_severity": {
+            "type": "string",
+            "default": "error",
+            "description": "The severity of the response",
+            "example": "error"
+          },
+          "imsx_description": {
+            "type": "string"
+          },
+          "imsx_CodeMinor": {
+            "type": "object",
+            "properties": {
+              "imsx_codeMinorField": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "imsx_codeMinorFieldName": {
+                      "type": "string",
+                      "default": "TargetEndSystem",
+                      "description": "The field name for the minor code",
+                      "example": "TargetEndSystem"
+                    },
+                    "imsx_codeMinorFieldValue": {
+                      "type": "string",
+                      "default": "internal_server_error",
+                      "description": "The field value for the minor code",
+                      "example": "internal_server_error"
+                    }
+                  },
+                  "required": [
+                    "imsx_codeMinorFieldName",
+                    "imsx_codeMinorFieldValue"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "imsx_codeMinorField"
+            ]
+          },
+          "imsx_error_details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "imsx_codeMajor",
+          "imsx_severity",
+          "imsx_description",
+          "imsx_CodeMinor"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "get": {
+    "operationId": "getNextQuestion",
+    "summary": "Get next question",
+    "description": "\nReturns the next question in the given PowerPath component resource.\n\nWorks only with lessons of type 'powerpath-100'.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object associated with it.\n",
+    "tags": ["PowerPath - Lesson Mastery"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student who is answering the question",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student who is answering the question"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "lesson",
+        "description": "The sourcedId of the lesson (ComponentResource)",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the lesson (ComponentResource)"
+        },
+        "required": true
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "score": {
+                  "type": "number",
+                  "description": "The current PowerPath score of the student in this lesson"
+                },
+                "question": {
+                  "$ref": "#/components/schemas/PowerPathTestQuestion"
+                }
+              },
+              "required": ["score", "question"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "PowerPathTestQuestion": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The ID that represents the question in the test"
+        },
+        "index": {
+          "type": "number",
+          "description": "The index of the question in the test"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the question"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "The URL of the QTI question"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"],
+          "default": "medium",
+          "description": "The difficulty of the question"
+        },
+        "humanApproved": {
+          "type": ["boolean", "null"],
+          "description": "Whether the question has been approved by a human"
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "The type of the question"
+            },
+            "rawXml": {
+              "type": "string",
+              "description": "The raw XML question in QTI format"
+            }
+          },
+          "required": ["rawXml"],
+          "description": "The QTI content of the question"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "The student's response to the question"
+        },
+        "responses": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "description": "The student's responses to the question"
+        },
+        "correct": {
+          "type": "boolean",
+          "description": "Whether the student's response is correct"
+        },
+        "result": {
+          "type": "object",
+          "properties": {
+            "outcomes": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "The outcomes of the question"
+            },
+            "score": {
+              "type": "number",
+              "description": "The score assigned to the question, considering the student's response"
+            },
+            "feedback": {
+              "type": "string",
+              "description": "The feedback for the question"
+            }
+          },
+          "required": ["score", "feedback"],
+          "description": "The result of the question"
+        },
+        "learningObjectives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of learning objective IDs associated with the question"
+        }
+      },
+      "required": ["id", "index", "title", "url", "difficulty"],
+      "description": "A PowerPath Test Question"
+    }
+  }
+}

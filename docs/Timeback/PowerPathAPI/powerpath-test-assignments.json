@@ -1,0 +1,414 @@
+{
+  "post": {
+    "operationId": "createTestAssignment",
+    "summary": "Create an individual test assignment (unlisted test-out)",
+    "description": "Creates a standalone test-out assignment for a student, generating a Resource and an unlisted ComponentResource (no course link), and registering the assignment record.",
+    "tags": ["PowerPath - Test Assignments"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "student": {
+                "type": "string",
+                "description": "The sourcedId of the student"
+              },
+              "subject": {
+                "type": "string",
+                "description": "The subject of the test (e.g., Math)",
+                "enum": [
+                  "Reading",
+                  "Language",
+                  "Vocabulary",
+                  "Social Studies",
+                  "Writing",
+                  "Science",
+                  "FastMath",
+                  "Math"
+                ]
+              },
+              "grade": {
+                "type": "string",
+                "description": "The grade of the test (e.g., 3)",
+                "enum": [
+                  "-1",
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13"
+                ]
+              },
+              "testName": {
+                "type": "string",
+                "description": "Optional display name for the test"
+              }
+            },
+            "required": ["student", "subject", "grade"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "assignmentId": {
+                  "type": "string",
+                  "description": "The sourcedId of the test assignment"
+                },
+                "lessonId": {
+                  "type": "string",
+                  "description": "The sourcedId of the component resource (unlisted lesson)"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The sourcedId of the resource created"
+                }
+              },
+              "required": ["assignmentId", "lessonId", "resourceId"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "get": {
+    "operationId": "listStudentTestAssignments",
+    "summary": "List test assignments for a student",
+    "description": "Returns a paginated list of test assignments filtered by student with optional filters for status, subject, and grade.",
+    "tags": ["PowerPath - Test Assignments"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "limit",
+        "description": "The maximum number of items to return in the paginated response. While the OneRoster specification does not define a maximum limit, this implementation enforces a maximum of 3000 to prevent abuse and ensure optimal performance.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3000,
+          "default": 100,
+          "description": "The maximum number of items to return in the paginated response. While the OneRoster specification does not define a maximum limit, this implementation enforces a maximum of 3000 to prevent abuse and ensure optimal performance.",
+          "example": 100
+        }
+      },
+      {
+        "in": "query",
+        "name": "offset",
+        "description": "The number of items to skip in the paginated response",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "The number of items to skip in the paginated response",
+          "example": 0
+        }
+      },
+      {
+        "in": "query",
+        "name": "student",
+        "description": "The sourcedId of the student",
+        "schema": {
+          "type": "string",
+          "description": "The sourcedId of the student"
+        },
+        "required": true
+      },
+      {
+        "in": "query",
+        "name": "status",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "assigned",
+            "in_progress",
+            "completed",
+            "failed",
+            "expired",
+            "cancelled"
+          ]
+        }
+      },
+      {
+        "in": "query",
+        "name": "subject",
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "in": "query",
+        "name": "grade",
+        "schema": {
+          "type": "string",
+          "description": "The grades of the course",
+          "enum": [
+            "-1",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13"
+          ]
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "testAssignments": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sourcedId": {
+                        "type": "string"
+                      },
+                      "studentSourcedId": {
+                        "type": "string"
+                      },
+                      "studentEmail": {
+                        "type": "string",
+                        "format": "email"
+                      },
+                      "assignedByUserSourcedId": {
+                        "type": ["string", "null"]
+                      },
+                      "subject": {
+                        "type": "string"
+                      },
+                      "grade": {
+                        "type": "string"
+                      },
+                      "assignmentStatus": {
+                        "type": "string"
+                      },
+                      "testName": {
+                        "type": ["string", "null"]
+                      },
+                      "assignedAt": {
+                        "type": ["string", "null"]
+                      },
+                      "expiresAt": {
+                        "type": ["string", "null"]
+                      },
+                      "completedAt": {
+                        "type": ["string", "null"]
+                      },
+                      "resourceSourcedId": {
+                        "type": ["string", "null"]
+                      },
+                      "componentResourceSourcedId": {
+                        "type": ["string", "null"]
+                      }
+                    },
+                    "required": [
+                      "sourcedId",
+                      "studentSourcedId",
+                      "studentEmail",
+                      "assignedByUserSourcedId",
+                      "subject",
+                      "grade",
+                      "assignmentStatus"
+                    ]
+                  }
+                },
+                "totalCount": {
+                  "type": "number"
+                },
+                "pageCount": {
+                  "type": "number"
+                },
+                "pageNumber": {
+                  "type": "number"
+                },
+                "offset": {
+                  "type": "number"
+                },
+                "limit": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "testAssignments",
+                "totalCount",
+                "pageCount",
+                "pageNumber",
+                "offset",
+                "limit"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

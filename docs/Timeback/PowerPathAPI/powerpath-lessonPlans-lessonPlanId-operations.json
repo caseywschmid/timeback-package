@@ -1,0 +1,450 @@
+{
+  "post": {
+    "operationId": "storeOperation",
+    "summary": "Store an operation on a lesson plan",
+    "description": "Purpose: Store a new operation in the lesson plan's operation log\n\nWhen to use:\n- Primary endpoint for all lesson plan modifications\n- When students, guides or admins want to customize the learning path\n- For any personalization changes\n\nAvailable Operations:\n\n- set-skipped: Show/hide content for the student\n- move-item-before/after: Reorder content relative to other items\n- move-item-to-start/end: Move to beginning/end of parent\n- add-custom-resource: Add additional resources in the lesson plan\n- change-item-parent: Move content to different sections (components) in the lesson plan\n\n  ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "lessonPlanId",
+        "description": "Lesson plan ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SetSkippedCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/AddCustomResourceCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoveItemBeforeCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoveItemAfterCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoveItemToStartCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoveItemToEndCommand"
+                  },
+                  {
+                    "$ref": "#/components/schemas/ChangeItemParentCommand"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "type",
+                  "mapping": {
+                    "set-skipped": "#/components/schemas/SetSkippedCommand",
+                    "add-custom-resource": "#/components/schemas/AddCustomResourceCommand",
+                    "move-item-before": "#/components/schemas/MoveItemBeforeCommand",
+                    "move-item-after": "#/components/schemas/MoveItemAfterCommand",
+                    "move-item-to-start": "#/components/schemas/MoveItemToStartCommand",
+                    "move-item-to-end": "#/components/schemas/MoveItemToEndCommand",
+                    "change-item-parent": "#/components/schemas/ChangeItemParentCommand"
+                  }
+                }
+              },
+              "reason": {
+                "type": "string",
+                "description": "The reason for the operation"
+              }
+            },
+            "required": ["operation"],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Operation stored",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "operationId": {
+                  "type": "string"
+                }
+              },
+              "required": ["success"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    },
+    "SetSkippedCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "set-skipped"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"],
+              "description": "The target item to set the skipped attribute of"
+            },
+            "value": {
+              "type": "boolean",
+              "description": "The value to set the skipped attribute to"
+            }
+          },
+          "required": ["target", "value"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Set Skipped",
+      "description": "Set the skipped attribute of a lesson plan item, effectively changing it's visibility for the student"
+    },
+    "AddCustomResourceCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "add-custom-resource"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "resource_id": {
+              "type": "string"
+            },
+            "parent_component_id": {
+              "type": "string"
+            },
+            "skipped": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": ["resource_id", "parent_component_id"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Add Custom Resource",
+      "description": "Add a custom resource to the lesson plan under a component, by default the resource is placed at the end of the component"
+    },
+    "MoveItemBeforeCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "move-item-before"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"]
+            },
+            "reference_id": {
+              "type": "string"
+            }
+          },
+          "required": ["target", "reference_id"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Move Item Before",
+      "description": "Move a lesson plan item to be before another item"
+    },
+    "MoveItemAfterCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "move-item-after"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"]
+            },
+            "reference_id": {
+              "type": "string"
+            }
+          },
+          "required": ["target", "reference_id"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Move Item After",
+      "description": "Move a lesson plan item to be after another item"
+    },
+    "MoveItemToStartCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "move-item-to-start"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"]
+            }
+          },
+          "required": ["target"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Move Item To Start",
+      "description": "Move a lesson plan item to the start of the parent"
+    },
+    "MoveItemToEndCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "move-item-to-end"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"]
+            }
+          },
+          "required": ["target"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Move Item To End",
+      "description": "Move a lesson plan item to the end of the parent"
+    },
+    "ChangeItemParentCommand": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "change-item-parent"
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["component", "resource"]
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "id"]
+            },
+            "new_parent_id": {
+              "type": "string"
+            },
+            "position": {
+              "type": "string",
+              "enum": ["start", "end"],
+              "default": "end"
+            }
+          },
+          "required": ["target", "new_parent_id"]
+        }
+      },
+      "required": ["type", "payload"],
+      "additionalProperties": false,
+      "title": "Change Item Parent",
+      "description": "Change the parent of a lesson plan item, by default the item is placed at the end of the parent"
+    }
+  },
+  "get": {
+    "operationId": "getOperations",
+    "summary": "Get the operations for a lesson plan",
+    "description": "Purpose: Get all operations for a lesson plan\n\nWhen to use:\n- For audit trails and history tracking\n- When debugging lesson plan issues\n- For administrative oversight\n\nWhat it does:\n- Returns all operations in chronological order\n- Includes operation type, payload, timestamp, and reason\n- Shows who made each change and when\n  ",
+    "tags": ["PowerPath - Lesson Plans"],
+    "parameters": [
+      {
+        "name": "lessonPlanId",
+        "description": "Lesson plan ID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Operations",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "operations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "payload": {},
+                      "reason": {
+                        "type": ["string", "null"]
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "sequenceNumber": {
+                        "type": "number"
+                      },
+                      "createdBy": {
+                        "type": ["string", "null"]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "type",
+                      "reason",
+                      "createdAt",
+                      "sequenceNumber",
+                      "createdBy"
+                    ]
+                  }
+                }
+              },
+              "required": ["operations"]
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,732 @@
+{
+  "get": {
+    "operationId": "getAllUsers",
+    "summary": "Get all Users",
+    "description": "To get all Users on the service provider.",
+    "tags": ["Users Management"],
+    "parameters": [
+      {
+        "in": "query",
+        "name": "fields",
+        "description": "Comma-separated list of fields to include in the response",
+        "schema": {
+          "type": "string",
+          "description": "Comma-separated list of fields to include in the response",
+          "example": "sourcedId,name"
+        }
+      },
+      {
+        "in": "query",
+        "name": "limit",
+        "description": "The maximum number of items to return in the paginated response. While the OneRoster specification does not define a maximum limit, this implementation enforces a maximum of 3000 to prevent abuse and ensure optimal performance.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3000,
+          "default": 100,
+          "description": "The maximum number of items to return in the paginated response. While the OneRoster specification does not define a maximum limit, this implementation enforces a maximum of 3000 to prevent abuse and ensure optimal performance.",
+          "example": 100
+        }
+      },
+      {
+        "in": "query",
+        "name": "offset",
+        "description": "The number of items to skip in the paginated response",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "The number of items to skip in the paginated response",
+          "example": 0
+        }
+      },
+      {
+        "in": "query",
+        "name": "sort",
+        "description": "The field to sort the response by",
+        "schema": {
+          "type": "string",
+          "description": "The field to sort the response by"
+        }
+      },
+      {
+        "in": "query",
+        "name": "orderBy",
+        "description": "The order to sort the response by",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "description": "The order to sort the response by"
+        }
+      },
+      {
+        "in": "query",
+        "name": "filter",
+        "description": "The filter to apply to the response",
+        "schema": {
+          "type": "string",
+          "description": "The filter to apply to the response",
+          "example": "status='active'"
+        }
+      },
+      {
+        "in": "query",
+        "name": "search",
+        "description": "PROPRIETARY EXTENSION: Free-text search across multiple fields. Provides convenient text-based querying beyond the standard OneRoster filter parameter.",
+        "schema": {
+          "type": "string",
+          "description": "PROPRIETARY EXTENSION: Free-text search across multiple fields. Provides convenient text-based querying beyond the standard OneRoster filter parameter.",
+          "example": "john"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response containing a collection of users",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sourcedId": { "type": "string" },
+                      "status": {
+                        "type": "string",
+                        "enum": ["active", "tobedeleted"]
+                      },
+                      "dateLastModified": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "nullable": true,
+                        "description": "Additional metadata for the object"
+                      },
+                      "userMasterIdentifier": {
+                        "type": ["string", "null"]
+                      },
+                      "username": { "type": ["string", "null"] },
+                      "userIds": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": { "type": "string" },
+                            "identifier": { "type": "string" }
+                          },
+                          "required": ["type", "identifier"]
+                        }
+                      },
+                      "enabledUser": {
+                        "type": "string",
+                        "enum": ["true", "false"]
+                      },
+                      "givenName": { "type": "string" },
+                      "familyName": { "type": "string" },
+                      "middleName": { "type": ["string", "null"] },
+                      "roles": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "roleType": {
+                              "type": "string",
+                              "enum": ["primary", "secondary"]
+                            },
+                            "role": {
+                              "type": "string",
+                              "enum": [
+                                "system_administrator",
+                                "administrator",
+                                "aide",
+                                "guardian",
+                                "parent",
+                                "proctor",
+                                "relative",
+                                "student",
+                                "teacher"
+                              ]
+                            },
+                            "org": {
+                              "type": "object",
+                              "properties": {
+                                "href": {
+                                  "type": "string",
+                                  "format": "uri"
+                                },
+                                "sourcedId": { "type": "string" },
+                                "type": { "type": "string" }
+                              },
+                              "required": ["href", "sourcedId", "type"]
+                            },
+                            "userProfile": { "type": "string" },
+                            "metadata": {
+                              "type": ["object", "null"],
+                              "additionalProperties": {}
+                            },
+                            "beginDate": { "type": ["string", "null"] },
+                            "endDate": { "type": ["string", "null"] }
+                          },
+                          "required": ["roleType", "role", "org"]
+                        },
+                        "default": []
+                      },
+                      "agents": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "href": { "type": "string", "format": "uri" },
+                            "sourcedId": { "type": "string" },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "academicSession",
+                                "assessmentLineItem",
+                                "category",
+                                "class",
+                                "course",
+                                "demographics",
+                                "enrollment",
+                                "gradingPeriod",
+                                "lineItem",
+                                "org",
+                                "resource",
+                                "result",
+                                "scoreScale",
+                                "student",
+                                "teacher",
+                                "term",
+                                "user",
+                                "componentResource",
+                                "courseComponent"
+                              ]
+                            }
+                          },
+                          "required": ["href", "sourcedId", "type"]
+                        },
+                        "default": []
+                      },
+                      "userProfiles": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "profileId": { "type": "string" },
+                            "profileType": { "type": "string" },
+                            "vendorId": { "type": "string" },
+                            "applicationId": { "type": "string" },
+                            "description": { "type": ["string", "null"] },
+                            "app": {
+                              "type": "object",
+                              "properties": {
+                                "sourcedId": { "type": "string" },
+                                "name": { "type": "string" },
+                                "description": {
+                                  "type": ["string", "null"]
+                                },
+                                "domain": {
+                                  "type": "array",
+                                  "items": { "type": "string" }
+                                },
+                                "metadata": {
+                                  "type": ["object", "null"],
+                                  "additionalProperties": {}
+                                }
+                              },
+                              "required": ["sourcedId", "name", "domain"]
+                            },
+                            "credentials": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "id": { "type": "string" },
+                                  "type": { "type": "string" },
+                                  "username": { "type": "string" },
+                                  "password": { "type": ["string", "null"] }
+                                },
+                                "required": ["id", "type", "username"]
+                              },
+                              "default": []
+                            }
+                          },
+                          "required": [
+                            "profileId",
+                            "profileType",
+                            "vendorId",
+                            "applicationId",
+                            "app",
+                            "credentials"
+                          ]
+                        },
+                        "default": []
+                      },
+                      "primaryOrg": {
+                        "type": "object",
+                        "properties": {
+                          "href": { "type": "string", "format": "uri" },
+                          "sourcedId": { "type": "string" },
+                          "type": { "type": "string" },
+                          "name": { "type": ["string", "null"] }
+                        },
+                        "required": ["href", "sourcedId", "type"]
+                      },
+                      "identifier": { "type": ["string", "null"] },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Must be unique across all users."
+                      },
+                      "preferredFirstName": { "type": ["string", "null"] },
+                      "preferredMiddleName": { "type": ["string", "null"] },
+                      "preferredLastName": { "type": ["string", "null"] },
+                      "pronouns": { "type": ["string", "null"] },
+                      "grades": {
+                        "type": "array",
+                        "items": {
+                          "allOf": [
+                            { "$ref": "#/components/schemas/GradeEnum" }
+                          ],
+                          "description": "The grades of the course",
+                          "enum": [
+                            "-1",
+                            "0",
+                            "1",
+                            "2",
+                            "3",
+                            "4",
+                            "5",
+                            "6",
+                            "7",
+                            "8",
+                            "9",
+                            "10",
+                            "11",
+                            "12",
+                            "13"
+                          ]
+                        }
+                      },
+                      "password": { "type": ["string", "null"] },
+                      "sms": { "type": ["string", "null"] },
+                      "phone": { "type": ["string", "null"] },
+                      "demographics": {
+                        "oneOf": [
+                          { "$ref": "#/components/schemas/Demographics" },
+                          { "type": "null" }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "sourcedId",
+                      "status",
+                      "enabledUser",
+                      "givenName",
+                      "familyName",
+                      "roles",
+                      "agents",
+                      "userProfiles",
+                      "email"
+                    ],
+                    "description": "Represents a user of the system. Can be a student, teacher, guide, parent etc."
+                  }
+                },
+                "totalCount": { "type": "number" },
+                "pageCount": { "type": "number" },
+                "pageNumber": { "type": "number" },
+                "offset": { "type": "number" },
+                "limit": { "type": "number" }
+              },
+              "required": [
+                "users",
+                "totalCount",
+                "pageCount",
+                "pageNumber",
+                "offset",
+                "limit"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "post": {
+    "operationId": "createUser",
+    "summary": "Create a new User",
+    "description": "To create a new User on the service provider. The responding system must return the set of sourcedIds that have been allocated to the newly created user record.",
+    "tags": ["Users Management"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "user": {
+                "type": "object",
+                "properties": {
+                  "sourcedId": { "type": "string", "minLength": 1 },
+                  "metadata": {
+                    "type": ["object", "null"],
+                    "properties": {
+                      "onboarding": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "state": {
+                                  "type": "string",
+                                  "const": "not_started"
+                                }
+                              },
+                              "required": ["state"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "state": {
+                                  "type": "string",
+                                  "const": "in_progress"
+                                }
+                              },
+                              "required": ["state"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "state": {
+                                  "type": "string",
+                                  "const": "completed"
+                                },
+                                "completedAt": { "type": "string" },
+                                "courseId": { "type": ["string", "null"] }
+                              },
+                              "required": ["state"],
+                              "additionalProperties": false
+                            }
+                          ]
+                        }
+                      },
+                      "isTestUser": { "type": "boolean" }
+                    },
+                    "additionalProperties": true
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": ["active", "tobedeleted"],
+                    "default": "active"
+                  },
+                  "userMasterIdentifier": { "type": ["string", "null"] },
+                  "username": { "type": ["string", "null"] },
+                  "userIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": { "type": "string" },
+                        "identifier": { "type": "string" }
+                      },
+                      "required": ["type", "identifier"]
+                    }
+                  },
+                  "enabledUser": {
+                    "anyOf": [
+                      { "type": "boolean" },
+                      { "type": "string", "enum": ["true", "false"] }
+                    ]
+                  },
+                  "givenName": { "type": "string" },
+                  "familyName": { "type": "string" },
+                  "middleName": { "type": ["string", "null"] },
+                  "roles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "roleType": {
+                          "type": "string",
+                          "enum": ["primary", "secondary"]
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "system_administrator",
+                            "administrator",
+                            "aide",
+                            "guardian",
+                            "parent",
+                            "proctor",
+                            "relative",
+                            "student",
+                            "teacher"
+                          ]
+                        },
+                        "org": {
+                          "type": "object",
+                          "properties": {
+                            "sourcedId": { "type": "string" }
+                          },
+                          "required": ["sourcedId"]
+                        },
+                        "userProfile": { "type": "string" },
+                        "metadata": {
+                          "type": ["object", "null"],
+                          "properties": {
+                            "timebackRole": {
+                              "type": "string",
+                              "enum": [
+                                "head_of_school",
+                                "dean_of_parents",
+                                "campus_coordinator",
+                                "head_guide",
+                                "lead_guide",
+                                "guide",
+                                "guide_assistant",
+                                "reading_specialist",
+                                "parent",
+                                "student"
+                              ]
+                            },
+                            "alphaLevelAccess": {
+                              "type": "array",
+                              "items": { "type": "string" }
+                            }
+                          },
+                          "additionalProperties": true
+                        },
+                        "beginDate": { "type": ["string", "null"] },
+                        "endDate": { "type": ["string", "null"] }
+                      },
+                      "required": ["roleType", "role", "org"]
+                    },
+                    "minItems": 1
+                  },
+                  "primaryOrg": {
+                    "type": "object",
+                    "properties": { "sourcedId": { "type": "string" } },
+                    "required": ["sourcedId"]
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Must be unique across all users."
+                  },
+                  "preferredFirstName": { "type": ["string", "null"] },
+                  "preferredMiddleName": { "type": ["string", "null"] },
+                  "preferredLastName": { "type": ["string", "null"] },
+                  "pronouns": { "type": ["string", "null"] },
+                  "grades": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "The grades of the course",
+                      "enum": [
+                        "-1",
+                        "0",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13"
+                      ]
+                    }
+                  },
+                  "password": { "type": ["string", "null"] },
+                  "sms": { "type": ["string", "null"] },
+                  "phone": { "type": ["string", "null"] },
+                  "agents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": { "sourcedId": { "type": "string" } },
+                      "required": ["sourcedId"]
+                    },
+                    "default": []
+                  }
+                },
+                "required": [
+                  "enabledUser",
+                  "givenName",
+                  "familyName",
+                  "roles",
+                  "email"
+                ]
+              }
+            },
+            "required": ["user"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "User successfully created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourcedIdPairs": {
+                  "type": "object",
+                  "properties": {
+                    "suppliedSourcedId": { "type": "string" },
+                    "allocatedSourcedId": { "type": "string" }
+                  },
+                  "required": ["suppliedSourcedId", "allocatedSourcedId"]
+                }
+              },
+              "required": ["sourcedIdPairs"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -4,7 +4,7 @@ from timeback.models.request import TimebackGetUserRequest, TimebackQueryParams
 
 def main():
     client = Timeback()
-    sourced_id = "3bc7037e-c871-449f-be2d-7fcdcf377512"
+    sourced_id = "20268c57-3828-4f4a-8144-2ef896681010"
 
     # Basic request without query params
     request = TimebackGetUserRequest(sourced_id=sourced_id)
@@ -13,13 +13,17 @@ def main():
         print("No user found")
         return
 
-    print(response.user.sourcedId, response.user.givenName, response.user.familyName)
+    print(response)
 
     # Example with fields query param
     query_params = TimebackQueryParams(fields=["sourcedId", "givenName", "familyName"])
-    request_with_fields = TimebackGetUserRequest(sourced_id=sourced_id, query_params=query_params)
+    request_with_fields = TimebackGetUserRequest(
+        sourced_id=sourced_id, query_params=query_params
+    )
     response_min = client.oneroster.rostering.get_user(request_with_fields)
-    print(f"Minimal user: {response_min.user.sourcedId}, {response_min.user.givenName}, {response_min.user.familyName}")
+    print(
+        f"Minimal user: {response_min.user.sourcedId}, {response_min.user.givenName}, {response_min.user.familyName}"
+    )
 
 
 if __name__ == "__main__":

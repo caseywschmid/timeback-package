@@ -1,0 +1,121 @@
+{
+  "post": {
+    "operationId": "postLineItemsForClass",
+    "summary": "Create Line Items for a Class",
+    "description": "To create a set of lineItems for a specific class. The responding system must return the set of sourcedIds that have been allocated to the newly created lineItem records. If the corresponding record cannot be located, the api will return a 404 error code and message 'Class not found.'",
+    "tags": ["Classes Management"],
+    "parameters": [
+      {
+        "name": "classSourcedId",
+        "description": "The sourcedId of the class",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "lineItems": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/LineItem" }
+              }
+            },
+            "required": ["lineItems"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Line item successfully created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sourcedIdPairs": {
+                  "type": "object",
+                  "properties": {
+                    "suppliedSourcedId": { "type": "string" },
+                    "allocatedSourcedId": { "type": "string" }
+                  },
+                  "required": ["suppliedSourcedId", "allocatedSourcedId"]
+                }
+              },
+              "required": ["sourcedIdPairs"]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/BadRequestResponse" }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/ForbiddenResponse" }
+          }
+        }
+      },
+      "404": {
+        "description": "Class not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/NotFoundResponse" }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

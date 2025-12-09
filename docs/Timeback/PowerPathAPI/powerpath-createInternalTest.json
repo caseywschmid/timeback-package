@@ -1,0 +1,392 @@
+{
+  "post": {
+    "operationId": "createInternalTest",
+    "summary": "Create an Internal Test",
+    "description": "\nCreates or updates a ComponentResource to act as an internal test lesson in a course.\nThis allows creating tests using internal QTI resources or assessment banks with multiple QTI resources.\n\nThe endpoint creates or updates (if they already exist) the following entities:\n- A CourseComponent for the course to hold the test lesson\n- One or more Resources with type = \"qti\" for individual tests, or type = \"assessment-bank\" for test banks\n- A ComponentResource acting as the test lesson\n\nSupports two test types:\n- Regular QTI test: Creates a single QTI resource\n- Assessment Bank: Creates multiple QTI resources and wraps them in an assessment bank\n\nFor test-out and placement lessons, this will update existing tests of the same type.\nFor other lesson types (quiz, unit-test, pp-100), it will create new lessons in the course structure.\n\nA 'Lesson' in this context is a ComponentResource object which has a Resource object associated with it.\n",
+    "tags": ["PowerPath - Course Mastery"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CreateInternalQtiTestInput"
+              },
+              {
+                "$ref": "#/components/schemas/CreateInternalAssessmentBankInput"
+              }
+            ],
+            "discriminator": {
+              "propertyName": "testType",
+              "mapping": {
+                "qti": "#/components/schemas/CreateInternalQtiTestInput",
+                "assessment-bank": "#/components/schemas/CreateInternalAssessmentBankInput"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "lessonType": {
+                  "type": "string",
+                  "enum": [
+                    "powerpath-100",
+                    "quiz",
+                    "test-out",
+                    "placement",
+                    "unit-test",
+                    "alpha-read-article"
+                  ]
+                },
+                "testType": {
+                  "type": "string",
+                  "enum": ["qti", "assessment-bank"]
+                },
+                "lessonId": {
+                  "type": "string",
+                  "description": "The sourcedId of the created internal test lesson (ComponentResource)"
+                },
+                "courseComponentId": {
+                  "type": "string",
+                  "description": "The sourcedId of the component (unit) containing the test"
+                },
+                "resourceId": {
+                  "type": "string",
+                  "description": "The sourcedId of the main resource (parent for assessment-bank)"
+                },
+                "childResourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Array of child resource IDs (only for assessment-bank type)"
+                },
+                "courseIdOnFail": {
+                  "type": ["string", "null"],
+                  "description": "The courseId to enroll the student in if they fail the placement test (optional)"
+                },
+                "grades": {
+                  "type": "array",
+                  "items": {
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/GradeEnum"
+                      }
+                    ],
+                    "description": "The grades of the course",
+                    "enum": [
+                      "-1",
+                      "0",
+                      "1",
+                      "2",
+                      "3",
+                      "4",
+                      "5",
+                      "6",
+                      "7",
+                      "8",
+                      "9",
+                      "10",
+                      "11",
+                      "12",
+                      "13"
+                    ]
+                  },
+                  "description": "The grades for the resource (for placement tests)"
+                }
+              },
+              "required": [
+                "lessonType",
+                "testType",
+                "lessonId",
+                "courseComponentId",
+                "resourceId"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "CreateInternalQtiTestInput": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "description": "The sourcedId of the Course to create the internal test for"
+        },
+        "lessonType": {
+          "type": "string",
+          "enum": [
+            "powerpath-100",
+            "quiz",
+            "test-out",
+            "placement",
+            "unit-test",
+            "alpha-read-article"
+          ],
+          "description": "The type of lesson to create"
+        },
+        "lessonTitle": {
+          "type": "string",
+          "description": "Optional title for the lesson (ComponentResource)"
+        },
+        "unitTitle": {
+          "type": "string",
+          "description": "Optional title for the unit (CourseComponent)"
+        },
+        "courseComponentSourcedId": {
+          "type": "string",
+          "description": "Optional sourcedId of existing CourseComponent to reuse"
+        },
+        "resourceMetadata": {
+          "type": "null",
+          "description": "Additional metadata for the internal test resource"
+        },
+        "xp": {
+          "type": "number",
+          "description": "The XP value for the resource (for test-out lessons)"
+        },
+        "grades": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The grades of the course",
+            "enum": [
+              "-1",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13"
+            ]
+          },
+          "description": "The grades for the resource (for placement tests)"
+        },
+        "courseIdOnFail": {
+          "type": ["string", "null"],
+          "description": "The courseId to enroll the student in if they fail the placement test (optional)"
+        },
+        "testType": {
+          "type": "string",
+          "const": "qti"
+        },
+        "qti": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to the QTI test XML file"
+            },
+            "title": {
+              "type": "string",
+              "description": "Optional title for the QTI test"
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": {},
+              "description": "Additional metadata for the QTI resource"
+            }
+          },
+          "required": ["url"]
+        }
+      },
+      "required": ["courseId", "lessonType", "testType", "qti"],
+      "description": "Input for creating an internal QTI test"
+    },
+    "CreateInternalAssessmentBankInput": {
+      "type": "object",
+      "properties": {
+        "courseId": {
+          "type": "string",
+          "description": "The sourcedId of the Course to create the internal test for"
+        },
+        "lessonType": {
+          "type": "string",
+          "enum": [
+            "powerpath-100",
+            "quiz",
+            "test-out",
+            "placement",
+            "unit-test",
+            "alpha-read-article"
+          ],
+          "description": "The type of lesson to create"
+        },
+        "lessonTitle": {
+          "type": "string",
+          "description": "Optional title for the lesson (ComponentResource)"
+        },
+        "unitTitle": {
+          "type": "string",
+          "description": "Optional title for the unit (CourseComponent)"
+        },
+        "courseComponentSourcedId": {
+          "type": "string",
+          "description": "Optional sourcedId of existing CourseComponent to reuse"
+        },
+        "resourceMetadata": {
+          "type": "null",
+          "description": "Additional metadata for the internal test resource"
+        },
+        "xp": {
+          "type": "number",
+          "description": "The XP value for the resource (for test-out lessons)"
+        },
+        "grades": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "The grades of the course",
+            "enum": [
+              "-1",
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13"
+            ]
+          },
+          "description": "The grades for the resource (for placement tests)"
+        },
+        "courseIdOnFail": {
+          "type": ["string", "null"],
+          "description": "The courseId to enroll the student in if they fail the placement test (optional)"
+        },
+        "testType": {
+          "type": "string",
+          "const": "assessment-bank"
+        },
+        "assessmentBank": {
+          "type": "object",
+          "properties": {
+            "resources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URL to the QTI test XML file"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title for this assessment bank resource"
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "additionalProperties": {},
+                    "description": "Additional metadata for the QTI resource"
+                  }
+                },
+                "required": ["url"]
+              },
+              "minItems": 1,
+              "description": "Array of QTI resources that will make up the assessment bank"
+            }
+          },
+          "required": ["resources"]
+        }
+      },
+      "required": ["courseId", "lessonType", "testType", "assessmentBank"],
+      "description": "Input for creating an internal assessment bank test"
+    }
+  }
+}

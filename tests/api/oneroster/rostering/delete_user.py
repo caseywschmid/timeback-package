@@ -3,7 +3,7 @@ from timeback import Timeback
 
 def main():
     client = Timeback()
-    sourced_id = "523cd9f6-a5f9-430b-bab5-6f3561e470fc"
+    sourced_id = "be148271-7481-494b-af69-921a648ec64f"
     result = client.oneroster.rostering.delete_user(sourced_id)
     print("Result:", result)
 

@@ -93,8 +93,4 @@ class TimebackUpdateUserRequest(BaseModel):
 
     user: TimebackUpdateUserBody
 
-    def to_dict(self) -> Dict[str, Any]:
-        """Serialize to API-compatible dictionary."""
-        return {"user": self.user.model_dump(exclude_none=True)}
-
 

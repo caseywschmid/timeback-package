@@ -1,0 +1,139 @@
+{
+  "post": {
+    "operationId": "resetUserPlacement",
+    "summary": "Reset user placement for subject",
+    "description": "\nResets a user's placement progress for a specific subject by:\n- Soft deleting all placement assessment results for that subject\n- Resetting user onboarding state to \"in_progress\" and removing completedAt and courseId if existing\n\nThis operation is restricted to administrators only and cannot be undone.\n",
+    "tags": ["PowerPath - Placement"],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "student": {
+                "type": "string",
+                "description": "The sourcedId of the student"
+              },
+              "subject": {
+                "type": "string",
+                "description": "The subject name",
+                "enum": [
+                  "Reading",
+                  "Language",
+                  "Vocabulary",
+                  "Social Studies",
+                  "Writing",
+                  "Science",
+                  "FastMath",
+                  "Math"
+                ]
+              }
+            },
+            "required": ["student", "subject"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Success",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "description": "Whether the reset operation was successful"
+                },
+                "placementResultsDeleted": {
+                  "type": "number",
+                  "description": "Number of placement results soft-deleted"
+                },
+                "onboardingReset": {
+                  "type": "boolean",
+                  "description": "Whether onboarding state was reset"
+                }
+              },
+              "required": [
+                "success",
+                "placementResultsDeleted",
+                "onboardingReset"
+              ]
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestResponse"
+            }
+          }
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnauthorizedRequestResponse"
+            }
+          }
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForbiddenResponse"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "User not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/NotFoundResponse"
+            }
+          }
+        }
+      },
+      "422": {
+        "description": "Unprocessable Entity / Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UnprocessableEntityResponse"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/TooManyRequestsResponse"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/InternalServerErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

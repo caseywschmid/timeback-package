@@ -5,7 +5,7 @@ from timeback.models.response import TimebackGetUserResponse
 from timeback.models.request import TimebackGetUserRequest
 from timeback.logs import logger
 
-log = logger.configure_logging(__name__, log_level="INFO")
+log = logger.configure_logging(__name__, log_level="DEBUG")
 
 
 def get_user(http: HttpClient, request: TimebackGetUserRequest) -> TimebackGetUserResponse:
