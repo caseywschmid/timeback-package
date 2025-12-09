@@ -1,0 +1,157 @@
+"""QTI service for the QTI API.
+
+This service provides methods for managing QTI (Question and Test Interoperability) content:
+- Stimuli: Shared content/passages used across multiple assessment items
+- Assessment Items: Individual questions/tasks with response processing
+- Assessment Tests: Complete tests containing test parts, sections, and items
+- Test Parts: Major divisions within an assessment test
+- Sections: Groupings of items within test parts
+- Feedback: Question and lesson feedback management
+- Validation: XML validation for QTI content
+
+QTI uses a dedicated base URL separate from OneRoster:
+- Production: https://qti.alpha-1edtech.ai/api
+- Staging: https://qti-staging.alpha-1edtech.ai/api
+
+Used by:
+- timeback/client.py - instantiated and exposed as client.qti
+"""
+
+from timeback.http import HttpClient
+
+
+class QTIService:
+    """QTI service methods.
+
+    This service handles all QTI API interactions for managing question and test
+    interoperability content following the IMS QTI specification.
+
+    Usage:
+        client = Timeback()
+        
+        # Stimuli
+        stimuli = client.qti.search_stimuli(request)
+        stimulus = client.qti.get_stimulus(request)
+        
+        # Assessment Items
+        items = client.qti.search_assessment_items(request)
+        item = client.qti.get_assessment_item(request)
+        
+        # Assessment Tests
+        tests = client.qti.search_assessment_tests(request)
+        test = client.qti.get_assessment_test(request)
+        
+        # Validation
+        result = client.qti.validate_xml(request)
+    """
+
+    def __init__(self, http: HttpClient):
+        """Initialize QTIService with an HTTP client.
+
+        Args:
+            http: The HttpClient instance configured for the QTI API base URL.
+                  QTI uses a dedicated base URL (qti.alpha-1edtech.ai/api).
+        """
+        self._http = http
+
+    # ==========================================================================
+    # STIMULI ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing stimuli (shared content/passages for assessment items).
+    # Base path: /stimuli
+    #
+    # TODO: Implement the following endpoints:
+    # - search_stimuli: GET /stimuli
+    # - create_stimulus: POST /stimuli
+    # - get_stimulus: GET /stimuli/{identifier}
+    # - update_stimulus: PUT /stimuli/{identifier}
+    # - delete_stimulus: DELETE /stimuli/{identifier}
+    # ==========================================================================
+
+    # ==========================================================================
+    # ASSESSMENT ITEM ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing assessment items (individual questions/tasks).
+    # Base path: /assessment-items
+    #
+    # TODO: Implement the following endpoints:
+    # - search_assessment_items: GET /assessment-items
+    # - create_assessment_item: POST /assessment-items
+    # - get_assessment_item: GET /assessment-items/{identifier}
+    # - update_assessment_item: PUT /assessment-items/{identifier}
+    # - delete_assessment_item: DELETE /assessment-items/{identifier}
+    # - update_metadata: PUT /assessment-items/metadata
+    # - process_response: POST /assessment-items/{identifier}/process-response
+    # ==========================================================================
+
+    # ==========================================================================
+    # ASSESSMENT TEST ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing assessment tests (complete tests with structure).
+    # Base path: /assessment-tests
+    #
+    # TODO: Implement the following endpoints:
+    # - search_assessment_tests: GET /assessment-tests
+    # - create_assessment_test: POST /assessment-tests
+    # - get_assessment_test: GET /assessment-tests/{identifier}
+    # - update_assessment_test: PUT /assessment-tests/{identifier}
+    # - delete_assessment_test: DELETE /assessment-tests/{identifier}
+    # - get_all_questions: GET /assessment-tests/{identifier}/questions
+    # - update_assessment_test_metadata: PUT /assessment-tests/{identifier}/metadata
+    # ==========================================================================
+
+    # ==========================================================================
+    # TEST PART ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing test parts (major divisions within assessment tests).
+    # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts
+    #
+    # TODO: Implement the following endpoints:
+    # - search_test_parts: GET /assessment-tests/{assessmentTestIdentifier}/test-parts
+    # - create_test_part: POST /assessment-tests/{assessmentTestIdentifier}/test-parts
+    # - get_test_part: GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+    # - update_test_part: PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+    # - delete_test_part: DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+    # ==========================================================================
+
+    # ==========================================================================
+    # SECTION ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing sections (groupings of items within test parts).
+    # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections
+    #
+    # TODO: Implement the following endpoints:
+    # - search_sections: GET .../sections
+    # - create_section: POST .../sections
+    # - get_section: GET .../sections/{identifier}
+    # - update_section: PUT .../sections/{identifier}
+    # - delete_section: DELETE .../sections/{identifier}
+    # - add_assessment_item: POST .../sections/{identifier}/items
+    # - remove_assessment_item: DELETE .../sections/{identifier}/items/{itemIdentifier}
+    # - update_assessment_item_order: PUT .../sections/{identifier}/items/order
+    # ==========================================================================
+
+    # ==========================================================================
+    # FEEDBACK ENDPOINTS
+    # ==========================================================================
+    # Endpoints for managing question and lesson feedback.
+    # Base paths: /question, /lesson, /{id}
+    #
+    # TODO: Implement the following endpoints:
+    # - create_question_feedback: POST /question
+    # - create_lesson_feedback: POST /lesson
+    # - get_feedback_by_lesson_id: GET /lesson/{lessonId}
+    # - delete_feedback: DELETE /{id}
+    # ==========================================================================
+
+    # ==========================================================================
+    # VALIDATION ENDPOINTS
+    # ==========================================================================
+    # Endpoints for validating QTI XML content.
+    # Base path: /validate
+    #
+    # TODO: Implement the following endpoints:
+    # - validate_xml: POST /validate
+    # - validate_batch: POST /validate/batch
+    # ==========================================================================
+

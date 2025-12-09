@@ -85,6 +85,68 @@ from .timeback_get_all_academic_sessions_response import TimebackGetAllAcademicS
 from .timeback_create_academic_session_response import TimebackCreateAcademicSessionResponse
 from .timeback_get_academic_session_response import TimebackGetAcademicSessionResponse
 from .timeback_update_academic_session_response import TimebackUpdateAcademicSessionResponse
+# PowerPath responses
+from .timeback_get_all_placement_tests_response import TimebackGetAllPlacementTestsResponse
+from .timeback_get_current_level_response import TimebackGetCurrentLevelResponse
+from .timeback_get_next_placement_test_response import TimebackGetNextPlacementTestResponse
+from .timeback_get_subject_progress_response import TimebackGetSubjectProgressResponse
+from .timeback_get_screening_results_response import TimebackGetScreeningResultsResponse
+from .timeback_create_external_test_response import TimebackCreateExternalTestResponse
+from .timeback_create_internal_test_response import TimebackCreateInternalTestResponse
+from .timeback_import_external_test_assignment_results_response import (
+    TimebackImportExternalTestAssignmentResultsResponse,
+    TimebackExternalTestCredentials,
+)
+from .timeback_make_external_test_assignment_response import (
+    TimebackMakeExternalTestAssignmentResponse,
+)
+from .timeback_get_test_out_response import TimebackGetTestOutResponse
+from .timeback_reset_user_placement_response import TimebackResetUserPlacementResponse
+from .timeback_create_lesson_plan_response import TimebackCreateLessonPlanResponse
+from .timeback_start_test_out_response import TimebackStartTestOutResponse
+from .timeback_get_operations_response import (
+    TimebackGetOperationsResponse,
+    TimebackLessonPlanOperation,
+)
+from .timeback_store_operation_response import TimebackStoreOperationResponse
+from .timeback_sync_operations_response import (
+    TimebackSyncOperationsResponse,
+    TimebackOperationResult,
+    TimebackOperationError,
+)
+from .timeback_sync_course_lesson_plans_response import TimebackSyncCourseLessonPlansResponse
+from .timeback_lesson_plan_structure_response import (
+    TimebackLessonPlanStructureResponse,
+    TimebackLessonPlanStructureNode,
+    TimebackLessonPlanStructureData,
+    TimebackLessonPlanStructureWrapper,
+)
+from .timeback_course_progress_response import TimebackCourseProgressResponse
+from .timeback_update_student_item_response_response import (
+    TimebackUpdateStudentItemResponseResponse,
+)
+from .timeback_syllabus_response import TimebackSyllabusResponse
+from .timeback_create_new_attempt_response import (
+    TimebackCreateNewAttemptResponse,
+    TimebackAttemptData,
+)
+from .timeback_final_student_assessment_response import (
+    TimebackFinalStudentAssessmentResponse,
+)
+from .timeback_assessment_progress_response import (
+    TimebackAssessmentProgressResponse,
+    TimebackTestQuestion,
+)
+from .timeback_get_attempts_response import TimebackGetAttemptsResponse
+from .timeback_next_question_response import TimebackNextQuestionResponse
+from .timeback_reset_attempt_response import TimebackResetAttemptResponse
+from .timeback_update_student_question_response_response import (
+    TimebackUpdateStudentQuestionResponseResponse,
+    TimebackResponseResult,
+)
+from .timeback_create_test_assignment_response import TimebackCreateTestAssignmentResponse
+from .timeback_list_test_assignments_response import TimebackListTestAssignmentsResponse
+from .timeback_bulk_test_assignments_response import TimebackBulkTestAssignmentsResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -172,4 +234,46 @@ __all__ = [
     "TimebackCreateAcademicSessionResponse",
     "TimebackGetAcademicSessionResponse",
     "TimebackUpdateAcademicSessionResponse",
+    # PowerPath responses
+    "TimebackGetAllPlacementTestsResponse",
+    "TimebackGetCurrentLevelResponse",
+    "TimebackGetNextPlacementTestResponse",
+    "TimebackGetSubjectProgressResponse",
+    "TimebackGetScreeningResultsResponse",
+    "TimebackCreateExternalTestResponse",
+    "TimebackCreateInternalTestResponse",
+    "TimebackImportExternalTestAssignmentResultsResponse",
+    "TimebackExternalTestCredentials",
+    "TimebackMakeExternalTestAssignmentResponse",
+    "TimebackGetTestOutResponse",
+    "TimebackResetUserPlacementResponse",
+    "TimebackCreateLessonPlanResponse",
+    "TimebackStartTestOutResponse",
+    "TimebackGetOperationsResponse",
+    "TimebackLessonPlanOperation",
+    "TimebackStoreOperationResponse",
+    "TimebackSyncOperationsResponse",
+    "TimebackOperationResult",
+    "TimebackOperationError",
+    "TimebackSyncCourseLessonPlansResponse",
+    "TimebackLessonPlanStructureResponse",
+    "TimebackLessonPlanStructureNode",
+    "TimebackLessonPlanStructureData",
+    "TimebackLessonPlanStructureWrapper",
+    "TimebackCourseProgressResponse",
+    "TimebackUpdateStudentItemResponseResponse",
+    "TimebackSyllabusResponse",
+    "TimebackCreateNewAttemptResponse",
+    "TimebackAttemptData",
+    "TimebackFinalStudentAssessmentResponse",
+    "TimebackAssessmentProgressResponse",
+    "TimebackTestQuestion",
+    "TimebackGetAttemptsResponse",
+    "TimebackNextQuestionResponse",
+    "TimebackResetAttemptResponse",
+    "TimebackUpdateStudentQuestionResponseResponse",
+    "TimebackResponseResult",
+    "TimebackCreateTestAssignmentResponse",
+    "TimebackListTestAssignmentsResponse",
+    "TimebackBulkTestAssignmentsResponse",
 ]

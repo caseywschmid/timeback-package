@@ -167,6 +167,55 @@ from .timeback_get_all_academic_sessions_request import TimebackGetAllAcademicSe
 from .timeback_create_academic_session_request import TimebackCreateAcademicSessionRequest, TimebackCreateAcademicSessionBody
 from .timeback_get_academic_session_request import TimebackGetAcademicSessionRequest
 from .timeback_update_academic_session_request import TimebackUpdateAcademicSessionRequest, TimebackUpdateAcademicSessionBody
+# PowerPath requests
+from .timeback_get_all_placement_tests_request import TimebackGetAllPlacementTestsRequest
+from .timeback_get_current_level_request import TimebackGetCurrentLevelRequest
+from .timeback_get_next_placement_test_request import TimebackGetNextPlacementTestRequest
+from .timeback_get_subject_progress_request import TimebackGetSubjectProgressRequest
+from .timeback_assign_screening_test_request import TimebackAssignScreeningTestRequest
+from .timeback_create_external_placement_test_request import (
+    TimebackCreateExternalPlacementTestRequest,
+)
+from .timeback_create_external_test_out_request import (
+    TimebackCreateExternalTestOutRequest,
+)
+from .timeback_create_internal_test_request import (
+    TimebackCreateInternalQtiTestRequest,
+    TimebackCreateInternalAssessmentBankTestRequest,
+    TimebackCreateInternalTestRequest,
+    TimebackQtiTestConfig,
+    TimebackAssessmentBankConfig,
+    TimebackAssessmentBankResource,
+)
+from .timeback_import_external_test_assignment_results_request import (
+    TimebackImportExternalTestAssignmentResultsRequest,
+)
+from .timeback_make_external_test_assignment_request import (
+    TimebackMakeExternalTestAssignmentRequest,
+)
+from .timeback_get_test_out_request import TimebackGetTestOutRequest
+from .timeback_reset_user_placement_request import TimebackResetUserPlacementRequest
+from .timeback_create_lesson_plan_request import TimebackCreateLessonPlanRequest
+from .timeback_start_test_out_request import TimebackStartTestOutRequest
+from .timeback_get_tree_request import TimebackGetTreeRequest
+from .timeback_store_operation_request import TimebackStoreOperationRequest
+from .timeback_update_student_item_response_request import (
+    TimebackUpdateStudentItemResponseRequest,
+    TimebackStudentItemResult,
+)
+from .timeback_create_new_attempt_request import TimebackCreateNewAttemptRequest
+from .timeback_final_student_assessment_request import TimebackFinalStudentAssessmentRequest
+from .timeback_reset_attempt_request import TimebackResetAttemptRequest
+from .timeback_update_student_question_response_request import (
+    TimebackUpdateStudentQuestionResponseRequest,
+)
+from .timeback_create_test_assignment_request import TimebackCreateTestAssignmentRequest
+from .timeback_bulk_test_assignments_request import (
+    TimebackBulkTestAssignmentsRequest,
+    TimebackBulkTestAssignmentItem,
+)
+from .timeback_import_test_assignments_request import TimebackImportTestAssignmentsRequest
+from .timeback_update_test_assignment_request import TimebackUpdateTestAssignmentRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -325,4 +374,37 @@ __all__ = [
     "TimebackGetAcademicSessionRequest",
     "TimebackUpdateAcademicSessionRequest",
     "TimebackUpdateAcademicSessionBody",
+    # PowerPath requests
+    "TimebackGetAllPlacementTestsRequest",
+    "TimebackGetCurrentLevelRequest",
+    "TimebackGetNextPlacementTestRequest",
+    "TimebackGetSubjectProgressRequest",
+    "TimebackAssignScreeningTestRequest",
+    "TimebackCreateExternalPlacementTestRequest",
+    "TimebackCreateExternalTestOutRequest",
+    "TimebackCreateInternalQtiTestRequest",
+    "TimebackCreateInternalAssessmentBankTestRequest",
+    "TimebackCreateInternalTestRequest",
+    "TimebackQtiTestConfig",
+    "TimebackAssessmentBankConfig",
+    "TimebackAssessmentBankResource",
+    "TimebackImportExternalTestAssignmentResultsRequest",
+    "TimebackMakeExternalTestAssignmentRequest",
+    "TimebackGetTestOutRequest",
+    "TimebackResetUserPlacementRequest",
+    "TimebackCreateLessonPlanRequest",
+    "TimebackStartTestOutRequest",
+    "TimebackGetTreeRequest",
+    "TimebackStoreOperationRequest",
+    "TimebackUpdateStudentItemResponseRequest",
+    "TimebackStudentItemResult",
+    "TimebackCreateNewAttemptRequest",
+    "TimebackFinalStudentAssessmentRequest",
+    "TimebackResetAttemptRequest",
+    "TimebackUpdateStudentQuestionResponseRequest",
+    "TimebackCreateTestAssignmentRequest",
+    "TimebackBulkTestAssignmentsRequest",
+    "TimebackBulkTestAssignmentItem",
+    "TimebackImportTestAssignmentsRequest",
+    "TimebackUpdateTestAssignmentRequest",
 ]

@@ -61,9 +61,11 @@ client = Timeback(
     caliper_api_base_url="https://my-caliper.example.com",
 )
 
-# Raw HTTP clients (services can be added later)
-qti_health = client.qti_http.get("/health")
-caliper_status = client.caliper_http.get("/status")
+# Access different services
+user = client.oneroster.rostering.get_user(request)
+# client.powerpath.get_all_placement_tests(request)  # when implemented
+# client.qti.search_assessment_items(request)        # when implemented
+# client.caliper.create_caliper_event(request)       # when implemented
 ```
 
 Design rules: service methods contain no business logic; each method calls a single endpoint function in `timeback/services/.../endpoints/`, which may import utilities from `.../utils/`. All endpoints/utilities return typed Pydantic models/enums from `timeback/models` and `timeback/enums`.

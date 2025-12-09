@@ -392,132 +392,171 @@
 
 ### /powerpath/placement/getAllPlacementTests:
 
-- [ ] `get_all_placement_tests`
+- [x] `get_all_placement_tests`
 
 ### /powerpath/placement/getCurrentLevel:
 
-- [ ] `get_current_level`
+- [x] `get_current_level`
 
 ### /powerpath/placement/getNextPlacementTest:
 
-- [ ] `get_next_placement_test`
+- [x] `get_next_placement_test`
 
 ### /powerpath/placement/getSubjectProgress:
 
-- [ ] `get_subject_progress`
+- [x] `get_subject_progress`
+
+### /powerpath/placement/resetUserPlacement:
+
+- [x] `reset_user_placement`
+
+### /powerpath/placement/{studentId}:
+
+- [x] `get_student_placement_data`
 
 ### /powerpath/screening/results/{userId}:
 
-- [ ] `get_results`
+- [x] `get_screening_results`
 
 ### /powerpath/screening/session/{userId}:
 
-- [ ] `get_session`
+- [x] `get_screening_session`
 
 ### /powerpath/screening/tests/assign:
 
-- [ ] `assign_test`
+- [x] `assign_screening_test`
+
+### /powerpath/screening/session/reset:
+
+- [x] `reset_screening_session`
 
 ### /powerpath/createExternalPlacementTest:
 
-- [ ] `create_external_placement_test`
+- [x] `create_external_placement_test`
 
 ### /powerpath/createExternalTestOut:
 
-- [ ] `create_external_test_out`
+- [x] `create_external_test_out` (DEPRECATED - use startTestOut)
 
 ### /powerpath/createInternalTest:
 
-- [ ] `create_internal_test`
+- [x] `create_internal_test`
 
 ### /powerpath/importExternalTestAssignmentResults:
 
-- [ ] `import_external_test_assignment_results`
+- [x] `import_external_test_assignment_results`
 
 ### /powerpath/makeExternalTestAssignment:
 
-- [ ] `make_external_test_assignment`
+- [x] `make_external_test_assignment`
 
 ### /powerpath/testOut:
 
-- [ ] `test_out`
+- [x] `get_test_out` (DEPRECATED - use getCourseProgress)
 
 ### /powerpath/lessonPlans/:
 
-- [ ] `create_lesson_plan`
+- [x] `create_lesson_plan`
+
+### /powerpath/lessonPlans/startTestOut:
+
+- [x] `start_test_out`
 
 ### /powerpath/lessonPlans/{courseId}/{userId}:
 
-- [ ] `get_tree`
+- [x] `get_tree`
 
 ### /powerpath/lessonPlans/{courseId}/deleteAll:
 
-- [ ] `delete_lesson_plans_by_course_id`
+- [x] `delete_lesson_plans_by_course_id`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/operations:
 
-- [ ] `store_operation`
-- [ ] `get_operations`
+- [x] `store_operation`
+- [x] `get_operations`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/operations/sync:
 
-- [ ] `sync_operations`
+- [x] `sync_operations`
 
 ### /powerpath/lessonPlans/{lessonPlanId}/recreate:
 
-- [ ] `recreate_lesson_plan`
+- [x] `recreate_lesson_plan`
 
 ### /powerpath/lessonPlans/course/{courseId}/sync:
 
-- [ ] `sync_course_lesson_plans`
+- [x] `sync_course_lesson_plans`
 
 ### /powerpath/lessonPlans/getCourseProgress/{courseId}/student/{studentId}:
 
-- [ ] `get_course_progress`
+- [x] `get_course_progress`
 
 ### /powerpath/lessonPlans/tree/{lessonPlanId}:
 
-- [ ] `get_lesson_plan`
+- [x] `get_lesson_plan`
 
 ### /powerpath/lessonPlans/tree/{lessonPlanId}/structure:
 
-- [ ] `get_lesson_plan_structure`
+- [x] `get_lesson_plan_structure`
 
 ### /powerpath/lessonPlans/updateStudentItemResponse:
 
-- [ ] `update_student_item_response`
+- [x] `update_student_item_response`
 
 ### /powerpath/syllabus/{courseSourcedId}:
 
-- [ ] `get_course_syllabus`
+- [x] `get_course_syllabus`
 
 ### /powerpath/createNewAttempt:
 
-- [ ] `create_new_attempt`
+- [x] `create_new_attempt`
 
 ### /powerpath/finalStudentAssessmentResponse:
 
-- [ ] `final_student_assessment_response`
+- [x] `final_student_assessment_response`
 
 ### /powerpath/getAssessmentProgress:
 
-- [ ] `get_assessment_progress`
+- [x] `get_assessment_progress`
 
 ### /powerpath/getAttempts:
 
-- [ ] `get_attempts`
+- [x] `get_attempts`
 
 ### /powerpath/getNextQuestion:
 
-- [ ] `get_next_question`
+- [x] `get_next_question`
 
 ### /powerpath/resetAttempt:
 
-- [ ] `reset_attempt`
+- [x] `reset_attempt`
 
 ### /powerpath/updateStudentQuestionResponse:
 
-- [ ] `update_student_question_response`
+- [x] `update_student_question_response`
+
+### /powerpath/test-assignments:
+
+- [x] `create_test_assignment`
+- [x] `list_student_test_assignments`
+
+### /powerpath/test-assignments/admin:
+
+- [x] `list_all_test_assignments`
+
+### /powerpath/test-assignments/bulk:
+
+- [x] `create_bulk_test_assignments`
+
+### /powerpath/test-assignments/import:
+
+- [x] `import_test_assignments`
+
+### /powerpath/test-assignments/{id}:
+
+- [x] `get_test_assignment`
+- [x] `update_test_assignment`
+- [x] `delete_test_assignment`
 
 ## QTI API - All Endpoints
 
