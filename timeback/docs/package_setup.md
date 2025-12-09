@@ -13,10 +13,12 @@ This document explains how the client initializes configuration, authentication,
   - `PowerPathService` in `timeback/services/powerpath/powerpath_service.py` for placement, screening, lesson plans, and assessments
   - `QTIService` in `timeback/services/qti/qti_service.py` for stimuli, assessment items, assessment tests, and validation
   - `CaliperService` in `timeback/services/caliper/caliper_service.py` for learning analytics events
+  - `CASEService` in `timeback/services/case/case_service.py` for competency frameworks and academic standards
 
 The client constructs separate `HttpClient` instances for each service family that may use different base URLs:
 - OneRoster (uses the primary API base URL)
 - PowerPath (shares the primary API base URL with OneRoster)
+- CASE (shares the primary API base URL with OneRoster)
 - QTI (dedicated base URL)
 - Caliper (dedicated base URL)
 
@@ -77,6 +79,7 @@ On initialization, the client creates one token provider and three HTTP clients:
 Exposed properties:
 - `self.oneroster` → `OneRosterService(self._http_oneroster)`
 - `self.powerpath` → `PowerPathService(self._http_oneroster)` (shares HTTP client with OneRoster)
+- `self.case` → `CASEService(self._http_oneroster)` (shares HTTP client with OneRoster)
 - `self.qti` → `QTIService(self._http_qti)` (uses dedicated QTI base URL)
 - `self.caliper` → `CaliperService(self._http_caliper)` (uses dedicated Caliper base URL)
 
@@ -153,6 +156,23 @@ Available endpoints (examples - to be implemented):
 - `client.caliper.validate_caliper_event(request)`
 - `client.caliper.list_caliper_events(request)`
 
+### CASE Service Exposure
+
+File: `timeback/services/case/case_service.py`
+
+The CASE service provides methods for managing Competency and Academic Standards Exchange content following the IMS CASE specification:
+- **CF Documents**: `get_all_cf_documents`, `get_cf_document`
+- **CF Items**: `get_all_cf_items`, `get_cf_item`
+- **CF Associations**: `get_cf_association`
+- **CF Packages**: `upload_cf_package`, `get_cf_package`, `get_cf_package_with_groups`
+
+CASE uses the same base URL as OneRoster (`/ims/case/v1p1/...` on `api.alpha-1edtech.ai`).
+
+Available endpoints (examples - to be implemented):
+- `client.case.get_all_cf_documents(request)`
+- `client.case.get_cf_item(request)`
+- `client.case.get_cf_package(request)`
+
 ### Usage Examples
 
 Basic initialization using environment variables only:
@@ -176,6 +196,10 @@ user = client.oneroster.rostering.get_user(request)
 # Caliper endpoints (when implemented)
 # event = client.caliper.create_caliper_event(request)
 # events = client.caliper.list_caliper_events(request)
+
+# CASE endpoints (when implemented)
+# documents = client.case.get_all_cf_documents(request)
+# package = client.case.get_cf_package(request)
 ```
 
 Override QTI and Caliper base URLs explicitly via constructor:
@@ -215,8 +239,8 @@ export TIMEBACK_CALIPER_API_BASE_URL=https://caliper.custom.example.com
 - Implement remaining PowerPath endpoints (placement, screening, lesson plans, assessments).
 - Implement QTI endpoints (stimuli, assessment items, assessment tests, validation).
 - Implement Caliper endpoints (create, validate, list events).
+- Implement CASE endpoints (CF documents, items, associations, packages).
 - Introduce separate token providers if QTI/Caliper require distinct IDPs.
-- Add dedicated service classes for CASE API.
 - Extend `HttpClient` with additional HTTP verbs as new write endpoints are added.
 
 

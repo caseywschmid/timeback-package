@@ -5,6 +5,7 @@ from timeback.services.oneroster import OneRosterService
 from timeback.services.powerpath import PowerPathService
 from timeback.services.qti import QTIService
 from timeback.services.caliper import CaliperService
+from timeback.services.case import CASEService
 
 
 class Timeback:
@@ -52,3 +53,4 @@ class Timeback:
         self.powerpath = PowerPathService(self._http_oneroster)
         self.qti = QTIService(self._http_qti)
         self.caliper = CaliperService(self._http_caliper)
+        self.case = CASEService(self._http_oneroster)
