@@ -8,6 +8,35 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
 
 -
 
+## [0.3.0] - 2025-12-09
+
+### Added
+
+**PowerPath API - Complete Implementation (40+ endpoints):**
+
+- **Placement Testing**: `get_all_placement_tests`, `get_current_level`, `get_next_placement_test`, `get_subject_progress`, `reset_user_placement`, `get_student_placement_data`
+- **Screening**: `get_results`, `get_session`, `assign_test`, `reset_screening_session`
+- **External Tests**: `create_external_placement_test`, `create_external_test_out` (deprecated), `create_internal_qti_test`, `create_internal_assessment_bank_test`, `import_external_test_assignment_results`, `make_external_test_assignment`, `get_test_out`
+- **Lesson Plans**: `create_lesson_plan`, `start_test_out`, `get_tree`, `delete_lesson_plans_by_course_id`, `store_operation`, `get_operations`, `sync_operations`, `recreate_lesson_plan`, `sync_course_lesson_plans`, `get_course_progress`, `get_lesson_plan`, `get_lesson_plan_structure`, `update_student_item_response`
+- **Syllabus**: `get_course_syllabus`
+- **Assessment/Mastery**: `create_new_attempt`, `final_student_assessment_response`, `get_assessment_progress`, `get_attempts`, `get_next_question`, `reset_attempt`, `update_student_question_response`
+- **Test Assignments**: `create_test_assignment`, `list_student_test_assignments`, `list_all_test_assignments`, `create_bulk_test_assignments`, `import_test_assignments`, `get_test_assignment`, `update_test_assignment`, `delete_test_assignment`
+
+**New Service Classes:**
+
+- `PowerPathService` - Complete PowerPath API client
+- `QTIService`, `CaliperService`, `CASEService` - Scaffolded for future implementation
+
+**New Models:**
+
+- Request models for all PowerPath endpoints
+- Response models including `LessonPlan`, `TimebackTestAssignment`, `TimebackCourseProgressResponse`, `TimebackAssessmentProgressResponse`, and more
+- Enums: `TimebackTestAssignmentStatus`, `TimebackGrade` export
+
+### Changed
+
+- Removed backwards compatibility `qti_http` and `caliper_http` raw client exposures (use service classes instead)
+
 ## [0.2.0] - 2025-12-09
 
 ### Added
@@ -105,7 +134,8 @@ The format is based on Keep a Changelog and adheres to Semantic Versioning.
   - `timeback/docs/package_setup.md` (client setup)
 - Testing setup with unit tests (and integration tests marked with `@pytest.mark.integration`).
 
-[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/caseywschmid/timeback-package/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/caseywschmid/timeback-package/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/caseywschmid/timeback-package/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/caseywschmid/timeback-package/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/caseywschmid/timeback-package/compare/v0.1.3...v0.1.4
