@@ -25,6 +25,8 @@ from timeback.models.request import (
     TimebackCreateStimulusRequest,
     TimebackUpdateStimulusRequest,
     TimebackSearchAssessmentItemsRequest,
+    TimebackCreateAssessmentItemRequest,
+    TimebackUpdateAssessmentItemRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -32,6 +34,9 @@ from timeback.models.response import (
     TimebackGetStimulusResponse,
     TimebackUpdateStimulusResponse,
     TimebackSearchAssessmentItemsResponse,
+    TimebackGetAssessmentItemResponse,
+    TimebackCreateAssessmentItemResponse,
+    TimebackUpdateAssessmentItemResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -39,6 +44,10 @@ from timeback.services.qti.endpoints import get_stimulus as get_stimulus_endpoin
 from timeback.services.qti.endpoints import update_stimulus as update_stimulus_endpoint
 from timeback.services.qti.endpoints import delete_stimulus as delete_stimulus_endpoint
 from timeback.services.qti.endpoints import search_assessment_items as search_assessment_items_endpoint
+from timeback.services.qti.endpoints import get_assessment_item as get_assessment_item_endpoint
+from timeback.services.qti.endpoints import create_assessment_item as create_assessment_item_endpoint
+from timeback.services.qti.endpoints import update_assessment_item as update_assessment_item_endpoint
+from timeback.services.qti.endpoints import delete_assessment_item as delete_assessment_item_endpoint
 
 
 class QTIService:
@@ -179,10 +188,6 @@ class QTIService:
     # Base path: /assessment-items
     #
     # TODO: Implement the following endpoints:
-    # - create_assessment_item: POST /assessment-items
-    # - get_assessment_item: GET /assessment-items/{identifier}
-    # - update_assessment_item: PUT /assessment-items/{identifier}
-    # - delete_assessment_item: DELETE /assessment-items/{identifier}
     # - update_metadata: PUT /assessment-items/metadata
     # - process_response: POST /assessment-items/{identifier}/process-response
     # ==========================================================================
@@ -206,6 +211,83 @@ class QTIService:
             TimebackSearchAssessmentItemsResponse containing paginated items list
         """
         return search_assessment_items_endpoint(self._http, request)
+
+    def get_assessment_item(self, identifier: str) -> TimebackGetAssessmentItemResponse:
+        """Get a specific QTI assessment item by identifier.
+        
+        GET /assessment-items/{identifier}
+        
+        Retrieves a complete assessment item including its question content,
+        answer choices, interaction types, response processing rules, and scoring logic.
+        
+        Args:
+            identifier: Unique identifier of the assessment item to retrieve
+        
+        Returns:
+            TimebackGetAssessmentItemResponse containing the complete assessment item
+        """
+        return get_assessment_item_endpoint(self._http, identifier)
+
+    def create_assessment_item(
+        self,
+        request: TimebackCreateAssessmentItemRequest
+    ) -> TimebackCreateAssessmentItemResponse:
+        """Create a new QTI assessment item.
+        
+        POST /assessment-items
+        
+        Creates a new assessment item on the service provider. The recommended
+        approach is to send format='xml' with QTI XML content that validates
+        against IMS QTI XSDs.
+        
+        Args:
+            request: Assessment item data including format, xml/content, and metadata.
+                     See TimebackCreateAssessmentItemRequest for all available fields.
+        
+        Returns:
+            TimebackCreateAssessmentItemResponse containing the created item
+        """
+        return create_assessment_item_endpoint(self._http, request)
+
+    def update_assessment_item(
+        self,
+        identifier: str,
+        request: TimebackUpdateAssessmentItemRequest
+    ) -> TimebackUpdateAssessmentItemResponse:
+        """Update an existing QTI assessment item.
+        
+        PUT /assessment-items/{identifier}
+        
+        Updates an assessment item including its question content, interactions,
+        response processing, and scoring logic. This operation regenerates the
+        QTI XML structure and validates all content.
+        
+        Args:
+            identifier: Unique identifier of the assessment item to update
+            request: Assessment item update data including format, xml/content, and metadata.
+                     See TimebackUpdateAssessmentItemRequest for all available fields.
+        
+        Returns:
+            TimebackUpdateAssessmentItemResponse containing the updated item
+        """
+        return update_assessment_item_endpoint(self._http, identifier, request)
+
+    def delete_assessment_item(self, identifier: str) -> None:
+        """Delete a QTI assessment item.
+        
+        DELETE /assessment-items/{identifier}
+        
+        Permanently deletes an assessment item from the service provider.
+        This operation cannot be undone.
+        
+        Args:
+            identifier: Unique identifier of the assessment item to delete
+        
+        Warning:
+            Assessment tests that reference this item may be affected.
+            The item references in test sections will need to be updated separately.
+        """
+        return delete_assessment_item_endpoint(self._http, identifier)
 
     # ==========================================================================
     # ASSESSMENT TEST ENDPOINTS

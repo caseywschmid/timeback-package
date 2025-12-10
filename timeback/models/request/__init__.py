@@ -221,6 +221,8 @@ from .timeback_search_stimuli_request import TimebackSearchStimuliRequest
 from .timeback_create_stimulus_request import TimebackCreateStimulusRequest
 from .timeback_update_stimulus_request import TimebackUpdateStimulusRequest
 from .timeback_search_assessment_items_request import TimebackSearchAssessmentItemsRequest
+from .timeback_create_assessment_item_request import TimebackCreateAssessmentItemRequest
+from .timeback_update_assessment_item_request import TimebackUpdateAssessmentItemRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -417,4 +419,6 @@ __all__ = [
     "TimebackCreateStimulusRequest",
     "TimebackUpdateStimulusRequest",
     "TimebackSearchAssessmentItemsRequest",
+    "TimebackCreateAssessmentItemRequest",
+    "TimebackUpdateAssessmentItemRequest",
 ]

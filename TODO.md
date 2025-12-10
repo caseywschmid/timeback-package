@@ -574,13 +574,13 @@
 ### /assessment-items:
 
 - [x] `search_assessment_items`
-- [ ] `create_assessment_item`
+- [x] `create_assessment_item`
 
 ### /assessment-items/{identifier}:
 
-- [ ] `get_assessment_item`
-- [ ] `update_assessment_item`
-- [ ] `delete_assessment_item`
+- [x] `get_assessment_item`
+- [x] `update_assessment_item`
+- [x] `delete_assessment_item`
 
 ### /assessment-items/metadata:
 

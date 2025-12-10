@@ -19,6 +19,10 @@ from .get_stimulus import get_stimulus
 from .update_stimulus import update_stimulus
 from .delete_stimulus import delete_stimulus
 from .search_assessment_items import search_assessment_items
+from .get_assessment_item import get_assessment_item
+from .create_assessment_item import create_assessment_item
+from .update_assessment_item import update_assessment_item
+from .delete_assessment_item import delete_assessment_item
 
 __all__ = [
     # Stimuli
@@ -29,5 +33,9 @@ __all__ = [
     "delete_stimulus",
     # Assessment Items
     "search_assessment_items",
+    "get_assessment_item",
+    "create_assessment_item",
+    "update_assessment_item",
+    "delete_assessment_item",
 ]
 
