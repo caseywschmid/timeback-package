@@ -20,9 +20,10 @@ Used by:
 from typing import Optional
 
 from timeback.http import HttpClient
-from timeback.models.request import TimebackSearchStimuliRequest
-from timeback.models.response import TimebackSearchStimuliResponse
+from timeback.models.request import TimebackSearchStimuliRequest, TimebackCreateStimulusRequest
+from timeback.models.response import TimebackSearchStimuliResponse, TimebackCreateStimulusResponse
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
+from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
 
 
 class QTIService:
@@ -66,7 +67,6 @@ class QTIService:
     # Base path: /stimuli
     #
     # TODO: Implement the following endpoints:
-    # - create_stimulus: POST /stimuli
     # - get_stimulus: GET /stimuli/{identifier}
     # - update_stimulus: PUT /stimuli/{identifier}
     # - delete_stimulus: DELETE /stimuli/{identifier}
@@ -91,6 +91,26 @@ class QTIService:
             TimebackSearchStimuliResponse containing paginated stimuli list
         """
         return search_stimuli_endpoint(self._http, request)
+
+    def create_stimulus(
+        self,
+        request: TimebackCreateStimulusRequest
+    ) -> TimebackCreateStimulusResponse:
+        """Create a new QTI stimulus.
+        
+        POST /stimuli
+        
+        Creates a new stimulus on the service provider. Stimuli can be
+        referenced by assessment items and provide shared content/passages.
+        
+        Args:
+            request: Stimulus data including identifier, title, and content.
+                     See TimebackCreateStimulusRequest for all available fields.
+        
+        Returns:
+            TimebackCreateStimulusResponse containing the created stimulus
+        """
+        return create_stimulus_endpoint(self._http, request)
 
     # ==========================================================================
     # ASSESSMENT ITEM ENDPOINTS

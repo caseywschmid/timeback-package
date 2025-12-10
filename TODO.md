@@ -563,7 +563,7 @@
 ### /stimuli:
 
 - [x] `search_stimuli`
-- [ ] `create_stimulus`
+- [x] `create_stimulus`
 
 ### /stimuli/{identifier}:
 

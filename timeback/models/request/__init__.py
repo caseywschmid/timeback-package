@@ -218,6 +218,7 @@ from .timeback_import_test_assignments_request import TimebackImportTestAssignme
 from .timeback_update_test_assignment_request import TimebackUpdateTestAssignmentRequest
 # QTI requests
 from .timeback_search_stimuli_request import TimebackSearchStimuliRequest
+from .timeback_create_stimulus_request import TimebackCreateStimulusRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -411,4 +412,5 @@ __all__ = [
     "TimebackUpdateTestAssignmentRequest",
     # QTI requests
     "TimebackSearchStimuliRequest",
+    "TimebackCreateStimulusRequest",
 ]
