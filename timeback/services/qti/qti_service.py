@@ -27,6 +27,7 @@ from timeback.models.request import (
     TimebackSearchAssessmentItemsRequest,
     TimebackCreateAssessmentItemRequest,
     TimebackUpdateAssessmentItemRequest,
+    TimebackProcessResponseRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -37,6 +38,7 @@ from timeback.models.response import (
     TimebackGetAssessmentItemResponse,
     TimebackCreateAssessmentItemResponse,
     TimebackUpdateAssessmentItemResponse,
+    TimebackProcessResponseResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -48,6 +50,7 @@ from timeback.services.qti.endpoints import get_assessment_item as get_assessmen
 from timeback.services.qti.endpoints import create_assessment_item as create_assessment_item_endpoint
 from timeback.services.qti.endpoints import update_assessment_item as update_assessment_item_endpoint
 from timeback.services.qti.endpoints import delete_assessment_item as delete_assessment_item_endpoint
+from timeback.services.qti.endpoints import process_response as process_response_endpoint
 
 
 class QTIService:
@@ -188,8 +191,7 @@ class QTIService:
     # Base path: /assessment-items
     #
     # TODO: Implement the following endpoints:
-    # - update_metadata: PUT /assessment-items/metadata
-    # - process_response: POST /assessment-items/{identifier}/process-response
+    # - update_metadata: PUT /assessment-items/metadata (batch metadata update)
     # ==========================================================================
 
     def search_assessment_items(
@@ -288,6 +290,30 @@ class QTIService:
             The item references in test sections will need to be updated separately.
         """
         return delete_assessment_item_endpoint(self._http, identifier)
+
+    def process_response(
+        self,
+        identifier: str,
+        request: TimebackProcessResponseRequest
+    ) -> TimebackProcessResponseResponse:
+        """Process a candidate's response to an assessment item.
+        
+        POST /assessment-items/{identifier}/process-response
+        
+        Validates the response against the item's response processing rules
+        and returns the score and feedback.
+        
+        Args:
+            identifier: Unique identifier of the assessment item
+            request: Request containing the item identifier and candidate's response.
+                     See TimebackProcessResponseRequest for details.
+        
+        Returns:
+            TimebackProcessResponseResponse containing:
+                - score: Numerical score (0.0-1.0)
+                - feedback: Structured feedback with identifier and message
+        """
+        return process_response_endpoint(self._http, identifier, request)
 
     # ==========================================================================
     # ASSESSMENT TEST ENDPOINTS

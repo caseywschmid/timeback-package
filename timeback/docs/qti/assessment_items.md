@@ -133,6 +133,43 @@ client.qti.delete_assessment_item("item-001")
 
 ---
 
+### POST /assessment-items/{identifier}/process-response — Process Response
+
+Process a candidate's response and get score + feedback.
+
+Path params:
+- `identifier` (string, required): Assessment item identifier
+
+Request body:
+- `identifier` (string, required): Assessment item identifier
+- `response` (string | array): Candidate's response (string for single-value, array for multi-value)
+
+Response (HTTP 200):
+- `score` (number): Score between 0.0 and 1.0
+- `feedback.identifier` (string): Machine-readable feedback type
+- `feedback.value` (string): Human-readable feedback message
+
+```python
+from timeback.models.request import TimebackProcessResponseRequest
+
+# Single choice response
+request = TimebackProcessResponseRequest(
+    identifier="item-001",
+    response="B"
+)
+result = client.qti.process_response("item-001", request)
+print(f"Score: {result.score}, Feedback: {result.feedback.value}")
+
+# Multi-choice response
+request = TimebackProcessResponseRequest(
+    identifier="item-002",
+    response=["A", "C"]
+)
+result = client.qti.process_response("item-002", request)
+```
+
+---
+
 ## Assessment Item Types
 
 - `choice`: Multiple choice

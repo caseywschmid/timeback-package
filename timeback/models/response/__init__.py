@@ -156,6 +156,10 @@ from .timeback_search_assessment_items_response import TimebackSearchAssessmentI
 from .timeback_get_assessment_item_response import TimebackGetAssessmentItemResponse
 from .timeback_create_assessment_item_response import TimebackCreateAssessmentItemResponse
 from .timeback_update_assessment_item_response import TimebackUpdateAssessmentItemResponse
+from .timeback_process_response_response import (
+    TimebackProcessResponseResponse,
+    TimebackProcessResponseFeedback,
+)
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -294,4 +298,6 @@ __all__ = [
     "TimebackGetAssessmentItemResponse",
     "TimebackCreateAssessmentItemResponse",
     "TimebackUpdateAssessmentItemResponse",
+    "TimebackProcessResponseResponse",
+    "TimebackProcessResponseFeedback",
 ]

@@ -588,7 +588,7 @@
 
 ### /assessment-items/{identifier}/process-response:
 
-- [ ] `process_response`
+- [x] `process_response`
 
 ### /assessment-tests:
 

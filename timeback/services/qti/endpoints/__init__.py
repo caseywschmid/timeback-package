@@ -23,6 +23,7 @@ from .get_assessment_item import get_assessment_item
 from .create_assessment_item import create_assessment_item
 from .update_assessment_item import update_assessment_item
 from .delete_assessment_item import delete_assessment_item
+from .process_response import process_response
 
 __all__ = [
     # Stimuli
@@ -37,5 +38,6 @@ __all__ = [
     "create_assessment_item",
     "update_assessment_item",
     "delete_assessment_item",
+    "process_response",
 ]
 
