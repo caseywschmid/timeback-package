@@ -29,6 +29,7 @@ from .get_assessment_test import get_assessment_test
 from .create_assessment_test import create_assessment_test
 from .update_assessment_test import update_assessment_test
 from .delete_assessment_test import delete_assessment_test
+from .update_metadata import update_metadata
 
 __all__ = [
     # Stimuli
@@ -50,5 +51,6 @@ __all__ = [
     "create_assessment_test",
     "update_assessment_test",
     "delete_assessment_test",
+    "update_metadata",
 ]
 

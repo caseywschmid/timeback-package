@@ -584,7 +584,7 @@
 
 ### /assessment-items/metadata:
 
-- [ ] `update_metadata`
+- [x] `update_metadata`
 
 ### /assessment-items/{identifier}/process-response:
 

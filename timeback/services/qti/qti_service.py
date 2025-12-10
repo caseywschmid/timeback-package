@@ -31,6 +31,7 @@ from timeback.models.request import (
     TimebackSearchAssessmentTestsRequest,
     TimebackCreateAssessmentTestRequest,
     TimebackUpdateAssessmentTestRequest,
+    TimebackUpdateAssessmentItemMetadataRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -46,6 +47,7 @@ from timeback.models.response import (
     TimebackGetAssessmentTestResponse,
     TimebackCreateAssessmentTestResponse,
     TimebackUpdateAssessmentTestResponse,
+    TimebackUpdateAssessmentItemMetadataResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -58,6 +60,7 @@ from timeback.services.qti.endpoints import create_assessment_item as create_ass
 from timeback.services.qti.endpoints import update_assessment_item as update_assessment_item_endpoint
 from timeback.services.qti.endpoints import delete_assessment_item as delete_assessment_item_endpoint
 from timeback.services.qti.endpoints import process_response as process_response_endpoint
+from timeback.services.qti.endpoints import update_metadata as update_metadata_endpoint
 from timeback.services.qti.endpoints import search_assessment_tests as search_assessment_tests_endpoint
 from timeback.services.qti.endpoints import get_assessment_test as get_assessment_test_endpoint
 from timeback.services.qti.endpoints import create_assessment_test as create_assessment_test_endpoint
@@ -201,9 +204,6 @@ class QTIService:
     # ==========================================================================
     # Endpoints for managing assessment items (individual questions/tasks).
     # Base path: /assessment-items
-    #
-    # TODO: Implement the following endpoints:
-    # - update_metadata: PUT /assessment-items/metadata (batch metadata update)
     # ==========================================================================
 
     def search_assessment_items(
@@ -326,6 +326,26 @@ class QTIService:
                 - feedback: Structured feedback with identifier and message
         """
         return process_response_endpoint(self._http, identifier, request)
+
+    def update_metadata(
+        self,
+        request: TimebackUpdateAssessmentItemMetadataRequest
+    ) -> TimebackUpdateAssessmentItemMetadataResponse:
+        """Update metadata for assessment items.
+        
+        POST /assessment-items/metadata
+        
+        This operation is used to update metadata for assessment items,
+        such as resetting the human approved status.
+        
+        Args:
+            request: Request containing format, xml content, and metadata to update.
+                     See TimebackUpdateAssessmentItemMetadataRequest for details.
+        
+        Returns:
+            TimebackUpdateAssessmentItemMetadataResponse containing the updated item
+        """
+        return update_metadata_endpoint(self._http, request)
 
     # ==========================================================================
     # ASSESSMENT TEST ENDPOINTS
