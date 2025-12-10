@@ -20,15 +20,22 @@ Used by:
 from typing import Optional
 
 from timeback.http import HttpClient
-from timeback.models.request import TimebackSearchStimuliRequest, TimebackCreateStimulusRequest
+from timeback.models.request import (
+    TimebackSearchStimuliRequest,
+    TimebackCreateStimulusRequest,
+    TimebackUpdateStimulusRequest,
+)
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
     TimebackCreateStimulusResponse,
     TimebackGetStimulusResponse,
+    TimebackUpdateStimulusResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
 from timeback.services.qti.endpoints import get_stimulus as get_stimulus_endpoint
+from timeback.services.qti.endpoints import update_stimulus as update_stimulus_endpoint
+from timeback.services.qti.endpoints import delete_stimulus as delete_stimulus_endpoint
 
 
 class QTIService:
@@ -70,10 +77,6 @@ class QTIService:
     # ==========================================================================
     # Endpoints for managing stimuli (shared content/passages for assessment items).
     # Base path: /stimuli
-    #
-    # TODO: Implement the following endpoints:
-    # - update_stimulus: PUT /stimuli/{identifier}
-    # - delete_stimulus: DELETE /stimuli/{identifier}
     # ==========================================================================
 
     def search_stimuli(
@@ -130,6 +133,41 @@ class QTIService:
             TimebackGetStimulusResponse containing the complete stimulus data
         """
         return get_stimulus_endpoint(self._http, identifier)
+
+    def update_stimulus(
+        self,
+        request: TimebackUpdateStimulusRequest
+    ) -> TimebackUpdateStimulusResponse:
+        """Update an existing QTI stimulus.
+        
+        PUT /stimuli/{identifier}
+        
+        Updates a stimulus on the service provider with new content.
+        
+        Args:
+            request: Stimulus update data including identifier, title, and content.
+                     See TimebackUpdateStimulusRequest for all available fields.
+        
+        Returns:
+            TimebackUpdateStimulusResponse containing the updated stimulus
+        """
+        return update_stimulus_endpoint(self._http, request)
+
+    def delete_stimulus(self, identifier: str) -> None:
+        """Delete a QTI stimulus.
+        
+        DELETE /stimuli/{identifier}
+        
+        Permanently deletes a stimulus from the service provider. This operation
+        cannot be undone.
+        
+        Args:
+            identifier: Unique identifier of the stimulus to delete
+        
+        Warning:
+            Assessment items referencing this stimulus may be affected.
+        """
+        return delete_stimulus_endpoint(self._http, identifier)
 
     # ==========================================================================
     # ASSESSMENT ITEM ENDPOINTS

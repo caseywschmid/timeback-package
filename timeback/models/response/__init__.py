@@ -151,6 +151,7 @@ from .timeback_bulk_test_assignments_response import TimebackBulkTestAssignments
 from .timeback_search_stimuli_response import TimebackSearchStimuliResponse
 from .timeback_create_stimulus_response import TimebackCreateStimulusResponse
 from .timeback_get_stimulus_response import TimebackGetStimulusResponse
+from .timeback_update_stimulus_response import TimebackUpdateStimulusResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -284,4 +285,5 @@ __all__ = [
     "TimebackSearchStimuliResponse",
     "TimebackCreateStimulusResponse",
     "TimebackGetStimulusResponse",
+    "TimebackUpdateStimulusResponse",
 ]

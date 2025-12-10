@@ -568,8 +568,8 @@
 ### /stimuli/{identifier}:
 
 - [x] `get_stimulus`
-- [ ] `update_stimulus`
-- [ ] `delete_stimulus`
+- [x] `update_stimulus`
+- [x] `delete_stimulus`
 
 ### /assessment-items:
 
