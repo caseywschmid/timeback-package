@@ -592,14 +592,14 @@
 
 ### /assessment-tests:
 
-- [ ] `search_assessment_tests`
-- [ ] `create_assessment_test`
+- [x] `search_assessment_tests`
+- [x] `create_assessment_test`
 
 ### /assessment-tests/{identifier}:
 
-- [ ] `get_assessment_test`
-- [ ] `update_assessment_test`
-- [ ] `delete_assessment_test`
+- [x] `get_assessment_test`
+- [x] `update_assessment_test`
+- [x] `delete_assessment_test`
 
 ### /assessment-tests/{identifier}/questions:
 

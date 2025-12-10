@@ -160,6 +160,10 @@ from .timeback_process_response_response import (
     TimebackProcessResponseResponse,
     TimebackProcessResponseFeedback,
 )
+from .timeback_search_assessment_tests_response import TimebackSearchAssessmentTestsResponse
+from .timeback_get_assessment_test_response import TimebackGetAssessmentTestResponse
+from .timeback_create_assessment_test_response import TimebackCreateAssessmentTestResponse
+from .timeback_update_assessment_test_response import TimebackUpdateAssessmentTestResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -300,4 +304,8 @@ __all__ = [
     "TimebackUpdateAssessmentItemResponse",
     "TimebackProcessResponseResponse",
     "TimebackProcessResponseFeedback",
+    "TimebackSearchAssessmentTestsResponse",
+    "TimebackGetAssessmentTestResponse",
+    "TimebackCreateAssessmentTestResponse",
+    "TimebackUpdateAssessmentTestResponse",
 ]

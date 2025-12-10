@@ -24,6 +24,11 @@ from .create_assessment_item import create_assessment_item
 from .update_assessment_item import update_assessment_item
 from .delete_assessment_item import delete_assessment_item
 from .process_response import process_response
+from .search_assessment_tests import search_assessment_tests
+from .get_assessment_test import get_assessment_test
+from .create_assessment_test import create_assessment_test
+from .update_assessment_test import update_assessment_test
+from .delete_assessment_test import delete_assessment_test
 
 __all__ = [
     # Stimuli
@@ -39,5 +44,11 @@ __all__ = [
     "update_assessment_item",
     "delete_assessment_item",
     "process_response",
+    # Assessment Tests
+    "search_assessment_tests",
+    "get_assessment_test",
+    "create_assessment_test",
+    "update_assessment_test",
+    "delete_assessment_test",
 ]
 

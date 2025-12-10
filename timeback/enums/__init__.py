@@ -25,6 +25,9 @@ from .timeback_qti_sort_field import TimebackQTISortField
 from .timeback_sort_order import TimebackSortOrder
 from .timeback_qti_item_type import TimebackQTIItemType
 from .timeback_qti_assessment_item_sort_field import TimebackQTIAssessmentItemSortField
+from .timeback_qti_assessment_test_sort_field import TimebackQTIAssessmentTestSortField
+from .timeback_qti_navigation_mode import TimebackQTINavigationMode
+from .timeback_qti_submission_mode import TimebackQTISubmissionMode
 
 __all__ = [
     "TimebackRoleName",
@@ -54,4 +57,7 @@ __all__ = [
     "TimebackSortOrder",
     "TimebackQTIItemType",
     "TimebackQTIAssessmentItemSortField",
+    "TimebackQTIAssessmentTestSortField",
+    "TimebackQTINavigationMode",
+    "TimebackQTISubmissionMode",
 ]

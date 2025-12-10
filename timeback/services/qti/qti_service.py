@@ -28,6 +28,9 @@ from timeback.models.request import (
     TimebackCreateAssessmentItemRequest,
     TimebackUpdateAssessmentItemRequest,
     TimebackProcessResponseRequest,
+    TimebackSearchAssessmentTestsRequest,
+    TimebackCreateAssessmentTestRequest,
+    TimebackUpdateAssessmentTestRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -39,6 +42,10 @@ from timeback.models.response import (
     TimebackCreateAssessmentItemResponse,
     TimebackUpdateAssessmentItemResponse,
     TimebackProcessResponseResponse,
+    TimebackSearchAssessmentTestsResponse,
+    TimebackGetAssessmentTestResponse,
+    TimebackCreateAssessmentTestResponse,
+    TimebackUpdateAssessmentTestResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -51,6 +58,11 @@ from timeback.services.qti.endpoints import create_assessment_item as create_ass
 from timeback.services.qti.endpoints import update_assessment_item as update_assessment_item_endpoint
 from timeback.services.qti.endpoints import delete_assessment_item as delete_assessment_item_endpoint
 from timeback.services.qti.endpoints import process_response as process_response_endpoint
+from timeback.services.qti.endpoints import search_assessment_tests as search_assessment_tests_endpoint
+from timeback.services.qti.endpoints import get_assessment_test as get_assessment_test_endpoint
+from timeback.services.qti.endpoints import create_assessment_test as create_assessment_test_endpoint
+from timeback.services.qti.endpoints import update_assessment_test as update_assessment_test_endpoint
+from timeback.services.qti.endpoints import delete_assessment_test as delete_assessment_test_endpoint
 
 
 class QTIService:
@@ -322,14 +334,106 @@ class QTIService:
     # Base path: /assessment-tests
     #
     # TODO: Implement the following endpoints:
-    # - search_assessment_tests: GET /assessment-tests
-    # - create_assessment_test: POST /assessment-tests
-    # - get_assessment_test: GET /assessment-tests/{identifier}
-    # - update_assessment_test: PUT /assessment-tests/{identifier}
-    # - delete_assessment_test: DELETE /assessment-tests/{identifier}
     # - get_all_questions: GET /assessment-tests/{identifier}/questions
     # - update_assessment_test_metadata: PUT /assessment-tests/{identifier}/metadata
     # ==========================================================================
+
+    def search_assessment_tests(
+        self,
+        request: Optional[TimebackSearchAssessmentTestsRequest] = None
+    ) -> TimebackSearchAssessmentTestsResponse:
+        """Search and filter QTI assessment tests.
+        
+        GET /assessment-tests
+        
+        Retrieves a paginated list of assessment tests with optional filtering.
+        Supports fuzzy text search, navigation mode, and submission mode filtering.
+        
+        Args:
+            request: Optional search parameters including query, pagination, sorting,
+                     navigation_mode, submission_mode, and filter.
+                     If not provided, returns first page with defaults.
+        
+        Returns:
+            TimebackSearchAssessmentTestsResponse containing paginated tests list
+        """
+        return search_assessment_tests_endpoint(self._http, request)
+
+    def get_assessment_test(self, identifier: str) -> TimebackGetAssessmentTestResponse:
+        """Get a specific QTI assessment test by identifier.
+        
+        GET /assessment-tests/{identifier}
+        
+        Retrieves a complete assessment test including all its test parts,
+        sections, and assessment item references.
+        
+        Args:
+            identifier: Unique identifier of the assessment test to retrieve
+        
+        Returns:
+            TimebackGetAssessmentTestResponse containing the complete test
+        """
+        return get_assessment_test_endpoint(self._http, identifier)
+
+    def create_assessment_test(
+        self,
+        request: TimebackCreateAssessmentTestRequest
+    ) -> TimebackCreateAssessmentTestResponse:
+        """Create a new QTI assessment test.
+        
+        POST /assessment-tests
+        
+        Creates a new assessment test on the service provider.
+        The recommended approach is to send format='xml' with QTI XML content.
+        
+        Args:
+            request: Assessment test data including format, xml/content, and metadata.
+                     See TimebackCreateAssessmentTestRequest for all available fields.
+        
+        Returns:
+            TimebackCreateAssessmentTestResponse containing the created test
+        """
+        return create_assessment_test_endpoint(self._http, request)
+
+    def update_assessment_test(
+        self,
+        identifier: str,
+        request: TimebackUpdateAssessmentTestRequest
+    ) -> TimebackUpdateAssessmentTestResponse:
+        """Update an existing QTI assessment test.
+        
+        PUT /assessment-tests/{identifier}
+        
+        Updates an entire assessment test by replacing its complete structure.
+        This operation updates the test including its test parts, sections, and
+        item references.
+        
+        Args:
+            identifier: Unique identifier of the assessment test to update
+            request: Assessment test update data including format, xml/content, and metadata.
+                     See TimebackUpdateAssessmentTestRequest for all available fields.
+        
+        Returns:
+            TimebackUpdateAssessmentTestResponse containing the updated test
+        """
+        return update_assessment_test_endpoint(self._http, identifier, request)
+
+    def delete_assessment_test(self, identifier: str) -> None:
+        """Delete a QTI assessment test.
+        
+        DELETE /assessment-tests/{identifier}
+        
+        Permanently deletes an assessment test and all its associated data
+        including test parts, sections, and item references. This operation
+        cannot be undone. The actual assessment items are NOT deleted.
+        
+        Args:
+            identifier: Unique identifier of the assessment test to delete
+        
+        Warning:
+            This operation cannot be undone.
+        """
+        return delete_assessment_test_endpoint(self._http, identifier)
 
     # ==========================================================================
     # TEST PART ENDPOINTS
