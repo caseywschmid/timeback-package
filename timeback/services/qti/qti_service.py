@@ -17,7 +17,12 @@ Used by:
 - timeback/client.py - instantiated and exposed as client.qti
 """
 
+from typing import Optional
+
 from timeback.http import HttpClient
+from timeback.models.request import TimebackSearchStimuliRequest
+from timeback.models.response import TimebackSearchStimuliResponse
+from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 
 
 class QTIService:
@@ -61,12 +66,31 @@ class QTIService:
     # Base path: /stimuli
     #
     # TODO: Implement the following endpoints:
-    # - search_stimuli: GET /stimuli
     # - create_stimulus: POST /stimuli
     # - get_stimulus: GET /stimuli/{identifier}
     # - update_stimulus: PUT /stimuli/{identifier}
     # - delete_stimulus: DELETE /stimuli/{identifier}
     # ==========================================================================
+
+    def search_stimuli(
+        self,
+        request: Optional[TimebackSearchStimuliRequest] = None
+    ) -> TimebackSearchStimuliResponse:
+        """Search and filter QTI stimuli.
+        
+        GET /stimuli
+        
+        Retrieves a paginated list of stimuli with optional filtering.
+        Supports fuzzy text search across title and identifier fields.
+        
+        Args:
+            request: Optional search parameters including query, pagination, and sorting.
+                     If not provided, returns first page with default settings.
+        
+        Returns:
+            TimebackSearchStimuliResponse containing paginated stimuli list
+        """
+        return search_stimuli_endpoint(self._http, request)
 
     # ==========================================================================
     # ASSESSMENT ITEM ENDPOINTS

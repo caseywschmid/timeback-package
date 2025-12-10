@@ -147,6 +147,8 @@ from .timeback_update_student_question_response_response import (
 from .timeback_create_test_assignment_response import TimebackCreateTestAssignmentResponse
 from .timeback_list_test_assignments_response import TimebackListTestAssignmentsResponse
 from .timeback_bulk_test_assignments_response import TimebackBulkTestAssignmentsResponse
+# QTI responses
+from .timeback_search_stimuli_response import TimebackSearchStimuliResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -276,4 +278,6 @@ __all__ = [
     "TimebackCreateTestAssignmentResponse",
     "TimebackListTestAssignmentsResponse",
     "TimebackBulkTestAssignmentsResponse",
+    # QTI responses
+    "TimebackSearchStimuliResponse",
 ]

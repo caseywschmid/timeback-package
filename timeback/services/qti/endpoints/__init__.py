@@ -13,3 +13,9 @@ Structure:
 - Validation endpoints: validate_xml, validate_batch
 """
 
+from .search_stimuli import search_stimuli
+
+__all__ = [
+    "search_stimuli",
+]
+

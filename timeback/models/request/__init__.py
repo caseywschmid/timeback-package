@@ -216,6 +216,8 @@ from .timeback_bulk_test_assignments_request import (
 )
 from .timeback_import_test_assignments_request import TimebackImportTestAssignmentsRequest
 from .timeback_update_test_assignment_request import TimebackUpdateTestAssignmentRequest
+# QTI requests
+from .timeback_search_stimuli_request import TimebackSearchStimuliRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -407,4 +409,6 @@ __all__ = [
     "TimebackBulkTestAssignmentItem",
     "TimebackImportTestAssignmentsRequest",
     "TimebackUpdateTestAssignmentRequest",
+    # QTI requests
+    "TimebackSearchStimuliRequest",
 ]

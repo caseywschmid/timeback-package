@@ -40,7 +40,7 @@ from .timeback_qti_rubric import TimebackQTIRubric
 from .timeback_qti_inline_feedback import TimebackQTIInlineFeedback
 from .timeback_qti_response_processing import TimebackQTIResponseProcessing
 from .timeback_catalog_entry import TimebackCatalogEntry
-from .timeback_qti_stimulus import TimebackQTIStimulus
+from .timeback_qti_stimulus import TimebackQTIStimulus, TimebackQTIStylesheet
 from .timeback_qti_item_body import TimebackQTIItemBody
 from .timeback_qti_interaction import TimebackQTIInteraction
 from .timeback_qti_item_ref import TimebackQTIItemRef
@@ -140,6 +140,7 @@ __all__ = [
     "TimebackQTIResponseProcessing",
     "TimebackCatalogEntry",
     "TimebackQTIStimulus",
+    "TimebackQTIStylesheet",
     "TimebackQTIItemBody",
     "TimebackQTIInteraction",
     "TimebackQTIItemRef",
