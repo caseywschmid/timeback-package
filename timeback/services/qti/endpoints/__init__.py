@@ -15,9 +15,11 @@ Structure:
 
 from .search_stimuli import search_stimuli
 from .create_stimulus import create_stimulus
+from .get_stimulus import get_stimulus
 
 __all__ = [
     "search_stimuli",
     "create_stimulus",
+    "get_stimulus",
 ]
 

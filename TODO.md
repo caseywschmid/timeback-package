@@ -567,7 +567,7 @@
 
 ### /stimuli/{identifier}:
 
-- [ ] `get_stimulus`
+- [x] `get_stimulus`
 - [ ] `update_stimulus`
 - [ ] `delete_stimulus`
 

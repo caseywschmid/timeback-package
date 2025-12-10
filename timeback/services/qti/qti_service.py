@@ -21,9 +21,14 @@ from typing import Optional
 
 from timeback.http import HttpClient
 from timeback.models.request import TimebackSearchStimuliRequest, TimebackCreateStimulusRequest
-from timeback.models.response import TimebackSearchStimuliResponse, TimebackCreateStimulusResponse
+from timeback.models.response import (
+    TimebackSearchStimuliResponse,
+    TimebackCreateStimulusResponse,
+    TimebackGetStimulusResponse,
+)
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
+from timeback.services.qti.endpoints import get_stimulus as get_stimulus_endpoint
 
 
 class QTIService:
@@ -67,7 +72,6 @@ class QTIService:
     # Base path: /stimuli
     #
     # TODO: Implement the following endpoints:
-    # - get_stimulus: GET /stimuli/{identifier}
     # - update_stimulus: PUT /stimuli/{identifier}
     # - delete_stimulus: DELETE /stimuli/{identifier}
     # ==========================================================================
@@ -111,6 +115,21 @@ class QTIService:
             TimebackCreateStimulusResponse containing the created stimulus
         """
         return create_stimulus_endpoint(self._http, request)
+
+    def get_stimulus(self, identifier: str) -> TimebackGetStimulusResponse:
+        """Get a specific QTI stimulus by identifier.
+        
+        GET /stimuli/{identifier}
+        
+        Retrieves a single stimulus with its complete content.
+        
+        Args:
+            identifier: Unique identifier of the stimulus to retrieve
+        
+        Returns:
+            TimebackGetStimulusResponse containing the complete stimulus data
+        """
+        return get_stimulus_endpoint(self._http, identifier)
 
     # ==========================================================================
     # ASSESSMENT ITEM ENDPOINTS
