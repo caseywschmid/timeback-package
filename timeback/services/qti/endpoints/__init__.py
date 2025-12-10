@@ -18,12 +18,16 @@ from .create_stimulus import create_stimulus
 from .get_stimulus import get_stimulus
 from .update_stimulus import update_stimulus
 from .delete_stimulus import delete_stimulus
+from .search_assessment_items import search_assessment_items
 
 __all__ = [
+    # Stimuli
     "search_stimuli",
     "create_stimulus",
     "get_stimulus",
     "update_stimulus",
     "delete_stimulus",
+    # Assessment Items
+    "search_assessment_items",
 ]
 

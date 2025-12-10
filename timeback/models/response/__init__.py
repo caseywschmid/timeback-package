@@ -152,6 +152,7 @@ from .timeback_search_stimuli_response import TimebackSearchStimuliResponse
 from .timeback_create_stimulus_response import TimebackCreateStimulusResponse
 from .timeback_get_stimulus_response import TimebackGetStimulusResponse
 from .timeback_update_stimulus_response import TimebackUpdateStimulusResponse
+from .timeback_search_assessment_items_response import TimebackSearchAssessmentItemsResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -286,4 +287,5 @@ __all__ = [
     "TimebackCreateStimulusResponse",
     "TimebackGetStimulusResponse",
     "TimebackUpdateStimulusResponse",
+    "TimebackSearchAssessmentItemsResponse",
 ]

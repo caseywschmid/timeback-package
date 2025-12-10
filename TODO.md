@@ -573,7 +573,7 @@
 
 ### /assessment-items:
 
-- [ ] `search_assessment_items`
+- [x] `search_assessment_items`
 - [ ] `create_assessment_item`
 
 ### /assessment-items/{identifier}:

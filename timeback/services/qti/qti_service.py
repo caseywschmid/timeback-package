@@ -24,18 +24,21 @@ from timeback.models.request import (
     TimebackSearchStimuliRequest,
     TimebackCreateStimulusRequest,
     TimebackUpdateStimulusRequest,
+    TimebackSearchAssessmentItemsRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
     TimebackCreateStimulusResponse,
     TimebackGetStimulusResponse,
     TimebackUpdateStimulusResponse,
+    TimebackSearchAssessmentItemsResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
 from timeback.services.qti.endpoints import get_stimulus as get_stimulus_endpoint
 from timeback.services.qti.endpoints import update_stimulus as update_stimulus_endpoint
 from timeback.services.qti.endpoints import delete_stimulus as delete_stimulus_endpoint
+from timeback.services.qti.endpoints import search_assessment_items as search_assessment_items_endpoint
 
 
 class QTIService:
@@ -176,7 +179,6 @@ class QTIService:
     # Base path: /assessment-items
     #
     # TODO: Implement the following endpoints:
-    # - search_assessment_items: GET /assessment-items
     # - create_assessment_item: POST /assessment-items
     # - get_assessment_item: GET /assessment-items/{identifier}
     # - update_assessment_item: PUT /assessment-items/{identifier}
@@ -184,6 +186,26 @@ class QTIService:
     # - update_metadata: PUT /assessment-items/metadata
     # - process_response: POST /assessment-items/{identifier}/process-response
     # ==========================================================================
+
+    def search_assessment_items(
+        self,
+        request: Optional[TimebackSearchAssessmentItemsRequest] = None
+    ) -> TimebackSearchAssessmentItemsResponse:
+        """Search and filter QTI assessment items.
+        
+        GET /assessment-items
+        
+        Retrieves a paginated list of assessment items with optional filtering.
+        Supports fuzzy text search and advanced filtering by type.
+        
+        Args:
+            request: Optional search parameters including query, pagination, sorting,
+                     and filter. If not provided, returns first page with defaults.
+        
+        Returns:
+            TimebackSearchAssessmentItemsResponse containing paginated items list
+        """
+        return search_assessment_items_endpoint(self._http, request)
 
     # ==========================================================================
     # ASSESSMENT TEST ENDPOINTS

@@ -23,6 +23,8 @@ from .timeback_subject import TimebackSubject
 from .timeback_grade import TimebackGrade
 from .timeback_qti_sort_field import TimebackQTISortField
 from .timeback_sort_order import TimebackSortOrder
+from .timeback_qti_item_type import TimebackQTIItemType
+from .timeback_qti_assessment_item_sort_field import TimebackQTIAssessmentItemSortField
 
 __all__ = [
     "TimebackRoleName",
@@ -50,4 +52,6 @@ __all__ = [
     "TimebackGrade",
     "TimebackQTISortField",
     "TimebackSortOrder",
+    "TimebackQTIItemType",
+    "TimebackQTIAssessmentItemSortField",
 ]
