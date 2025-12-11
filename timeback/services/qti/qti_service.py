@@ -55,6 +55,7 @@ from timeback.models.response import (
     TimebackUpdateAssessmentTestMetadataResponse,
     TimebackSearchTestPartsResponse,
     TimebackCreateTestPartResponse,
+    TimebackGetTestPartResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -77,6 +78,7 @@ from timeback.services.qti.endpoints import get_all_questions as get_all_questio
 from timeback.services.qti.endpoints import update_assessment_test_metadata as update_assessment_test_metadata_endpoint
 from timeback.services.qti.endpoints import search_test_parts as search_test_parts_endpoint
 from timeback.services.qti.endpoints import create_test_part as create_test_part_endpoint
+from timeback.services.qti.endpoints import get_test_part as get_test_part_endpoint
 
 
 class QTIService:
@@ -513,7 +515,6 @@ class QTIService:
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts
     #
     # TODO: Implement the following endpoints:
-    # - get_test_part: GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - update_test_part: PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - delete_test_part: DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # ==========================================================================
@@ -565,6 +566,27 @@ class QTIService:
             TimebackCreateTestPartResponse containing the created test part
         """
         return create_test_part_endpoint(self._http, assessment_test_identifier, request)
+
+    def get_test_part(
+        self,
+        assessment_test_identifier: str,
+        identifier: str
+    ) -> TimebackGetTestPartResponse:
+        """Retrieve a specific test part by identifier.
+        
+        GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+        
+        Retrieves a test part including all its sections and their assessment
+        item references.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            identifier: Unique identifier of the test part to retrieve
+        
+        Returns:
+            TimebackGetTestPartResponse containing the test part with sections
+        """
+        return get_test_part_endpoint(self._http, assessment_test_identifier, identifier)
 
     # ==========================================================================
     # SECTION ENDPOINTS

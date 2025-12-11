@@ -173,6 +173,7 @@ from .timeback_get_all_questions_response import (
 from .timeback_update_assessment_test_metadata_response import TimebackUpdateAssessmentTestMetadataResponse
 from .timeback_search_test_parts_response import TimebackSearchTestPartsResponse
 from .timeback_create_test_part_response import TimebackCreateTestPartResponse
+from .timeback_get_test_part_response import TimebackGetTestPartResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -324,4 +325,5 @@ __all__ = [
     "TimebackUpdateAssessmentTestMetadataResponse",
     "TimebackSearchTestPartsResponse",
     "TimebackCreateTestPartResponse",
+    "TimebackGetTestPartResponse",
 ]
