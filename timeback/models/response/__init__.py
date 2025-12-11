@@ -177,6 +177,8 @@ from .timeback_get_test_part_response import TimebackGetTestPartResponse
 from .timeback_update_test_part_response import TimebackUpdateTestPartResponse
 from .timeback_search_sections_response import TimebackSearchSectionsResponse
 from .timeback_create_section_response import TimebackCreateSectionResponse
+from .timeback_get_section_response import TimebackGetSectionResponse
+from .timeback_update_section_response import TimebackUpdateSectionResponse
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -332,4 +334,6 @@ __all__ = [
     "TimebackUpdateTestPartResponse",
     "TimebackSearchSectionsResponse",
     "TimebackCreateSectionResponse",
+    "TimebackGetSectionResponse",
+    "TimebackUpdateSectionResponse",
 ]

@@ -234,6 +234,7 @@ from .timeback_create_test_part_request import TimebackCreateTestPartRequest
 from .timeback_update_test_part_request import TimebackUpdateTestPartRequest
 from .timeback_search_sections_request import TimebackSearchSectionsRequest
 from .timeback_create_section_request import TimebackCreateSectionRequest
+from .timeback_update_section_request import TimebackUpdateSectionRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -443,4 +444,5 @@ __all__ = [
     "TimebackUpdateTestPartRequest",
     "TimebackSearchSectionsRequest",
     "TimebackCreateSectionRequest",
+    "TimebackUpdateSectionRequest",
 ]

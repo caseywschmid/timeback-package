@@ -39,6 +39,9 @@ from .update_test_part import update_test_part
 from .delete_test_part import delete_test_part
 from .search_sections import search_sections
 from .create_section import create_section
+from .get_section import get_section
+from .update_section import update_section
+from .delete_section import delete_section
 
 __all__ = [
     # Stimuli
@@ -70,5 +73,8 @@ __all__ = [
     "delete_test_part",
     "search_sections",
     "create_section",
+    "get_section",
+    "update_section",
+    "delete_section",
 ]
 

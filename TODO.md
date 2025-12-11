@@ -627,9 +627,9 @@
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}:
 
-- [ ] `get_section`
-- [ ] `update_section`
-- [ ] `delete_section`
+- [x] `get_section`
+- [x] `update_section`
+- [x] `delete_section`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}/items:
 

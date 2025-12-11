@@ -38,6 +38,7 @@ from timeback.models.request import (
     TimebackUpdateTestPartRequest,
     TimebackSearchSectionsRequest,
     TimebackCreateSectionRequest,
+    TimebackUpdateSectionRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -62,6 +63,8 @@ from timeback.models.response import (
     TimebackUpdateTestPartResponse,
     TimebackSearchSectionsResponse,
     TimebackCreateSectionResponse,
+    TimebackGetSectionResponse,
+    TimebackUpdateSectionResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -89,6 +92,9 @@ from timeback.services.qti.endpoints import update_test_part as update_test_part
 from timeback.services.qti.endpoints import delete_test_part as delete_test_part_endpoint
 from timeback.services.qti.endpoints import search_sections as search_sections_endpoint
 from timeback.services.qti.endpoints import create_section as create_section_endpoint
+from timeback.services.qti.endpoints import get_section as get_section_endpoint
+from timeback.services.qti.endpoints import update_section as update_section_endpoint
+from timeback.services.qti.endpoints import delete_section as delete_section_endpoint
 
 
 class QTIService:
@@ -648,9 +654,6 @@ class QTIService:
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections
     #
     # TODO: Implement the following endpoints:
-    # - get_section: GET .../sections/{identifier}
-    # - update_section: PUT .../sections/{identifier}
-    # - delete_section: DELETE .../sections/{identifier}
     # - add_assessment_item: POST .../sections/{identifier}/items
     # - remove_assessment_item: DELETE .../sections/{identifier}/items/{itemIdentifier}
     # - update_assessment_item_order: PUT .../sections/{identifier}/items/order
@@ -708,6 +711,81 @@ class QTIService:
         """
         return create_section_endpoint(
             self._http, assessment_test_identifier, test_part_identifier, request
+        )
+
+    def get_section(
+        self,
+        assessment_test_identifier: str,
+        test_part_identifier: str,
+        identifier: str
+    ) -> TimebackGetSectionResponse:
+        """Retrieve a specific section by identifier.
+        
+        GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}
+        
+        Retrieves a section including all its assessment item references.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            test_part_identifier: Unique identifier of the parent test part
+            identifier: Unique identifier of the section to retrieve
+        
+        Returns:
+            TimebackGetSectionResponse containing the section with item references
+        """
+        return get_section_endpoint(
+            self._http, assessment_test_identifier, test_part_identifier, identifier
+        )
+
+    def update_section(
+        self,
+        assessment_test_identifier: str,
+        test_part_identifier: str,
+        identifier: str,
+        request: TimebackUpdateSectionRequest
+    ) -> TimebackUpdateSectionResponse:
+        """Update an existing section within a test part.
+        
+        PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}
+        
+        Updates a section including its title, visibility, and item references.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            test_part_identifier: Unique identifier of the parent test part
+            identifier: Unique identifier of the section to update
+            request: Updated section data.
+        
+        Returns:
+            TimebackUpdateSectionResponse containing the updated section
+        """
+        return update_section_endpoint(
+            self._http, assessment_test_identifier, test_part_identifier, identifier, request
+        )
+
+    def delete_section(
+        self,
+        assessment_test_identifier: str,
+        test_part_identifier: str,
+        identifier: str
+    ) -> None:
+        """Delete an existing section from a test part.
+        
+        DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}
+        
+        Permanently deletes a section. This operation cannot be undone.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            test_part_identifier: Unique identifier of the parent test part
+            identifier: Unique identifier of the section to delete
+        
+        Warning:
+            This operation cannot be undone. Item references within the section
+            will be removed, but the actual assessment items are NOT deleted.
+        """
+        return delete_section_endpoint(
+            self._http, assessment_test_identifier, test_part_identifier, identifier
         )
 
     # ==========================================================================
