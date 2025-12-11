@@ -48,6 +48,7 @@ from timeback.models.response import (
     TimebackCreateAssessmentTestResponse,
     TimebackUpdateAssessmentTestResponse,
     TimebackUpdateAssessmentItemMetadataResponse,
+    TimebackGetAllQuestionsResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -66,6 +67,7 @@ from timeback.services.qti.endpoints import get_assessment_test as get_assessmen
 from timeback.services.qti.endpoints import create_assessment_test as create_assessment_test_endpoint
 from timeback.services.qti.endpoints import update_assessment_test as update_assessment_test_endpoint
 from timeback.services.qti.endpoints import delete_assessment_test as delete_assessment_test_endpoint
+from timeback.services.qti.endpoints import get_all_questions as get_all_questions_endpoint
 
 
 class QTIService:
@@ -354,7 +356,6 @@ class QTIService:
     # Base path: /assessment-tests
     #
     # TODO: Implement the following endpoints:
-    # - get_all_questions: GET /assessment-tests/{identifier}/questions
     # - update_assessment_test_metadata: PUT /assessment-tests/{identifier}/metadata
     # ==========================================================================
 
@@ -454,6 +455,27 @@ class QTIService:
             This operation cannot be undone.
         """
         return delete_assessment_test_endpoint(self._http, identifier)
+
+    def get_all_questions(self, identifier: str) -> TimebackGetAllQuestionsResponse:
+        """Get all assessment items referenced by an assessment test.
+        
+        GET /assessment-tests/{identifier}/questions
+        
+        Retrieves all assessment items (questions) that are referenced by
+        an assessment test, along with their structural context (test part
+        and section).
+        
+        Args:
+            identifier: Unique identifier of the assessment test
+        
+        Returns:
+            TimebackGetAllQuestionsResponse containing:
+                - assessment_test: Test identifier
+                - title: Test title
+                - total_questions: Total count of questions
+                - questions: List of questions with reference info and item data
+        """
+        return get_all_questions_endpoint(self._http, identifier)
 
     # ==========================================================================
     # TEST PART ENDPOINTS

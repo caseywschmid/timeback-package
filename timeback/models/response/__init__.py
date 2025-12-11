@@ -165,6 +165,11 @@ from .timeback_get_assessment_test_response import TimebackGetAssessmentTestResp
 from .timeback_create_assessment_test_response import TimebackCreateAssessmentTestResponse
 from .timeback_update_assessment_test_response import TimebackUpdateAssessmentTestResponse
 from .timeback_update_assessment_item_metadata_response import TimebackUpdateAssessmentItemMetadataResponse
+from .timeback_get_all_questions_response import (
+    TimebackGetAllQuestionsResponse,
+    TimebackQuestionWithReference,
+    TimebackQuestionReference,
+)
 
 __all__ = [
     "TimebackGetAllUsersResponse",
@@ -310,4 +315,7 @@ __all__ = [
     "TimebackCreateAssessmentTestResponse",
     "TimebackUpdateAssessmentTestResponse",
     "TimebackUpdateAssessmentItemMetadataResponse",
+    "TimebackGetAllQuestionsResponse",
+    "TimebackQuestionWithReference",
+    "TimebackQuestionReference",
 ]

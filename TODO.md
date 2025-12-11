@@ -603,7 +603,7 @@
 
 ### /assessment-tests/{identifier}/questions:
 
-- [ ] `get_all_questions`
+- [x] `get_all_questions`
 
 ### /assessment-tests/{identifier}/metadata:
 
