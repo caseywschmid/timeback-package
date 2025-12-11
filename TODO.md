@@ -612,7 +612,7 @@
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts:
 
 - [x] `search_test_parts`
-- [ ] `create_test_part`
+- [x] `create_test_part`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}:
 

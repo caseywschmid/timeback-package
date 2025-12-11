@@ -230,6 +230,7 @@ from .timeback_update_assessment_test_request import TimebackUpdateAssessmentTes
 from .timeback_update_assessment_item_metadata_request import TimebackUpdateAssessmentItemMetadataRequest
 from .timeback_update_assessment_test_metadata_request import TimebackUpdateAssessmentTestMetadataRequest
 from .timeback_search_test_parts_request import TimebackSearchTestPartsRequest
+from .timeback_create_test_part_request import TimebackCreateTestPartRequest
 
 __all__ = [
     "TimebackUpdateUserRequest",
@@ -435,4 +436,5 @@ __all__ = [
     "TimebackUpdateAssessmentItemMetadataRequest",
     "TimebackUpdateAssessmentTestMetadataRequest",
     "TimebackSearchTestPartsRequest",
+    "TimebackCreateTestPartRequest",
 ]

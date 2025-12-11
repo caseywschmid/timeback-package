@@ -34,6 +34,7 @@ from timeback.models.request import (
     TimebackUpdateAssessmentItemMetadataRequest,
     TimebackUpdateAssessmentTestMetadataRequest,
     TimebackSearchTestPartsRequest,
+    TimebackCreateTestPartRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -53,6 +54,7 @@ from timeback.models.response import (
     TimebackGetAllQuestionsResponse,
     TimebackUpdateAssessmentTestMetadataResponse,
     TimebackSearchTestPartsResponse,
+    TimebackCreateTestPartResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -74,6 +76,7 @@ from timeback.services.qti.endpoints import delete_assessment_test as delete_ass
 from timeback.services.qti.endpoints import get_all_questions as get_all_questions_endpoint
 from timeback.services.qti.endpoints import update_assessment_test_metadata as update_assessment_test_metadata_endpoint
 from timeback.services.qti.endpoints import search_test_parts as search_test_parts_endpoint
+from timeback.services.qti.endpoints import create_test_part as create_test_part_endpoint
 
 
 class QTIService:
@@ -510,7 +513,6 @@ class QTIService:
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts
     #
     # TODO: Implement the following endpoints:
-    # - create_test_part: POST /assessment-tests/{assessmentTestIdentifier}/test-parts
     # - get_test_part: GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - update_test_part: PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - delete_test_part: DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
@@ -540,6 +542,29 @@ class QTIService:
                 - page, pages, limit, sort, order: Pagination metadata
         """
         return search_test_parts_endpoint(self._http, assessment_test_identifier, request)
+
+    def create_test_part(
+        self,
+        assessment_test_identifier: str,
+        request: TimebackCreateTestPartRequest
+    ) -> TimebackCreateTestPartResponse:
+        """Create a new test part within an assessment test.
+        
+        POST /assessment-tests/{assessmentTestIdentifier}/test-parts
+        
+        Test parts organize sections and define navigation behaviors
+        (linear/nonlinear) and submission modes. The assessment test's XML
+        structure is automatically updated to include the new test part.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            request: Test part data including identifier, navigation mode,
+                     submission mode, and at least one section.
+        
+        Returns:
+            TimebackCreateTestPartResponse containing the created test part
+        """
+        return create_test_part_endpoint(self._http, assessment_test_identifier, request)
 
     # ==========================================================================
     # SECTION ENDPOINTS

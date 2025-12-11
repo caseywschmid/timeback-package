@@ -33,6 +33,7 @@ from .update_metadata import update_metadata
 from .get_all_questions import get_all_questions
 from .update_assessment_test_metadata import update_assessment_test_metadata
 from .search_test_parts import search_test_parts
+from .create_test_part import create_test_part
 
 __all__ = [
     # Stimuli
@@ -58,5 +59,6 @@ __all__ = [
     "get_all_questions",
     "update_assessment_test_metadata",
     "search_test_parts",
+    "create_test_part",
 ]
 
