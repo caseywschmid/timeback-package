@@ -622,8 +622,8 @@
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections:
 
-- [ ] `search_sections`
-- [ ] `create_section`
+- [x] `search_sections`
+- [x] `create_section`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections/{identifier}:
 

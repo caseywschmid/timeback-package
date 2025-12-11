@@ -36,6 +36,8 @@ from timeback.models.request import (
     TimebackSearchTestPartsRequest,
     TimebackCreateTestPartRequest,
     TimebackUpdateTestPartRequest,
+    TimebackSearchSectionsRequest,
+    TimebackCreateSectionRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -58,6 +60,8 @@ from timeback.models.response import (
     TimebackCreateTestPartResponse,
     TimebackGetTestPartResponse,
     TimebackUpdateTestPartResponse,
+    TimebackSearchSectionsResponse,
+    TimebackCreateSectionResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -83,6 +87,8 @@ from timeback.services.qti.endpoints import create_test_part as create_test_part
 from timeback.services.qti.endpoints import get_test_part as get_test_part_endpoint
 from timeback.services.qti.endpoints import update_test_part as update_test_part_endpoint
 from timeback.services.qti.endpoints import delete_test_part as delete_test_part_endpoint
+from timeback.services.qti.endpoints import search_sections as search_sections_endpoint
+from timeback.services.qti.endpoints import create_section as create_section_endpoint
 
 
 class QTIService:
@@ -642,8 +648,6 @@ class QTIService:
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections
     #
     # TODO: Implement the following endpoints:
-    # - search_sections: GET .../sections
-    # - create_section: POST .../sections
     # - get_section: GET .../sections/{identifier}
     # - update_section: PUT .../sections/{identifier}
     # - delete_section: DELETE .../sections/{identifier}
@@ -651,6 +655,60 @@ class QTIService:
     # - remove_assessment_item: DELETE .../sections/{identifier}/items/{itemIdentifier}
     # - update_assessment_item_order: PUT .../sections/{identifier}/items/order
     # ==========================================================================
+    
+    def search_sections(
+        self,
+        assessment_test_identifier: str,
+        test_part_identifier: str,
+        request: Optional[TimebackSearchSectionsRequest] = None
+    ) -> TimebackSearchSectionsResponse:
+        """Search and filter sections within a test part.
+        
+        GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections
+        
+        Gets all sections within a specific test part with support for
+        text search, sorting, and pagination.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            test_part_identifier: Unique identifier of the parent test part
+            request: Optional search parameters including query, pagination, and sorting.
+                     If not provided, returns all with defaults.
+        
+        Returns:
+            TimebackSearchSectionsResponse containing:
+                - items: List of TimebackQTISection objects
+                - total: Total count of matching sections
+                - page, pages, limit, sort, order: Pagination metadata
+        """
+        return search_sections_endpoint(
+            self._http, assessment_test_identifier, test_part_identifier, request
+        )
+
+    def create_section(
+        self,
+        assessment_test_identifier: str,
+        test_part_identifier: str,
+        request: TimebackCreateSectionRequest
+    ) -> TimebackCreateSectionResponse:
+        """Create a new section within a test part.
+        
+        POST /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections
+        
+        Sections organize assessment items and define their presentation behavior.
+        The parent assessment test's XML is automatically updated.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            test_part_identifier: Unique identifier of the parent test part
+            request: Section data including identifier, title, and visibility.
+        
+        Returns:
+            TimebackCreateSectionResponse containing the created section
+        """
+        return create_section_endpoint(
+            self._http, assessment_test_identifier, test_part_identifier, request
+        )
 
     # ==========================================================================
     # FEEDBACK ENDPOINTS
