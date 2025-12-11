@@ -607,7 +607,7 @@
 
 ### /assessment-tests/{identifier}/metadata:
 
-- [ ] `update_assessment_test_metadata`
+- [x] `update_assessment_test_metadata`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts:
 

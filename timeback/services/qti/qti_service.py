@@ -32,6 +32,7 @@ from timeback.models.request import (
     TimebackCreateAssessmentTestRequest,
     TimebackUpdateAssessmentTestRequest,
     TimebackUpdateAssessmentItemMetadataRequest,
+    TimebackUpdateAssessmentTestMetadataRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -49,6 +50,7 @@ from timeback.models.response import (
     TimebackUpdateAssessmentTestResponse,
     TimebackUpdateAssessmentItemMetadataResponse,
     TimebackGetAllQuestionsResponse,
+    TimebackUpdateAssessmentTestMetadataResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -68,6 +70,7 @@ from timeback.services.qti.endpoints import create_assessment_test as create_ass
 from timeback.services.qti.endpoints import update_assessment_test as update_assessment_test_endpoint
 from timeback.services.qti.endpoints import delete_assessment_test as delete_assessment_test_endpoint
 from timeback.services.qti.endpoints import get_all_questions as get_all_questions_endpoint
+from timeback.services.qti.endpoints import update_assessment_test_metadata as update_assessment_test_metadata_endpoint
 
 
 class QTIService:
@@ -354,9 +357,6 @@ class QTIService:
     # ==========================================================================
     # Endpoints for managing assessment tests (complete tests with structure).
     # Base path: /assessment-tests
-    #
-    # TODO: Implement the following endpoints:
-    # - update_assessment_test_metadata: PUT /assessment-tests/{identifier}/metadata
     # ==========================================================================
 
     def search_assessment_tests(
@@ -476,6 +476,29 @@ class QTIService:
                 - questions: List of questions with reference info and item data
         """
         return get_all_questions_endpoint(self._http, identifier)
+
+    def update_assessment_test_metadata(
+        self,
+        identifier: str,
+        request: TimebackUpdateAssessmentTestMetadataRequest
+    ) -> TimebackUpdateAssessmentTestMetadataResponse:
+        """Update only the metadata fields of an assessment test.
+        
+        PUT /assessment-tests/{identifier}/metadata
+        
+        This is a lightweight operation for administrative changes to metadata
+        properties without affecting the test structure, test parts, sections,
+        or assessment items.
+        
+        Args:
+            identifier: Unique identifier of the assessment test to update
+            request: Request containing metadata to update.
+                     See TimebackUpdateAssessmentTestMetadataRequest for details.
+        
+        Returns:
+            TimebackUpdateAssessmentTestMetadataResponse containing the updated test
+        """
+        return update_assessment_test_metadata_endpoint(self._http, identifier, request)
 
     # ==========================================================================
     # TEST PART ENDPOINTS
