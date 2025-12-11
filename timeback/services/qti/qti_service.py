@@ -33,6 +33,7 @@ from timeback.models.request import (
     TimebackUpdateAssessmentTestRequest,
     TimebackUpdateAssessmentItemMetadataRequest,
     TimebackUpdateAssessmentTestMetadataRequest,
+    TimebackSearchTestPartsRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -51,6 +52,7 @@ from timeback.models.response import (
     TimebackUpdateAssessmentItemMetadataResponse,
     TimebackGetAllQuestionsResponse,
     TimebackUpdateAssessmentTestMetadataResponse,
+    TimebackSearchTestPartsResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -71,6 +73,7 @@ from timeback.services.qti.endpoints import update_assessment_test as update_ass
 from timeback.services.qti.endpoints import delete_assessment_test as delete_assessment_test_endpoint
 from timeback.services.qti.endpoints import get_all_questions as get_all_questions_endpoint
 from timeback.services.qti.endpoints import update_assessment_test_metadata as update_assessment_test_metadata_endpoint
+from timeback.services.qti.endpoints import search_test_parts as search_test_parts_endpoint
 
 
 class QTIService:
@@ -507,12 +510,36 @@ class QTIService:
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts
     #
     # TODO: Implement the following endpoints:
-    # - search_test_parts: GET /assessment-tests/{assessmentTestIdentifier}/test-parts
     # - create_test_part: POST /assessment-tests/{assessmentTestIdentifier}/test-parts
     # - get_test_part: GET /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - update_test_part: PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # - delete_test_part: DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # ==========================================================================
+    
+    def search_test_parts(
+        self,
+        assessment_test_identifier: str,
+        request: Optional[TimebackSearchTestPartsRequest] = None
+    ) -> TimebackSearchTestPartsResponse:
+        """Search and filter test parts within an assessment test.
+        
+        GET /assessment-tests/{assessmentTestIdentifier}/test-parts
+        
+        Gets all test parts within an assessment test with support for
+        filtering by navigation mode, submission mode, and text search.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            request: Optional search parameters including query, pagination, sorting,
+                     and filters. If not provided, returns all with defaults.
+        
+        Returns:
+            TimebackSearchTestPartsResponse containing:
+                - items: List of TimebackQTITestPart objects
+                - total: Total count of matching test parts
+                - page, pages, limit, sort, order: Pagination metadata
+        """
+        return search_test_parts_endpoint(self._http, assessment_test_identifier, request)
 
     # ==========================================================================
     # SECTION ENDPOINTS

@@ -611,7 +611,7 @@
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts:
 
-- [ ] `search_test_parts`
+- [x] `search_test_parts`
 - [ ] `create_test_part`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}:
