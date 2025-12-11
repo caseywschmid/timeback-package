@@ -35,6 +35,7 @@ from timeback.models.request import (
     TimebackUpdateAssessmentTestMetadataRequest,
     TimebackSearchTestPartsRequest,
     TimebackCreateTestPartRequest,
+    TimebackUpdateTestPartRequest,
 )
 from timeback.models.response import (
     TimebackSearchStimuliResponse,
@@ -56,6 +57,7 @@ from timeback.models.response import (
     TimebackSearchTestPartsResponse,
     TimebackCreateTestPartResponse,
     TimebackGetTestPartResponse,
+    TimebackUpdateTestPartResponse,
 )
 from timeback.services.qti.endpoints import search_stimuli as search_stimuli_endpoint
 from timeback.services.qti.endpoints import create_stimulus as create_stimulus_endpoint
@@ -79,6 +81,8 @@ from timeback.services.qti.endpoints import update_assessment_test_metadata as u
 from timeback.services.qti.endpoints import search_test_parts as search_test_parts_endpoint
 from timeback.services.qti.endpoints import create_test_part as create_test_part_endpoint
 from timeback.services.qti.endpoints import get_test_part as get_test_part_endpoint
+from timeback.services.qti.endpoints import update_test_part as update_test_part_endpoint
+from timeback.services.qti.endpoints import delete_test_part as delete_test_part_endpoint
 
 
 class QTIService:
@@ -514,9 +518,6 @@ class QTIService:
     # Endpoints for managing test parts (major divisions within assessment tests).
     # Base path: /assessment-tests/{assessmentTestIdentifier}/test-parts
     #
-    # TODO: Implement the following endpoints:
-    # - update_test_part: PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
-    # - delete_test_part: DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
     # ==========================================================================
     
     def search_test_parts(
@@ -587,6 +588,52 @@ class QTIService:
             TimebackGetTestPartResponse containing the test part with sections
         """
         return get_test_part_endpoint(self._http, assessment_test_identifier, identifier)
+
+    def update_test_part(
+        self,
+        assessment_test_identifier: str,
+        identifier: str,
+        request: TimebackUpdateTestPartRequest
+    ) -> TimebackUpdateTestPartResponse:
+        """Update an existing test part within an assessment test.
+        
+        PUT /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+        
+        Updates a test part including its navigation mode, submission mode,
+        and sections. The parent assessment test's XML is regenerated.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            identifier: Unique identifier of the test part to update
+            request: Updated test part data including identifier, navigation mode,
+                     submission mode, and sections.
+        
+        Returns:
+            TimebackUpdateTestPartResponse containing the updated test part
+        """
+        return update_test_part_endpoint(self._http, assessment_test_identifier, identifier, request)
+
+    def delete_test_part(
+        self,
+        assessment_test_identifier: str,
+        identifier: str
+    ) -> None:
+        """Delete an existing test part from an assessment test.
+        
+        DELETE /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}
+        
+        Permanently deletes a test part and all its sections. This operation
+        cannot be undone.
+        
+        Args:
+            assessment_test_identifier: Unique identifier of the parent assessment test
+            identifier: Unique identifier of the test part to delete
+        
+        Warning:
+            This operation cannot be undone. All sections within the test part
+            will also be deleted.
+        """
+        return delete_test_part_endpoint(self._http, assessment_test_identifier, identifier)
 
     # ==========================================================================
     # SECTION ENDPOINTS

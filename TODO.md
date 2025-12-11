@@ -617,8 +617,8 @@
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{identifier}:
 
 - [x] `get_test_part`
-- [ ] `update_test_part`
-- [ ] `delete_test_part`
+- [x] `update_test_part`
+- [x] `delete_test_part`
 
 ### /assessment-tests/{assessmentTestIdentifier}/test-parts/{testPartIdentifier}/sections:
 
